@@ -1,1 +1,3 @@
 "App Name: Travel Wish"
+
+Faculty of IT
