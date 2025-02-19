@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 " App Name: Travel Wish "
+=======
+"App Name: Travel Wish"
+
+Faculty of IT
+>>>>>>> f22ff1c743e9500afa03c342db03fc9adf83d2fa
