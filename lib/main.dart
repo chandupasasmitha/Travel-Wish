@@ -28,24 +28,24 @@ class HomeScreen extends StatelessWidget {
   ];
 
   final List<Map<String, String>> popularPlaces = [
-    {'image': 'assets/popular1.jpg', 'name': 'Beach'},
-    {'image': 'assets/popular2.jpg', 'name': 'Mountain'},
-    {'image': 'assets/popular3.jpg', 'name': 'City'},
-    {'image': 'assets/popular4.jpg', 'name': 'Resort'},
+    {'image': 'assets/image01.jpeg', 'name': 'Beach'},
+    {'image': 'assets/image02.jpg', 'name': 'Mountain'},
+    {'image': 'assets/image01.jpeg', 'name': 'City'},
+    {'image': 'assets/image02.jpg', 'name': 'Resort'},
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               children: [
-                Image.asset('assets/image01.jpeg.', height: 40),
+                Image.asset('assets/logo.png', height: 40),
                 SizedBox(width: 8),
                 Text(
                   'TravelWish',
@@ -94,7 +94,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage: AssetImage('assets/image.jpeg'),
+                  backgroundImage: AssetImage('assets/image01.jpeg'),
                 ),
               ],
             ),
