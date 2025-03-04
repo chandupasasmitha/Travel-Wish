@@ -14,7 +14,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> options = [
     {'icon': Icons.directions_bus, 'label': 'Public Transport'},
     {'icon': Icons.hotel, 'label': 'Accommodation'},
@@ -38,7 +43,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                 Image.asset('assets/logo.png', height: 40),
                 SizedBox(width: 8),
                 Text(
-                  'TravelWish',
+                  'travelWish',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -64,7 +68,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,19 +80,12 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black54,
-                      ),
+                      'Hello ,',
+                      style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Username',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                      'Chandupa Sasmitha',
+                      style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],
                 ),
@@ -112,12 +109,12 @@ class HomeScreen extends StatelessWidget {
                 return Column(
                   children: [
                     CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.blue.shade100,
+                      radius: 50,
+                      backgroundColor: Colors.white,
                       child: Icon(
                         options[index]['icon'],
                         size: 30,
-                        color: Colors.blue,
+                        color: Colors.black,
                       ),
                     ),
                     SizedBox(height: 8),
@@ -129,20 +126,17 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 20),
             Text(
               'Popular',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Container(
-              height: 150,
+              height: 200,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: popularPlaces.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    width: 120,
+                    width: 150,
                     margin: EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -173,6 +167,11 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.search),
+        backgroundColor: const Color.fromARGB(255, 101, 183, 250),
       ),
     );
   }
