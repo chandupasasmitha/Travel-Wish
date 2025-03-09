@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: Icon(Icons.search),
-        backgroundColor: const Color.fromARGB(255, 101, 183, 251),
+        backgroundColor: const Color.fromARGB(255, 102, 183, 251),
       ),
     );
   }
