@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'Explore ',
+              'Explore',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
