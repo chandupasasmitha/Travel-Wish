@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Chandupa Sasmitha',
+                      'Chandupa',
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],
