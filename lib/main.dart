@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Chandupa',
+                      'Chandupa Sasmitha',
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 20),
             Text(
-              'Popular',
+              'Popular  ',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
