@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Column(
                   children: [
                     CircleAvatar(
-                      radius: 50,
+                      radius: 51,
                       backgroundColor: Colors.white,
                       child: Icon(
                         options[index]['icon'],
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: popularPlaces.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    width: 150,
+                    width: 151,
                     margin: EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
