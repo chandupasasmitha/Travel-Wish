@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     );
-  } //
+  }
 }
 
 class HomeScreen extends StatefulWidget {
@@ -80,56 +80,63 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hello ,',
+                      'Hello,',
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Chandupa Sasmitha', //username
+                      'Chandupa Sasmitha', // username
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],
                 ),
                 CircleAvatar(
                   radius: 25,
-                  backgroundImage:
-                      AssetImage('assets/image02.jpg'), //background image
+                  backgroundImage: AssetImage('assets/image02.jpg'),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: options.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 51,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        options[index]['icon'],
-                        size: 30,
-                        color: Colors.black,
+
+            // FIX: Wrap GridView.builder inside SizedBox to prevent overflow
+            SizedBox(
+              height: 320, // Adjust height to fit all 9 options properly
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: options.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          options[index]['icon'],
+                          size: 30,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(options[index]['label'], textAlign: TextAlign.center),
-                  ],
-                );
-              },
+                      SizedBox(height: 8),
+                      Text(options[index]['label'],
+                          textAlign: TextAlign.center),
+                    ],
+                  );
+                },
+              ),
             ),
+
             SizedBox(height: 20),
             Text(
-              'Popular  ', // a title
+              'Popular',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
+
             Container(
               height: 200,
               child: ListView.builder(
@@ -166,9 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+
             SizedBox(height: 20),
             Text(
-              'Explore  ',
+              'Explore',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -177,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: Icon(Icons.search),
-        backgroundColor: const Color.fromARGB(255, 102, 183, 251),
+        backgroundColor: Color.fromARGB(255, 102, 183, 251),
       ),
     );
   }
