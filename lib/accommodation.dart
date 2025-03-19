@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(TravelWishApp());
@@ -11,7 +11,7 @@ class TravelWishApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AccommodationPage(),
-    ); //
+    );
   }
 }
 
@@ -45,95 +45,111 @@ class _AccommodationPageState extends State<AccommodationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.travel_explore, color: Colors.white),
-                SizedBox(width: 8),
-                Text("TravelWish", style: TextStyle(color: Colors.white)),
-              ],
-            ),
-            Icon(Icons.notifications, color: Colors.white),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {},
-                ),
-                Text("Accommodation",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                SizedBox(width: 40),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () => _selectDate(context, true),
-                    child: Row(
-                      children: [
-                        Icon(Icons.calendar_today, color: Colors.blue),
-                        SizedBox(width: 5),
-                        // Text("< ${DateFormat('E, d MMM').format(startDate)} >"),
-                      ],
-                    ),
-                  ),
-                  Text("|"),
-                  GestureDetector(
-                    onTap: () => _selectDate(context, false),
-                    child: Row(
-                      children: [
-                        Icon(Icons.calendar_today, color: Colors.blue),
-                        SizedBox(width: 5),
-                        // Text("< ${DateFormat('E, d MMM').format(endDate)} >"),
-                      ],
-                    ),
-                  ),
-                ],
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/background.png"),
+                fit: BoxFit.fill,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.sort),
-                  label: Text("Sort By"),
+          ),
+          Column(
+            children: [
+              SizedBox(height: 25), // Increase appbar height
+              AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title: Row(
+                  children: [
+                    Image.asset('assets/logo.png', height: 40),
+                    SizedBox(width: 8),
+                    Text("travelWish", style: TextStyle(color: Colors.white)),
+                  ],
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.filter_list),
-                  label: Text("Filter By"),
+                actions: [Icon(Icons.notifications, color: Colors.white)],
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(35),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Accommodation",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: const Color.fromARGB(255, 0, 0, 0)),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _selectDate(context, true),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today,
+                                      color: Colors.blue),
+                                  SizedBox(width: 5),
+                                  Text(
+                                      "< ${DateFormat('E, d MMM').format(startDate)} >"),
+                                ],
+                              ),
+                            ),
+                            Text("|"),
+                            GestureDetector(
+                              onTap: () => _selectDate(context, false),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.calendar_today,
+                                      color: Colors.blue),
+                                  SizedBox(width: 5),
+                                  Text(
+                                      "< ${DateFormat('E, d MMM').format(endDate)} >"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.sort),
+                            label: Text("Sort By"),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.filter_list),
+                            label: Text("Filter By"),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Column(
+                        children:
+                            List.generate(5, (index) => accommodationBox()),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Column(
-              children: List.generate(5, (index) => accommodationBox()),
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -143,7 +159,7 @@ class _AccommodationPageState extends State<AccommodationPage> {
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
+        color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -152,9 +168,9 @@ class _AccommodationPageState extends State<AccommodationPage> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
-              "https://via.placeholder.com/80",
-              width: 80,
-              height: 80,
+              "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/75/d8/95/infinity-pool.jpg?w=1200&h=-1&s=1",
+              width: 150,
+              height: 110,
               fit: BoxFit.cover,
             ),
           ),
@@ -163,7 +179,7 @@ class _AccommodationPageState extends State<AccommodationPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Hotel Name",
+                Text("Heritance Kandalama",
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 Row(
@@ -172,9 +188,10 @@ class _AccommodationPageState extends State<AccommodationPage> {
                     SizedBox(width: 5),
                     Row(
                       children: List.generate(
-                          5,
-                          (index) =>
-                              Icon(Icons.star, color: Colors.yellow, size: 16)),
+                        5,
+                        (index) =>
+                            Icon(Icons.star, color: Colors.yellow, size: 20),
+                      ),
                     ),
                   ],
                 ),
@@ -187,7 +204,7 @@ class _AccommodationPageState extends State<AccommodationPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    "\$120 per night",
+                    "LKR 30000",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
