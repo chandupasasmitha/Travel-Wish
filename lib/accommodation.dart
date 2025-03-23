@@ -57,7 +57,7 @@ class _AccommodationPageState extends State<AccommodationPage> {
           ),
           Column(
             children: [
-              SizedBox(height: 25), // Increase appbar height
+              SizedBox(height: 25), // Increase appbar
               AppBar(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
@@ -129,12 +129,12 @@ class _AccommodationPageState extends State<AccommodationPage> {
                           ElevatedButton.icon(
                             onPressed: () {},
                             icon: Icon(Icons.sort),
-                            label: Text("Sort By"),
+                            label: Text("Sort By "),
                           ),
                           ElevatedButton.icon(
                             onPressed: () {},
                             icon: Icon(Icons.filter_list),
-                            label: Text("Filter By"),
+                            label: Text("Filter By "),
                           ),
                         ],
                       ),
