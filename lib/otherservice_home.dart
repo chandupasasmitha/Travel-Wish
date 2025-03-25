@@ -20,25 +20,25 @@ class ServicesScreen extends StatelessWidget {
       "name": "Molly Maid",
       "rating": 4.5,
       "description": "Home cleaning services",
-      "charge": "\$50/hr",
+      "charge": "\$50/hr"
     },
     {
       "name": "Auto Miraj",
       "rating": 4.2,
       "description": "Car wash & detailing",
-      "charge": "\$30",
+      "charge": "\$30"
     },
     {
       "name": "TaxiMe",
       "rating": 4.8,
       "description": "Taxi booking service",
-      "charge": "\$5/km",
+      "charge": "\$5/km"
     },
     {
       "name": "Print.lk",
       "rating": 4.0,
       "description": "Online printing service",
-      "charge": "\$0.10/page",
+      "charge": "\$0.10/page"
     },
   ];
 
@@ -46,12 +46,13 @@ class ServicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "TravelWish",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
+        title: Text("TravelWish",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         actions: [
-          IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {},
+          )
         ],
       ),
       body: Padding(
@@ -61,11 +62,13 @@ class ServicesScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
-                Text(
-                  "SERVICES",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {},
                 ),
+                Text("SERVICES",
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               ],
             ),
             SizedBox(height: 10),
@@ -78,10 +81,9 @@ class ServicesScreen extends StatelessWidget {
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: "Today",
-                items:
-                    ["Today", "This Week", "This Month"]
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                        .toList(),
+                items: ["Today", "This Week", "This Month"]
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                    .toList(),
                 onChanged: (value) {},
                 underline: SizedBox(),
               ),
@@ -115,20 +117,15 @@ class ServicesScreen extends StatelessWidget {
                     margin: EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       leading: Icon(Icons.business, size: 40),
-                      title: Text(
-                        service['name'],
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                      title: Text(service['name'],
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(
-                        "${service['description']}\nRating: ${service['rating']} ⭐",
-                      ),
+                          "${service['description']}\nRating: ${service['rating']} ⭐"),
                       trailing: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            service['charge'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          Text(service['charge'],
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           IconButton(
                             icon: Icon(Icons.favorite_border),
                             onPressed: () {},
