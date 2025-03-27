@@ -361,7 +361,7 @@ class _AccommodationDetailPageState extends State<AccommodationDetailPage> {
             text,
             style: const TextStyle(
               fontSize: 16,
-              height: 1.5,
+              height: 1.51,
             ),
           ),
         ),
