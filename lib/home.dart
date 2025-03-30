@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'accommodation.dart'; // Import the Accommodation page
 
 void main() {
   runApp(MyApp());
@@ -20,18 +21,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // List of options available on the home screen
   final List<Map<String, dynamic>> options = [
-    {'icon': Icons.directions_bus, 'label': 'Public Transport'},
-    {'icon': Icons.hotel, 'label': 'Accommodation'},
-    {'icon': Icons.restaurant, 'label': 'Restaurant'},
-    {'icon': Icons.local_hospital, 'label': 'Emergency'},
-    {'icon': Icons.explore, 'label': 'Things to do'},
-    {'icon': Icons.local_taxi, 'label': 'Taxi'},
-    {'icon': Icons.people, 'label': 'Guides'},
-    {'icon': Icons.map, 'label': 'Map'},
-    {'icon': Icons.miscellaneous_services, 'label': 'Services'},
+    {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
+    {
+      'icon': Icons.hotel,
+      'label': 'Accommodation',
+      'route': AccommodationPage()
+    },
+    {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
+    {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
+    {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
+    {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': null},
+    {'icon': Icons.people, 'label': 'Guides', 'route': null},
+    {'icon': Icons.map, 'label': 'Map', 'route': null},
+    {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': null},
   ];
 
+  // List of popular places with corresponding images
   final List<Map<String, String>> popularPlaces = [
     {'image': 'assets/image01.jpeg', 'name': 'Beach'},
     {'image': 'assets/image02.jpg', 'name': 'Mountain'},
@@ -49,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Row(
               children: [
-                Image.asset('assets/logo.png', height: 40),
+                Image.asset('assets/logo.png', height: 40), // App logo
                 SizedBox(width: 8),
                 Text(
                   'travelWish',
@@ -73,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Greeting section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -84,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Chandupa Sasmitha', // username
+                      'Chandupa Sasmitha', // Static username
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],
@@ -97,9 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 20),
 
-            // FIX: Wrap GridView.builder inside SizedBox to prevent overflow
+            // Grid of options
             SizedBox(
-              height: 320, // Adjust height to fit all 9 options properly
+              height: 320,
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -110,21 +118,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 itemCount: options.length,
                 itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          options[index]['icon'],
-                          size: 30,
-                          color: Colors.black,
+                  return InkWell(
+                    onTap: () {
+                      // Navigate to respective page if a route is available
+                      if (options[index]['route'] != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => options[index]['route'],
+                          ),
+                        );
+                      }
+                    },
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            options[index]['icon'],
+                            size: 30,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(options[index]['label'],
-                          textAlign: TextAlign.center),
-                    ],
+                        SizedBox(height: 8),
+                        Text(options[index]['label'],
+                            textAlign: TextAlign.center),
+                      ],
+                    ),
                   );
                 },
               ),
@@ -137,6 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 10),
 
+            // Horizontal list of popular places
             Container(
               height: 200,
               child: ListView.builder(
