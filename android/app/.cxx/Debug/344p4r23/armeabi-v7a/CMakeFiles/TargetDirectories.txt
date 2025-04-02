@@ -1,0 +1,2 @@
+D:/Travel Wish/Travel-Wish/android/app/.cxx/Debug/344p4r23/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Travel Wish/Travel-Wish/android/app/.cxx/Debug/344p4r23/armeabi-v7a/CMakeFiles/rebuild_cache.dir
