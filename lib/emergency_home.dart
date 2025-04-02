@@ -32,53 +32,53 @@ class EmergencyScreen extends StatelessWidget {
             ),
           ),
           SafeArea(
-            child: Column(
-              children: [
-                // Header
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "travelwish",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+            child: SingleChildScrollView( // Wrap the column with SingleChildScrollView
+              child: Column(
+                children: [
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "travelwish",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.notifications,
                           color: Colors.white,
+                          size: 28,
                         ),
-                      ),
-                      const Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                // Title
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.arrow_back, color: Colors.black, size: 28),
-                      SizedBox(width: 10),
-                      Text(
-                        "EMERGENCY",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                
+                  const SizedBox(height: 40),
+                  // Title
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.arrow_back, color: Colors.black, size: 28),
+                        SizedBox(width: 10),
+                        Text(
+                          "EMERGENCY",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Expanded(
-                  child: Padding(
+                  const SizedBox(height: 20),
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
@@ -88,8 +88,8 @@ class EmergencyScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           // Search Icon in Bottom Right
