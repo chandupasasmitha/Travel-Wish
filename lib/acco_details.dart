@@ -131,14 +131,6 @@ class _AccommodationDetailPageState extends State<AccommodationDetailPage> {
                 expandedHeight: 300,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    "iPhone 14 Pro Max - 28",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
                   background: _buildImageGrid(accommodation.images),
                 ),
                 leading: Container(
@@ -361,7 +353,7 @@ class _AccommodationDetailPageState extends State<AccommodationDetailPage> {
             text,
             style: const TextStyle(
               fontSize: 16,
-              height: 1.5,
+              height: 1.51,
             ),
           ),
         ),
