@@ -27,7 +27,7 @@ class EmergencyScreen extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/background.png',
+              'assets/background01.png',
               fit: BoxFit.cover,
             ),
           ),
