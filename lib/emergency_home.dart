@@ -21,12 +21,14 @@ class EmergencyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    bool isTablet = screenWidth > 600;
+    bool isDesktop = screenWidth > 1000;
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
-          double screenWidth = constraints.maxWidth;
-          double screenHeight = constraints.maxHeight;
-
           return Stack(
             children: [
               // Background Image
@@ -53,7 +55,7 @@ class EmergencyScreen extends StatelessWidget {
                             Text(
                               "travelwish",
                               style: TextStyle(
-                                fontSize: screenWidth * 0.06,
+                                fontSize: screenWidth * 0.05,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -61,18 +63,19 @@ class EmergencyScreen extends StatelessWidget {
                             Icon(
                               Icons.notifications,
                               color: Colors.white,
-                              size: screenWidth * 0.07,
+                              size: screenWidth * 0.06,
                             ),
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.05),
+
                         // Title
                         Row(
                           children: [
                             Icon(
                               Icons.arrow_back,
                               color: Colors.black,
-                              size: screenWidth * 0.07,
+                              size: screenWidth * 0.06,
                             ),
                             SizedBox(width: screenWidth * 0.02),
                             Text(
@@ -86,19 +89,38 @@ class EmergencyScreen extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.03),
-                        Column(
-                          children: [
-                            _buildEmergencyCard('assets/bell.png', screenWidth, screenHeight),
-                            SizedBox(height: screenHeight * 0.03),
-                            _buildEmergencyCard('assets/1990.png', screenWidth, screenHeight),
-                          ],
+
+                        // Emergency Cards (Grid on larger screens)
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return isTablet || isDesktop
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildEmergencyCard(
+                                          'assets/bell.png', screenWidth, screenHeight),
+                                      _buildEmergencyCard(
+                                          'assets/1990.png', screenWidth, screenHeight),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      _buildEmergencyCard(
+                                          'assets/bell.png', screenWidth, screenHeight),
+                                      SizedBox(height: screenHeight * 0.03),
+                                      _buildEmergencyCard(
+                                          'assets/1990.png', screenWidth, screenHeight),
+                                    ],
+                                  );
+                          },
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
-              // Search Icon in Bottom Right
+
+              // Floating Action Button (Responsive Positioning & Size)
               Positioned(
                 bottom: screenHeight * 0.03,
                 right: screenWidth * 0.05,
@@ -107,7 +129,7 @@ class EmergencyScreen extends StatelessWidget {
                   child: Icon(
                     Icons.search,
                     color: Colors.white,
-                    size: screenWidth * 0.07,
+                    size: screenWidth * 0.06,
                   ),
                   onPressed: () {},
                 ),
@@ -120,69 +142,48 @@ class EmergencyScreen extends StatelessWidget {
   }
 
   Widget _buildEmergencyCard(String imagePath, double screenWidth, double screenHeight) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                spreadRadius: 2,
-              ),
-            ],
+    return Container(
+      width: screenWidth > 600 ? screenWidth * 0.4 : screenWidth * 0.8, // Adjust width for tablets
+      padding: EdgeInsets.all(screenWidth * 0.04),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            spreadRadius: 2,
           ),
-          padding: EdgeInsets.all(screenWidth * 0.05),
-          child: Image.asset(
+        ],
+      ),
+      child: Column(
+        children: [
+          Image.asset(
             imagePath,
             width: screenWidth * 0.3,
             height: screenWidth * 0.3,
           ),
-        ),
-        SizedBox(height: screenHeight * 0.01),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                spreadRadius: 1,
-              ),
-            ],
+          SizedBox(height: screenHeight * 0.02),
+          Text(
+            "Press & Hold To Activate Emergency Alert",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: screenWidth * 0.045,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.05,
-            vertical: screenHeight * 0.02,
+          SizedBox(height: screenHeight * 0.005),
+          Text(
+            "Our Agents will Contact You Soon.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: screenWidth * 0.035,
+              color: Colors.black54,
+            ),
           ),
-          margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: Column(
-            children: [
-              Text(
-                "Press & Hold To Activate Emergency Alert",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: screenWidth * 0.04,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.005),
-              Text(
-                "Our Agents will Contact You Soon.",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: screenWidth * 0.035,
-                  color: Colors.black54,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
