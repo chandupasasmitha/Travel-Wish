@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'loginpage.dart';
 import 'signuppage.dart';
+import 'emergency_home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand, // Ensures background covers entire screen
+        fit: StackFit.expand,
         children: [
           // Background Image
           Positioned.fill(
@@ -52,8 +53,8 @@ class HomeScreen extends StatelessWidget {
                       // Logo
                       Image.asset(
                         'assets/logo.png',
-                        width: screenWidth * 0.35, 
-                        height: screenWidth * 0.2, 
+                        width: screenWidth * 0.35,
+                        height: screenWidth * 0.2,
                       ),
 
                       SizedBox(height: screenHeight * 0.02),
@@ -85,7 +86,7 @@ class HomeScreen extends StatelessWidget {
 
                       // Log In Button
                       FractionallySizedBox(
-                        widthFactor: 0.8, // 80% of screen width
+                        widthFactor: 0.8,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -119,7 +120,7 @@ class HomeScreen extends StatelessWidget {
 
                       // Sign Up Button
                       FractionallySizedBox(
-                        widthFactor: 0.8, // 80% of screen width
+                        widthFactor: 0.8,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.push(
