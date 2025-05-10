@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const TravelWishApp());
@@ -16,7 +17,17 @@ class TravelWishApp extends StatelessWidget {
   }
 }
 
-class ServicesScreen extends StatelessWidget {
+class ServicesScreen extends StatefulWidget {
+  const ServicesScreen({super.key});
+
+  @override
+  State<ServicesScreen> createState() => _ServicesScreenState();
+}
+
+class _ServicesScreenState extends State<ServicesScreen> {
+  DateTime? startDate;
+  DateTime? endDate;
+
   final List<Map<String, dynamic>> services = [
     {
       "name": "Molly Maid",
@@ -52,7 +63,28 @@ class ServicesScreen extends StatelessWidget {
     },
   ];
 
-  ServicesScreen({super.key});
+  Future<void> pickDate({required bool isStart}) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: isStart ? startDate ?? DateTime.now() : endDate ?? DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2030),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        if (isStart) {
+          startDate = pickedDate;
+        } else {
+          endDate = pickedDate;
+        }
+      });
+    }
+  }
+
+  String formatDate(DateTime? date) {
+    if (date == null) return 'Select date';
+    return DateFormat('EEE, d MMM').format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +92,9 @@ class ServicesScreen extends StatelessWidget {
       backgroundColor: Colors.grey[100],
       body: Stack(
         children: [
-          // Blue wave background
           Container(
             height: 230,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/background.png"),
                 fit: BoxFit.cover,
@@ -74,7 +105,6 @@ class ServicesScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                // Custom AppBar
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(
@@ -82,11 +112,7 @@ class ServicesScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Image.asset(
-                            "assets/logo.png", // optional, else use Text
-                            height: 26,
-                            width: 26,
-                          ),
+                          Image.asset("assets/logo.png", height: 26, width: 26),
                           const SizedBox(width: 8),
                           const Text(
                             "travelwish.",
@@ -105,7 +131,6 @@ class ServicesScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                // White card containing all UI
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -118,7 +143,6 @@ class ServicesScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // SERVICES header with back button
                         Row(
                           children: [
                             IconButton(
@@ -136,48 +160,52 @@ class ServicesScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        // Date selectors
                         Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.calendar_today, size: 18, color: Colors.blue),
-                                    SizedBox(width: 4),
-                                    Text("Mon, 27 Mar", style: TextStyle(fontSize: 15)),
-                                    Icon(Icons.keyboard_arrow_down, size: 18),
-                                  ],
+                              child: GestureDetector(
+                                onTap: () => pickDate(isStart: true),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.calendar_today, size: 18, color: Colors.blue),
+                                      const SizedBox(width: 4),
+                                      Text(formatDate(startDate), style: const TextStyle(fontSize: 15)),
+                                      const Icon(Icons.keyboard_arrow_down, size: 18),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text("Wed, 29 Mar", style: TextStyle(fontSize: 15)),
-                                    Icon(Icons.keyboard_arrow_down, size: 18),
-                                  ],
+                              child: GestureDetector(
+                                onTap: () => pickDate(isStart: false),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(formatDate(endDate), style: const TextStyle(fontSize: 15)),
+                                      const Icon(Icons.keyboard_arrow_down, size: 18),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 10),
-                        // Sort and Filter buttons
                         Row(
                           children: [
                             Expanded(
@@ -189,10 +217,7 @@ class ServicesScreen extends StatelessWidget {
                                 child: TextButton.icon(
                                   onPressed: () {},
                                   icon: const Icon(Icons.sort, color: Colors.blue),
-                                  label: const Text(
-                                    "Sort By",
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
+                                  label: const Text("Sort By", style: TextStyle(color: Colors.blue)),
                                 ),
                               ),
                             ),
@@ -206,17 +231,13 @@ class ServicesScreen extends StatelessWidget {
                                 child: TextButton.icon(
                                   onPressed: () {},
                                   icon: const Icon(Icons.filter_list, color: Colors.blue),
-                                  label: const Text(
-                                    "Filter By",
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
+                                  label: const Text("Filter By", style: TextStyle(color: Colors.blue)),
                                 ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 10),
-                        // Services List
                         Expanded(
                           child: ListView.builder(
                             itemCount: services.length,
@@ -233,7 +254,6 @@ class ServicesScreen extends StatelessWidget {
               ],
             ),
           ),
-          // Floating search button
           Positioned(
             right: 24,
             bottom: 24,
@@ -264,7 +284,7 @@ class ServiceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey,
+            color: Colors.grey.shade300,
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -272,7 +292,6 @@ class ServiceCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Service image
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
@@ -283,22 +302,15 @@ class ServiceCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 14),
-          // Service details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  service['name'],
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
+                Text(service['name'], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 2),
                 Row(
                   children: [
-                    Text(
-                      service['rating'].toString(),
-                      style: const TextStyle(fontSize: 14, color: Colors.black87),
-                    ),
+                    Text(service['rating'].toString(), style: const TextStyle(fontSize: 14)),
                     const SizedBox(width: 2),
                     ...List.generate(5, (i) {
                       double rating = service['rating'];
@@ -311,21 +323,14 @@ class ServiceCard extends StatelessWidget {
                       );
                     }),
                     const SizedBox(width: 4),
-                    Text(
-                      "(${service['reviews']})",
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
+                    Text("(${service['reviews']})", style: const TextStyle(fontSize: 12, color: Colors.grey)),
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  service['description'],
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
+                Text(service['description'], style: const TextStyle(fontSize: 14, color: Colors.black54)),
               ],
             ),
           ),
-          // Price and favorite
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
