@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'emergency_bell.dart';    // Import the bell alert screen
+import 'emergency_1990.dart';   // Import the 1990 ambulance screen
 
 void main() {
   runApp(const EmergencyHome());
@@ -17,7 +19,7 @@ class EmergencyHome extends StatelessWidget {
 }
 
 class EmergencyScreen extends StatelessWidget {
-  const EmergencyScreen({Key? key}) : super(key: key);
+  const EmergencyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,18 +100,66 @@ class EmergencyScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       _buildEmergencyCard(
-                                          'assets/bell.png', screenWidth, screenHeight),
+                                        context,
+                                        'assets/bell.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const EmergencyAlertScreen(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                       _buildEmergencyCard(
-                                          'assets/1990.png', screenWidth, screenHeight),
+                                        context,
+                                        'assets/1990.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const Emergency1990Screen(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   )
                                 : Column(
                                     children: [
                                       _buildEmergencyCard(
-                                          'assets/bell.png', screenWidth, screenHeight),
+                                        context,
+                                        'assets/bell.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const EmergencyAlertScreen(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                       SizedBox(height: screenHeight * 0.03),
                                       _buildEmergencyCard(
-                                          'assets/1990.png', screenWidth, screenHeight),
+                                        context,
+                                        'assets/1990.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const Emergency1990Screen(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                           },
@@ -141,48 +191,58 @@ class EmergencyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyCard(String imagePath, double screenWidth, double screenHeight) {
-    return Container(
-      width: screenWidth > 600 ? screenWidth * 0.4 : screenWidth * 0.8, // Adjust width for tablets
-      padding: EdgeInsets.all(screenWidth * 0.04),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Image.asset(
-            imagePath,
-            width: screenWidth * 0.3,
-            height: screenWidth * 0.3,
-          ),
-          SizedBox(height: screenHeight * 0.02),
-          Text(
-            "Press & Hold To Activate Emergency Alert",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: screenWidth * 0.045,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+  Widget _buildEmergencyCard(
+    BuildContext context,
+    String imagePath,
+    double screenWidth,
+    double screenHeight, {
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: screenWidth > 600 ? screenWidth * 0.4 : screenWidth * 0.8,
+        padding: EdgeInsets.all(screenWidth * 0.04),
+        margin: EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              spreadRadius: 2,
             ),
-          ),
-          SizedBox(height: screenHeight * 0.005),
-          Text(
-            "Our Agents will Contact You Soon.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: screenWidth * 0.035,
-              color: Colors.black54,
+          ],
+        ),
+        child: Column(
+          children: [
+            Image.asset(
+              imagePath,
+              width: screenWidth * 0.3,
+              height: screenWidth * 0.3,
             ),
-          ),
-        ],
+            SizedBox(height: screenHeight * 0.02),
+            Text(
+              "Press & Hold To Activate Emergency Alert",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.005),
+            Text(
+              "Our Agents will Contact You Soon.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenWidth * 0.035,
+                color: Colors.black54,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
