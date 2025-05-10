@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EmergencyAlertScreen extends StatelessWidget {
-  const EmergencyAlertScreen({super.key});
+class Emergency1990Screen extends StatelessWidget {
+  const Emergency1990Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,6 @@ class EmergencyAlertScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Full-screen background image
           Positioned.fill(
             child: Image.asset(
               'assets/background.png',
@@ -19,14 +18,13 @@ class EmergencyAlertScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                // AppBar substitute (logo and bell icon)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset(
-                        'assets/logo.png', // Replace with your logo asset
+                        'assets/logo.png',
                         height: 40,
                       ),
                       const Icon(
@@ -38,7 +36,6 @@ class EmergencyAlertScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Emergency Title
                 const Text(
                   'EMERGENCY',
                   style: TextStyle(
@@ -50,7 +47,7 @@ class EmergencyAlertScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'EMERGENCY ALERT SENT',
+                  'AMBULANCE REQUEST SENT',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.red,
@@ -59,7 +56,6 @@ class EmergencyAlertScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                // Bell Icon in Card
                 Center(
                   child: Container(
                     decoration: BoxDecoration(
@@ -75,14 +71,13 @@ class EmergencyAlertScreen extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.all(32),
                     child: Image.asset(
-                      'assets/bell.png',
-                      height: 104,
-                      width: 104,
+                      'assets/1990.png',
+                      height: 204,
+                      width: 204,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Help is on the way card
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Container(
@@ -102,7 +97,7 @@ class EmergencyAlertScreen extends StatelessWidget {
                     child: const Column(
                       children: [
                         Text(
-                          'Help is on the way.',
+                          'You’re being connected to 1990.',
                           style: TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
@@ -111,7 +106,7 @@ class EmergencyAlertScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Stay calm and stay safe.',
+                          'Medical assistance is on its way..',
                           style: TextStyle(
                             color: Colors.black87,
                             fontSize: 15,
@@ -125,7 +120,6 @@ class EmergencyAlertScreen extends StatelessWidget {
               ],
             ),
           ),
-          // FloatingActionButton at bottom right
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
