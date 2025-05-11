@@ -38,6 +38,14 @@ flutter_rating_bar
 2.14
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_rating_bar-4.0.1/
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_rating_bar-4.0.1/lib/
+http
+3.4
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.4.0/
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.4.0/lib/
+http_parser
+3.4
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2/
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2/lib/
 intl
 3.3
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.20.2/
@@ -98,6 +106,10 @@ test_api
 3.4
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.3/
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/test_api-0.7.3/lib/
+typed_data
+3.5
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0/
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0/lib/
 vector_math
 2.14
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4/
@@ -106,6 +118,10 @@ vm_service
 3.3
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.3.0/
 file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/vm_service-14.3.0/lib/
+web
+3.4
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1/
+file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1/lib/
 sky_engine
 3.2
 file:///C:/src/flutter/bin/cache/pkg/sky_engine/

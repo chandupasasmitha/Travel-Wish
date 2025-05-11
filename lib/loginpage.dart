@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signuppage.dart';
 
-
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -23,13 +22,16 @@ class LoginScreen extends StatelessWidget {
           // Login Form
           Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 110 , left: 30, right: 30),
+              padding: EdgeInsets.only(top: 110, left: 30, right: 30),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
                     "Welcome Back!",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
                   ),
                   const SizedBox(height: 10),
                   const Text(
@@ -47,9 +49,11 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
                     ),
-                    child: const Text("Login", style: TextStyle(fontSize: 18, color: Colors.white)),
+                    child: const Text("Login",
+                        style: TextStyle(fontSize: 18, color: Colors.white)),
                   ),
                   const SizedBox(height: 50),
 
@@ -57,15 +61,18 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account?", style: TextStyle(color: Colors.black54)),
+                      const Text("Don't have an account?",
+                          style: TextStyle(color: Colors.black54)),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => SignUpScreen()),
                           );
                         },
-                        child: const Text("Sign up", style: TextStyle(color: Colors.blue)),
+                        child: const Text("Sign up",
+                            style: TextStyle(color: Colors.blue)),
                       ),
                     ],
                   ),
@@ -86,7 +93,8 @@ class LoginScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 5, offset: const Offset(0, 3)),
+          BoxShadow(
+              color: Colors.black12, blurRadius: 5, offset: const Offset(0, 3)),
         ],
       ),
       child: TextField(

@@ -68,6 +68,18 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "http",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http_parser-4.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.20.2",
       "packageUri": "lib/",
@@ -164,6 +176,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "typed_data",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/typed_data-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -176,13 +194,19 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "web",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "test",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-04-07T07:13:51.744836Z",
+  "generated": "2025-05-10T12:23:43.546982Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///C:/src/flutter",
