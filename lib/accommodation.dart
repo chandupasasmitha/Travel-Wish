@@ -89,7 +89,7 @@ class _AccommodationPageState extends State<AccommodationPage> {
                             EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                         margin: EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
