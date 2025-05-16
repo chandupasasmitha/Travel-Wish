@@ -51,14 +51,44 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets\logo.png
+    - assets\appbar-background.jpg
+    - assets/adventure/adams_peak.webp
+    - assets/adventure/walking_in_the_hills.jpg
+    - assets\adventure\jeep_safari.jpg 
+    - assets\adventure\jet_sking.jpg
+    - assets\adventure\kite_surfing.webp
+    - assets\adventure\lagoon_safari.jpg
+    - assets\adventure\learn_to_surf.jpg
+    - assets\adventure\pekoe_trail.jpg
+    - assets\adventure\rock_climbing.jpg
+    - assets\adventure\scuba_diving.jpg
+    - assets\adventure\train_through_the_hill.jpg
+    - assets\adventure\white_water_rafting.jpg
+    - assets\appbar-background.jpg
+    - assets\arpico-super-center.jpg
+    - assets\barista.jpeg
+    - assets\cargills-food-city.jpg
+    - assets\coolplanet.jpeg
+    - assets\ext.jpg
+    - assets\spar.jpeg
+    - assets\perera&sons.jpeg
+    - assets\odel.jpeg
+    - assets\ipharma.jpeg
+    - assets\healthguard.jpg
+    - assets\learningpoints\geographynlocation.jpg
+    - assets\learningpoints\historynculture.jpg
+    - assets\learningpoints\naturenwildlife.jpg
+
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/
+  
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -72,15 +102,15 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Quicksand
-  #     fonts:
-  #       - asset: assets\fonts\Quicksand-Bold.ttf
-  #         weight: 800
-  #       - asset: assets\fonts\Quicksand-Regular.ttf
-  #       - asset: assets\fonts\Quicksand-Light.ttf
-  #         weight: 600
-  #         style: italic
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets\fonts\Quicksand-Bold.ttf
+          weight: 800
+        - asset: assets\fonts\Quicksand-Regular.ttf
+        - asset: assets\fonts\Quicksand-Light.ttf
+          weight: 600
+          
    
   
   # For details regarding fonts from package dependencies,
