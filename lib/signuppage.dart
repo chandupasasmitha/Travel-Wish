@@ -63,6 +63,13 @@ class SignUpScreen extends StatelessWidget {
                       };
 
                       Api.adduser(data1);
+
+                      // Navigate to the Login Page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
@@ -128,4 +135,3 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 }
-// class SignUpScreen extends StatefulWidget
