@@ -4,14 +4,18 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String baseUrl = "http://192.168.147.219/api/";
+  static const String baseUrl = "http://10.0.2.2:2000/api/";
 
   static adduser(Map udata) async {
     print(udata);
     var url = Uri.parse("${baseUrl}add_data");
 
     try {
-      final res = await http.post(url, body: udata);
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"}, // ADD HEADER
+        body: jsonEncode(udata), // CONVERT TO JSON
+      );
 
       if (res.statusCode == 200) {
         var data1 = jsonDecode(res.body.toString());
