@@ -17,19 +17,16 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   String name = "John David";
-  String email = "johndavid@gmail.com";
-  String phone = "+94 71 234 5678";
-  String country = "Sri Lanka";
-  String password = "password123";
+  String email = "abc123@gmail.com";
+  String phone = "+72 345 678 654";
+  String country = "Australia";
 
   bool _isEditing = false;
-  bool _obscurePassword = true;
 
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _countryController;
-  late TextEditingController _passwordController;
 
   @override
   void initState() {
@@ -38,13 +35,11 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController = TextEditingController(text: email);
     _phoneController = TextEditingController(text: phone);
     _countryController = TextEditingController(text: country);
-    _passwordController = TextEditingController(text: password);
 
     _nameController.addListener(_checkChanges);
     _emailController.addListener(_checkChanges);
     _phoneController.addListener(_checkChanges);
     _countryController.addListener(_checkChanges);
-    _passwordController.addListener(_checkChanges);
   }
 
   void _checkChanges() {
@@ -52,8 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _isEditing = _nameController.text != name ||
           _emailController.text != email ||
           _phoneController.text != phone ||
-          _countryController.text != country ||
-          _passwordController.text != password;
+          _countryController.text != country;
     });
   }
 
@@ -63,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.dispose();
     _phoneController.dispose();
     _countryController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -73,7 +66,6 @@ class _ProfilePageState extends State<ProfilePage> {
       email = _emailController.text;
       phone = _phoneController.text;
       country = _countryController.text;
-      password = _passwordController.text;
       _isEditing = false;
     });
 
@@ -82,94 +74,212 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void _navigateToAddCardDetails() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddCardDetailsPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      backgroundColor: Colors.white, // Set overall background to white
+      extendBodyBehindAppBar: true, // Allows content to go behind the app bar
       appBar: AppBar(
+        toolbarHeight: screenHeight *
+            0.17, // Adjusted height for app bar content and profile text
         elevation: 0,
-        backgroundColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Image.asset('assets/logo.png', height: 40),
-                SizedBox(width: 8),
-                Text(
-                  'travelWish',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
+        backgroundColor: Colors.transparent, // Make app bar transparent
+        flexibleSpace: Container(
+          // Use a Container with a background image for the top section
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'assets/background.png'), // Your top background image
+              fit: BoxFit.cover,
             ),
-            IconButton(
-              icon: Icon(Icons.notifications, color: Colors.black),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/profile.jpg'),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: CircleAvatar(
-                  backgroundColor: const Color.fromARGB(255, 180, 179, 173),
-                  radius: 15,
-                  child: Icon(Icons.camera_alt, size: 16),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Form(
-              key: _formKey,
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
               child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.end, // Align content to the bottom
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildTextField(Icons.person, "Full Name", _nameController),
-                  _buildTextField(Icons.email, "Email", _emailController),
-                  _buildTextField(Icons.phone, "Telephone", _phoneController),
-                  _buildTextField(Icons.flag, "Country", _countryController),
-                  _buildPasswordField(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back,
+                            color: Colors.white,
+                            size: screenWidth * 0.06), // Back arrow
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Row(
+                        children: [
+                          Image.asset('assets/appname.png',
+                              height: screenHeight *
+                                  0.035), // Updated to appname.png
+                          SizedBox(width: screenWidth * 0.02),
+                          Text(
+                            'travelwish.',
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.05,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.notifications,
+                            color: Colors.white, size: screenWidth * 0.06),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                      height: screenHeight *
+                          0.02), // Space between logo row and "PROFILE"
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'PROFILE',
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.06, // Larger "PROFILE" text
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: screenHeight * 0.02), // Space for bottom padding
                 ],
               ),
             ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _isEditing ? _saveDetails : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 160, 180, 229),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+                height: screenHeight *
+                    0.25), // Adjust this space to push content down below the app bar and profile pic
+            // Profile Picture
+            Align(
+              alignment: Alignment.center,
+              child: CircleAvatar(
+                radius: screenWidth *
+                    0.18, // Slightly larger radius for profile picture
+                backgroundColor:
+                    Colors.grey[300], // Background color for empty profile
+                child: Stack(
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: screenWidth * 0.25, // Size of the person icon
+                      color: Colors.grey[600], // Color of the person icon
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: CircleAvatar(
+                        backgroundColor: Color(
+                            0xFFE0E0E0), // Lighter grey for camera icon background
+                        radius:
+                            screenWidth * 0.05, // Slightly larger camera circle
+                        child: Icon(Icons.add_a_photo,
+                            size: screenWidth * 0.05,
+                            color: Colors.grey[700]), // Camera icon color
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Text("Save Details"),
             ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
+            SizedBox(height: screenHeight * 0.03),
+            Form(
+              key: _formKey,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth *
+                        0.06), // Increased horizontal padding for text fields
+                child: Column(
+                  children: [
+                    _buildTextField(
+                        Icons.mail_outline, "Email Address", _emailController),
+                    _buildTextField(
+                        Icons.person_outline, "Name", _nameController),
+                    _buildTextField(
+                        Icons.flag_outlined, "Country", _countryController),
+                    _buildTextField(Icons.phone_outlined, "Mobile Number",
+                        _phoneController),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.03),
+            SizedBox(
+              width: screenWidth * 0.6, // Made the button smaller
+              height: screenHeight * 0.055, // Made the button smaller
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle Add Card Details
-                },
+                onPressed: _isEditing ? _saveDetails : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[800],
-                  padding: EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: _isEditing
+                      ? Color(0xFF3F51B5) // Blue when editing
+                      : const Color.fromARGB(
+                          255, 224, 224, 224), // Light grey when not editing
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // Rounded corners
+                  ),
+                ),
+                child: Text(
+                  "Save Details",
+                  style: TextStyle(
+                      color: _isEditing
+                          ? Colors.white
+                          : Colors.black, // Text color changes with background
+                      fontSize: screenWidth * 0.04),
+                ),
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.02),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+              child: Divider(
+                color: Colors.grey,
+                thickness: 1,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.02),
+            SizedBox(
+              width: screenWidth * 0.88, // Wider button as in the image
+              height: screenHeight * 0.065,
+              child: ElevatedButton(
+                onPressed: _navigateToAddCardDetails,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Color(0xFF1A1A1A), // Dark black as in the image
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: Text(
                   "Add Card Details",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      color: Colors.white, fontSize: screenWidth * 0.045),
                 ),
               ),
             ),
+            SizedBox(height: screenHeight * 0.04), // Add some bottom padding
           ],
         ),
       ),
@@ -180,38 +290,44 @@ class _ProfilePageState extends State<ProfilePage> {
       IconData icon, String hint, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        controller: controller,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon),
-          labelText: hint,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // White background for the text fields
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 2), // changes position of shadow
+            ),
+          ],
+        ),
+        child: TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon,
+                color: Colors.blue[400]), // Blue icon color for input fields
+            labelText: hint,
+            labelStyle: TextStyle(color: Colors.grey[600]),
+            border: InputBorder.none, // Remove default border
+            contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildPasswordField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        controller: _passwordController,
-        obscureText: _obscurePassword,
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.lock),
-          labelText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscurePassword ? Icons.visibility : Icons.visibility_off,
-            ),
-            onPressed: () {
-              setState(() {
-                _obscurePassword = !_obscurePassword;
-              });
-            },
-          ),
-        ),
+class AddCardDetailsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add Card Details"),
+      ),
+      body: Center(
+        child: Text("Add your card details here."),
       ),
     );
   }
