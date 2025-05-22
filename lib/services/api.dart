@@ -42,4 +42,28 @@ class Api {
       debugPrint(e.toString());
     }
   }
+
+  static Future<bool> loginUser(Map loginData) async {
+    var url = Uri.parse("${baseUrl}login");
+    try {
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(loginData),
+      );
+
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body);
+        print("Login Success: $data");
+        // Optionally check for a specific field in response
+        return true;
+      } else {
+        print("Login Failed: ${res.body}");
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Login error: $e");
+      return false;
+    }
+  }
 }
