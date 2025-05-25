@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'models/item.dart';
 
 void main() {
   runApp(MyApp());
@@ -100,614 +103,110 @@ class Content2 extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Supermarkets',
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/ext.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Keells",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.03),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/cargills-food-city.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Cargills Food City",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                    //second row
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/spar.jpeg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Spare",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.03),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/arpico-super-center.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Arpico",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                    //Pharmacies
-                    Row(
-                      children: [
-                        Text(
-                          'Pharmacies',
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/healthguard.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "HealthGuard",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.03),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image:
-                                              AssetImage('assets/ipharma.jpeg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "iPharma",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-
-                    //Clothing
-                    Row(
-                      children: [
-                        Text(
-                          'Clothing',
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage('assets/odel.jpeg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Odel",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.03),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/coolplanet.jpeg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Cool Planet",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                    //Cafe
-                    Row(
-                      children: [
-                        Text(
-                          'Cafes',
-                          style: TextStyle(
-                              fontSize: 19, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image:
-                                              AssetImage('assets/barista.jpeg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Barista",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.03),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/perera&sons.jpeg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 54, 85, 226)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 16,
-                                  bottom: 16,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Perera & Sons",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                      ),
-                                      Text(
-                                        "See Review",
-                                        style: TextStyle(
-                                            color: const Color.fromARGB(
-                                                255, 231, 230, 230),
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *
-                          0.02, // 2% of screen height
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Expanded(
+            child: categories(),
           ),
         ],
       ),
     );
+  }
+}
+
+class categories extends StatefulWidget {
+  const categories({super.key});
+
+  @override
+  State<categories> createState() => _categoriesState();
+}
+
+class _categoriesState extends State<categories> {
+  List<Item> items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchItems();
+  }
+
+  Future<void> fetchItems() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://localhost:3000/api/items'));
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          items = data.map((item) => Item.fromJson(item)).toList();
+        });
+      } else {
+        print('failed to load items');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return items.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : Flexible(
+            flex: 1,
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 0.8),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                return Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.network(
+                            item.imageUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Container(
+                            color: Colors.black.withOpacity(
+                                0.5), // 50% transparent black overlay
+                          ),
+                        ),
+                        Positioned(
+                            left: 16,
+                            bottom: 16,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.title,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                ),
+                                Text(
+                                  'See Review',
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 13),
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
   }
 }
