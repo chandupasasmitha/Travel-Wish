@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'card_details_page.dart'; // Import your card details page
 
 void main() {
   runApp(MaterialApp(
@@ -77,7 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
   void _navigateToAddCardDetails() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddCardDetailsPage()),
+      MaterialPageRoute(
+          builder: (context) =>
+              CardDetailsPage()), // Changed to CardDetailsPage
     );
   }
 
@@ -314,20 +317,6 @@ class _ProfilePageState extends State<ProfilePage> {
             contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AddCardDetailsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Card Details"),
-      ),
-      body: Center(
-        child: Text("Add your card details here."),
       ),
     );
   }
