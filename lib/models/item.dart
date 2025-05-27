@@ -1,21 +1,24 @@
 class Item {
-  final int id;
+  final String id;
   final String title;
-  final String description;
+  final String category;
+  final String subcategory;
   final String imageUrl;
 
   Item({
     required this.id,
     required this.title,
-    required this.description,
+    required this.category,
+    required this.subcategory,
     required this.imageUrl,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
-      id: json['id'],
+      id: json['_id'].toString(),
       title: json['title'],
-      description: json['description'],
+      category: json['category'],
+      subcategory: json['subcategory'],
       imageUrl: json['imageUrl'],
     );
   }

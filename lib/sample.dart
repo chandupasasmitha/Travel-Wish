@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
 }
 
 class ItemGallery extends StatefulWidget {
+  const ItemGallery({super.key});
+
   @override
   _ItemGalleryState createState() => _ItemGalleryState();
 }
@@ -100,7 +102,7 @@ class _ItemGalleryState extends State<ItemGallery> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(
-                          item.description,
+                          'item.description',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,

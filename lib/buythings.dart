@@ -107,7 +107,7 @@ class Content2 extends StatelessWidget {
             height: 10,
           ),
           const Expanded(
-            child: categories(),
+            child: Categories(),
           ),
         ],
       ),
@@ -115,15 +115,15 @@ class Content2 extends StatelessWidget {
   }
 }
 
-class categories extends StatefulWidget {
-  const categories({super.key});
+class Categories extends StatefulWidget {
+  const Categories({super.key});
 
   @override
-  State<categories> createState() => _categoriesState();
+  State<Categories> createState() => _CategoriesState();
 }
 
-class _categoriesState extends State<categories> {
-  List<Item> items = [];
+class _CategoriesState extends State<Categories> {
+  Map<String, List<Item>> categorizedItems = {};
 
   @override
   void initState() {
@@ -133,15 +133,34 @@ class _categoriesState extends State<categories> {
 
   Future<void> fetchItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:3000/api/items'));
+      final response = await http.get(
+        Uri.parse('http://192.168.43.228:3000/api/items'),
+      );
+
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
+        List<Item> fetchedItems = data
+            .where((item) => item['category'] == 'buythings')
+            .map((item) => Item.fromJson(item))
+            .toList();
+
+        // Group items by category
+        Map<String, List<Item>> categoryMap = {};
+
+        for (var item in fetchedItems) {
+          final key = item.subcategory.toLowerCase();
+          if (categoryMap.containsKey(key)) {
+            categoryMap[key]!.add(item);
+          } else {
+            categoryMap[key] = [item];
+          }
+        }
+
         setState(() {
-          items = data.map((item) => Item.fromJson(item)).toList();
+          categorizedItems = categoryMap;
         });
       } else {
-        print('failed to load items');
+        print('Failed to load items');
       }
     } catch (e) {
       print('Error: $e');
@@ -150,63 +169,88 @@ class _categoriesState extends State<categories> {
 
   @override
   Widget build(BuildContext context) {
-    return items.isEmpty
-        ? const Center(child: CircularProgressIndicator())
-        : Flexible(
-            flex: 1,
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    if (categorizedItems.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: categorizedItems.entries.map((entry) {
+          final categoryName = entry.key;
+          final items = entry.value;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                categoryName[0].toUpperCase() + categoryName.substring(1),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: items.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  childAspectRatio: 0.8),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                return Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Image.network(
-                            item.imageUrl,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: Container(
-                            color: Colors.black.withOpacity(
-                                0.5), // 50% transparent black overlay
-                          ),
-                        ),
-                        Positioned(
-                            left: 16,
-                            bottom: 16,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item.title,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                                Text(
-                                  'See Review',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 13),
-                                )
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                  childAspectRatio: 0.8,
+                ),
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return buildItemCard(item);
+                },
+              ),
+              const SizedBox(height: 20),
+            ],
           );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget buildItemCard(Item item) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.network(item.imageUrl, fit: BoxFit.cover),
+            ),
+            Positioned.fill(
+              child: Container(color: Colors.black.withOpacity(0.5)),
+            ),
+            Positioned(
+              left: 16,
+              bottom: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title,
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                  const Text(
+                    'See Review',
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

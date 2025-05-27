@@ -67,8 +67,8 @@ class MyApp extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
-          child: Icon(Icons.search),
           backgroundColor: Color.fromARGB(255, 102, 183, 251),
+          child: Icon(Icons.search),
         ),
       ),
     );

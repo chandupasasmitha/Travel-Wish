@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'models/item.dart';
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -90,652 +93,108 @@ class Content3 extends StatelessWidget {
               )
             ],
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/learn_to_surf.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Learn to Surf',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/rock_climbing.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Rock Climbing',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                          ),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/scuba_diving.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Scuba Diving',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/kite_surfing.webp'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Kite Surfing',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                          ),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/lagoon_safari.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Lagoon Safari',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/jeep_safari.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Jeep Safari',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                          ),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/jet_sking.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Jet Sking',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/white_water_rafting.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'White Water Rafting',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                          ),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/pekoe_trail.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'PEKOE Trail',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/walking_in_the_hills.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Walking In the Hills',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                          ),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/train_through_the_hill.jpg'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Train Through The Hills',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                              color: Colors.grey, fontSize: 13),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/adventure/adams_peak.webp'),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Container(
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color:
-                                        const Color.fromARGB(255, 26, 42, 109)
-                                            .withOpacity(0.5),
-                                  ),
-                                ),
-                                Positioned(
-                                    left: 16,
-                                    bottom: 16,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Adams Peak',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18),
-                                        ),
-                                        Text(
-                                          'See Review',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 13,
-                                          ),
-                                        )
-                                      ],
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Expanded(
+            child: adventures(),
           ),
         ],
       ),
     );
+  }
+}
+
+class adventures extends StatefulWidget {
+  const adventures({super.key});
+
+  @override
+  State<adventures> createState() => _adventuresState();
+}
+
+class _adventuresState extends State<adventures> {
+  List<Item> items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchItems();
+  }
+
+  Future<void> fetchItems() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://localhost:3000/api/items'));
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          items = data
+              .where((item) => item['category'] == 'adventures')
+              .map((item) => Item.fromJson(item))
+              .toList();
+        });
+      } else {
+        print('Failed to load items');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return items.isEmpty
+        ? const Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 0.8,
+            ),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.network(item.imageUrl, fit: BoxFit.cover),
+                      ),
+                      Positioned.fill(
+                        child: Container(color: Colors.black.withOpacity(0.5)),
+                      ),
+                      Positioned(
+                        left: 16,
+                        bottom: 16,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.title,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                            const Text(
+                              'See Review',
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
   }
 }

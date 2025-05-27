@@ -6,6 +6,8 @@ void main() {
 }
 
 class TravelWishApp extends StatelessWidget {
+  const TravelWishApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +18,8 @@ class TravelWishApp extends StatelessWidget {
 }
 
 class AccommodationPage extends StatefulWidget {
+  const AccommodationPage({super.key});
+
   @override
   _AccommodationPageState createState() => _AccommodationPageState();
 }
