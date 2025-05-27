@@ -39,7 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
         // Navigate to home or dashboard
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  HomeScreen(username: usernameController.text)),
         );
         // Navigator.pushReplacement(...);
       } else {

@@ -10,12 +10,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: HomeScreen(username: 'Guest'),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
+  final String username;
+
+  const HomeScreen({Key? key, required this.username}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -92,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Chandupa Sasmitha', // Static username
+                      widget.username,
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],

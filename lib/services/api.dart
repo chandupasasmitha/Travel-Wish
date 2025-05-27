@@ -52,10 +52,10 @@ class Api {
         body: jsonEncode(loginData),
       );
 
-      if (res.statusCode == 200) {
-        var data = jsonDecode(res.body);
+      var data = jsonDecode(res.body.toString());
+
+      if (res.statusCode == 200 && data['message'] == "Login successful") {
         print("Login Success: $data");
-        // Optionally check for a specific field in response
         return true;
       } else {
         print("Login Failed: ${res.body}");
