@@ -135,4 +135,3 @@ class Emergency1990Screen extends StatelessWidget {
       ),
     );
   }
-}

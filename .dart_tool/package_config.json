@@ -32,6 +32,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "csslib",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/csslib-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8",
       "packageUri": "lib/",
@@ -56,6 +62,12 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "flutter_plugin_android_lifecycle",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.27",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
       "name": "flutter_rating_bar",
       "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_rating_bar-4.0.1",
       "packageUri": "lib/",
@@ -66,6 +78,54 @@
       "rootUri": "file:///C:/src/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.7"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "google_maps",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps-8.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "google_maps_flutter",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter-2.12.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "google_maps_flutter_android",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter_android-2.16.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "google_maps_flutter_ios",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter_ios-2.15.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "google_maps_flutter_platform_interface",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.11.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "google_maps_flutter_web",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/google_maps_flutter_web-0.5.12",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "html",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/html-0.15.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "intl",
@@ -122,6 +182,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "sanitize_html",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/sanitize_html-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///C:/src/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -144,6 +216,12 @@
       "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/stream_channel-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "stream_transform",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/stream_transform-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
     },
     {
       "name": "string_scanner",
@@ -176,13 +254,20 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "web",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "test",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-05-28T04:41:51.095961Z",
+
+  "generated": "2025-05-10T05:32:29.155376Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///C:/src/flutter",
