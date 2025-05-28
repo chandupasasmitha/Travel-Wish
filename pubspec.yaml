@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
   flutter_rating_bar: ^4.0.1
+  google_maps_flutter: ^2.7.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,12 @@ flutter:
     - assets/bell.png
     - assets/image04.png
     - assets/logo.png
+    - assets/emergency_bell.png
+    - assets/taxi.png
+    - assets/maid.png
+    - assets/auto.png
+    - assets/print.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
