@@ -10,12 +10,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: HomeScreen(username: 'Guest'),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
+  final String username;
+
+  const HomeScreen({Key? key, required this.username}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -92,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 18, color: Colors.black54),
                     ),
                     Text(
-                      'Chandupa Sasmitha', // Static username
+                      widget.username,
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
                   ],
@@ -105,50 +109,48 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 20),
 
-            // Grid of options
-            SizedBox(
-              height: 320,
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: options.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      // Navigate to respective page if a route is available
-                      if (options[index]['route'] != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => options[index]['route'],
-                          ),
-                        );
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            options[index]['icon'],
-                            size: 30,
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(options[index]['label'],
-                            textAlign: TextAlign.center),
-                      ],
-                    ),
-                  );
-                },
+            // Grid of options - FIXED: Removed fixed height and used correct GridView
+            GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1, // Adjust for better fit
               ),
+              itemCount: options.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    // Navigate to respective page if a route is available
+                    if (options[index]['route'] != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => options[index]['route'],
+                        ),
+                      );
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 35, // Slightly reduced to fit better
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          options[index]['icon'],
+                          size: 30,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(options[index]['label'],
+                          textAlign: TextAlign.center),
+                    ],
+                  ),
+                );
+              },
             ),
 
             SizedBox(height: 20),
