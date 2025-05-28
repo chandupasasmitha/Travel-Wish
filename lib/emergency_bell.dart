@@ -141,4 +141,4 @@ class EmergencyAlertScreen extends StatelessWidget {
       ),
     );
   }
-}
+
