@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'buythings.dart';
+import 'adventures.dart';
+import 'learningpoints.dart';
 
 void main() {
   runApp(MyApp());
@@ -127,7 +130,7 @@ class Content1 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset("assets/Group 2609485 (1).png"),
+                  Image.asset('assets/groups/8.jpg'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +143,10 @@ class Content1 extends StatelessWidget {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => BuyThings()));
+                    },
                     child: Container(
                       //More Button
 
@@ -181,7 +187,7 @@ class Content1 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset("assets/Group_2609495.png"),
+                  Image.asset('assets/groups/7.png'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,14 +199,22 @@ class Content1 extends StatelessWidget {
                       Text("Around 2000 places")
                     ],
                   ),
-                  Container(
-                    //More Button 2
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFD8EFFF),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(child: Text("More >")),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Adventures()));
+                    },
+                    child: Container(
+                      //More Button 2
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFD8EFFF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("More >")),
+                    ),
                   )
                 ],
               ),
@@ -231,7 +245,7 @@ class Content1 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset("assets/Group 26094967.png"),
+                  Image.asset('assets/groups/4.png'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,14 +257,17 @@ class Content1 extends StatelessWidget {
                       Text("Around 2000 places")
                     ],
                   ),
-                  Container(
-                    //More Button 2
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFD8EFFF),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(child: Text("More >")),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      //More Button 2
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFD8EFFF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("More >")),
+                    ),
                   )
                 ],
               ),
@@ -280,7 +297,7 @@ class Content1 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset("assets/Group 2609497.png"),
+                  Image.asset('assets/groups/3.png'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,14 +309,22 @@ class Content1 extends StatelessWidget {
                       Text("Around 2000 places")
                     ],
                   ),
-                  Container(
-                    //More Button 2
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFD8EFFF),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(child: Text("More >")),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Learningpoints()));
+                    },
+                    child: Container(
+                      //More Button 2
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFD8EFFF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("More >")),
+                    ),
                   )
                 ],
               ),
@@ -330,7 +355,7 @@ class Content1 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset("assets/Group 2609494.png"),
+                  Image.asset('assets/groups/9.png'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,14 +367,20 @@ class Content1 extends StatelessWidget {
                       Text("Around 2000 places")
                     ],
                   ),
-                  Container(
-                    //More Button 2
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFD8EFFF),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(child: Text("More >")),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => BuyThings()));
+                    },
+                    child: Container(
+                      //More Button 2
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFD8EFFF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("More >")),
+                    ),
                   )
                 ],
               ),
@@ -379,7 +410,7 @@ class Content1 extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset("assets/Group_2609495.png"),
+                  Image.asset('assets/groups/1.png'),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:test/things_to_do.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Learningpoints());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Learningpoints extends StatelessWidget {
+  const Learningpoints({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +81,10 @@ class Content3 extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
+                  },
                   icon: Icon(Icons.arrow_back),
                 ),
               ),

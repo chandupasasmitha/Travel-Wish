@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:test/item_details.dart';
+import 'package:test/things_to_do.dart';
 import 'models/item.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(BuyThings());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BuyThings extends StatelessWidget {
+  const BuyThings({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +73,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//content2 is under scaffold
+
 class Content2 extends StatelessWidget {
   const Content2({super.key});
 
@@ -87,7 +91,10 @@ class Content2 extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
+                  },
                   icon: Icon(Icons.arrow_back),
                 ),
               ),
@@ -115,6 +122,8 @@ class Content2 extends StatelessWidget {
   }
 }
 
+//Creates card and handles api
+//Categories is under content2
 class Categories extends StatefulWidget {
   const Categories({super.key});
 
@@ -134,7 +143,7 @@ class _CategoriesState extends State<Categories> {
   Future<void> fetchItems() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.43.228:3000/api/items'),
+        Uri.parse('http://localhost:3000/api/items'),
       );
 
       if (response.statusCode == 200) {
@@ -142,7 +151,7 @@ class _CategoriesState extends State<Categories> {
         List<Item> fetchedItems = data
             .where((item) => item['category'] == 'buythings')
             .map((item) => Item.fromJson(item))
-            .toList();
+            .toList(); //filter the category = 'buythings'
 
         // Group items by category
         Map<String, List<Item>> categoryMap = {};
@@ -204,7 +213,21 @@ class _CategoriesState extends State<Categories> {
                 ),
                 itemBuilder: (context, index) {
                   final item = items[index];
-                  return buildItemCard(item);
+                  return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ItemDetails(
+                                    title: item.title,
+                                    imageUrl: item.imageUrl,
+                                    description: item.description,
+                                    location: item.location,
+                                    hours: item.openingHours,
+                                    entryFee: item.entryFee,
+                                    googleMapsUrl: item.googleMapsUrl)));
+                      },
+                      child: buildItemCard(item));
                 },
               ),
               const SizedBox(height: 20),

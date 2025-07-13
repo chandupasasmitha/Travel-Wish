@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.6
+  url_launcher: ^6.0.20
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -68,19 +69,31 @@ flutter:
     - assets\adventure\train_through_the_hill.jpg
     - assets\adventure\white_water_rafting.jpg
     - assets\appbar-background.jpg
-    - assets\arpico-super-center.jpg
-    - assets\barista.jpeg
     - assets\cargills-food-city.jpg
     - assets\coolplanet.jpeg
     - assets\ext.jpg
     - assets\spar.jpeg
     - assets\perera&sons.jpeg
-    - assets\odel.jpeg
-    - assets\ipharma.jpeg
-    - assets\healthguard.jpg
+    - assets\ipharma.jpeg 
     - assets\learningpoints\geographynlocation.jpg
     - assets\learningpoints\historynculture.jpg
     - assets\learningpoints\naturenwildlife.jpg
+    - assets/groups/1.png
+    - assets/groups/2.png
+    - assets/groups/3.png
+    - assets/groups/4.png
+    - assets/groups/5.png
+    - assets/groups/6.png
+    - assets/groups/7.png
+    - assets/groups/8.jpg
+    - assets/groups/9.png
+    - assets/groups/
+    
+    
+    
+
+    
+
 
 
   # The following line ensures that the Material Icons font is

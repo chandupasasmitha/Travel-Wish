@@ -5,11 +5,11 @@ import 'models/item.dart';
 import 'dart:convert';
 
 void main() {
-  runApp(Adventures());
+  runApp(Ayurweda());
 }
 
-class Adventures extends StatelessWidget {
-  const Adventures({super.key});
+class Ayurweda extends StatelessWidget {
+  const Ayurweda({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,7 @@ class Content3 extends StatelessWidget {
             height: 10,
           ),
           const Expanded(
-            child: adventures(),
+            child: Ayurweda(),
           ),
         ],
       ),
@@ -110,16 +110,16 @@ class Content3 extends StatelessWidget {
   }
 }
 
-//Adventures is under content3
+//Ayurweda is under content3
 
-class adventures extends StatefulWidget {
-  const adventures({super.key});
+class ayurweda extends StatefulWidget {
+  const ayurweda({super.key});
 
   @override
-  State<adventures> createState() => _adventuresState();
+  State<ayurweda> createState() => _ayurwedaState();
 }
 
-class _adventuresState extends State<adventures> {
+class _ayurwedaState extends State<ayurweda> {
   List<Item> items = []; //defining the list
 
   @override
@@ -128,6 +128,7 @@ class _adventuresState extends State<adventures> {
     fetchItems();
   }
 
+  // recieves the  response body and save it to a list, then map the category = 'ayurweda'
   Future<void> fetchItems() async {
     try {
       final response =
@@ -137,9 +138,9 @@ class _adventuresState extends State<adventures> {
             response.body); //recieves the response body and save it to a list
         setState(() {
           items = data
-              .where((item) => item['category'] == 'adventures')
+              .where((item) => item['category'] == 'ayurweda')
               .map((item) => Item.fromJson(item))
-              .toList(); //map only the catergory = 'adventures'
+              .toList(); //map only the catergory = 'ayurweda'
         });
       } else {
         print('Failed to load items');
