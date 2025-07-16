@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'services/api.dart'; // Assuming your api.dart is in a services folder
+import 'accommodation_booking.dart'; // Add this line
 
 class AccommodationDetailsPage extends StatefulWidget {
   final String accommodationId;
@@ -309,6 +310,21 @@ class _AccommodationDetailsPageState extends State<AccommodationDetailsPage> {
         ),
       ),
       onPressed: () {
+        if (accommodation != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BookingPage(
+                accommodationDetails:
+                    accommodation!, // Pass the accommodation data
+              ),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Accommodation details not loaded yet.')),
+          );
+        }
         // Handle booking action
       },
       child: Row(
