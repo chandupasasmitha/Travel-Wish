@@ -68,6 +68,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "http",
       "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/http-1.4.0",
       "packageUri": "lib/",
@@ -134,6 +140,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///C:/src/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -182,6 +194,54 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "url_launcher",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_android",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.3.16",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_ios",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.3.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "url_launcher_linux",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "url_launcher_macos",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "url_launcher_platform_interface",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_platform_interface-2.3.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "url_launcher_web",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_web-2.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "url_launcher_windows",
+      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -206,7 +266,7 @@
       "languageVersion": "3.6"
     }
   ],
-  "generated": "2025-05-10T12:23:43.546982Z",
+  "generated": "2025-07-16T08:51:45.639998Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///C:/src/flutter",
