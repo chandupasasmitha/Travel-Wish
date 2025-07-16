@@ -34,7 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
     {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
     {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': null},
-    {'icon': Icons.people, 'label': 'Guides', 'route': Guide()}, // Added Guide route
+    {
+      'icon': Icons.people,
+      'label': 'Guides',
+      'route': Guide()
+    }, // Added Guide route
     {'icon': Icons.map, 'label': 'Map', 'route': null},
     {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': null},
   ];
@@ -132,7 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Show message for pages that are not implemented yet
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${options[index]['label']} coming soon!'),
+                          content:
+                              Text('${options[index]['label']} coming soon!'),
                           duration: Duration(seconds: 2),
                         ),
                       );

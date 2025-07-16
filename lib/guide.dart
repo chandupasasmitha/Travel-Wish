@@ -243,10 +243,12 @@ class _GuideState extends State<Guide> {
                                     ),
                                   );
                                   */
-                                  
+
                                   // Temporary placeholder
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('Guide details: ${guide['name']}')),
+                                    SnackBar(
+                                        content: Text(
+                                            'Guide details: ${guide['name']}')),
                                   );
                                 },
                               );
@@ -432,7 +434,9 @@ class _GuideState extends State<Guide> {
                   itemCount: locations.length,
                   itemBuilder: (context, index) {
                     return _buildLocationOption(
-                        locations[index] == 'all' ? 'All Locations' : locations[index],
+                        locations[index] == 'all'
+                            ? 'All Locations'
+                            : locations[index],
                         locations[index]);
                   },
                 ),
@@ -549,7 +553,8 @@ class GuideCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            _GuideState.getGenderIcon(guide['gender'] ?? 'Male'),
+                            _GuideState.getGenderIcon(
+                                guide['gender'] ?? 'Male'),
                             color: Colors.white,
                             size: 32,
                           ),
@@ -624,11 +629,12 @@ class GuideCard extends StatelessWidget {
                       SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.location_on, size: 14, color: Colors.grey[600]),
+                          Icon(Icons.location_on,
+                              size: 14, color: Colors.grey[600]),
                           SizedBox(width: 4),
                           Expanded(
                             child: Text(
-                              locations.isNotEmpty 
+                              locations.isNotEmpty
                                   ? '${locations.length} location${locations.length > 1 ? 's' : ''}'
                                   : 'No locations',
                               style: TextStyle(
@@ -644,9 +650,11 @@ class GuideCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: availability.contains('Weekdays') && availability.contains('Weekends')
+                              color: availability.contains('Weekdays') &&
+                                      availability.contains('Weekends')
                                   ? Colors.green.withOpacity(0.1)
                                   : availability.contains('Weekdays')
                                       ? Colors.blue.withOpacity(0.1)
@@ -656,7 +664,8 @@ class GuideCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              availability.contains('Weekdays') && availability.contains('Weekends')
+                              availability.contains('Weekdays') &&
+                                      availability.contains('Weekends')
                                   ? 'Full Week'
                                   : availability.contains('Weekdays')
                                       ? 'Weekdays'
@@ -666,7 +675,8 @@ class GuideCard extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: availability.contains('Weekdays') && availability.contains('Weekends')
+                                color: availability.contains('Weekdays') &&
+                                        availability.contains('Weekends')
                                     ? Colors.green
                                     : availability.contains('Weekdays')
                                         ? Colors.blue
