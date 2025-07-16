@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:test/item_details.dart';
-import 'package:test/things_to_do.dart';
-import 'models/item.dart';
+import 'package:test/thingstodo/buythings/item_details_buythings.dart';
+import 'package:test/thingstodo/things_to_do.dart';
+import '../../models/item_buythings.dart';
 
 void main() {
   runApp(BuyThings());
@@ -218,14 +218,18 @@ class _CategoriesState extends State<Categories> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ItemDetails(
+                                builder: (context) => ItemDetailsBuythings(
                                     title: item.title,
                                     imageUrl: item.imageUrl,
                                     description: item.description,
                                     location: item.location,
                                     hours: item.openingHours,
                                     entryFee: item.entryFee,
-                                    googleMapsUrl: item.googleMapsUrl)));
+                                    googleMapsUrl: item.googleMapsUrl,
+                                    isCard: item.isCard,
+                                    isCash: item.isCash,
+                                    isQRScan: item.isQRScan,
+                                    isParking: item.isParking)));
                       },
                       child: buildItemCard(item));
                 },

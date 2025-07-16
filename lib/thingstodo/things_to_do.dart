@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'buythings.dart';
-import 'adventures.dart';
-import 'learningpoints.dart';
+import 'buythings/buythings.dart';
+import 'adventures/adventures.dart';
+import '../learningpoints.dart';
 
 void main() {
   runApp(MyApp());

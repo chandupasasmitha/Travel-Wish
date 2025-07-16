@@ -2,7 +2,7 @@ import 'dart:convert';
 //import 'dart:nativewrappers/_internal/vm/lib/internal_patch.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'models/item.dart';
+import 'models/item_buythings.dart';
 
 void main() {
   runApp(const MyApp());

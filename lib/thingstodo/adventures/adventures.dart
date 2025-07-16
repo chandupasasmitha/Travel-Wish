@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:test/things_to_do.dart';
-import 'models/item.dart';
+import 'package:test/thingstodo/adventures/item_details_adventures.dart';
+import 'package:test/thingstodo/things_to_do.dart';
+import '../../models/item_adventures.dart';
 import 'dart:convert';
 
 void main() {
@@ -165,41 +166,63 @@ class _adventuresState extends State<adventures> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              return Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Image.network(item.imageUrl, fit: BoxFit.cover),
-                      ),
-                      Positioned.fill(
-                        child: Container(color: Colors.black.withOpacity(0.5)),
-                      ),
-                      Positioned(
-                        left: 16,
-                        bottom: 16,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.title,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 18),
-                            ),
-                            const Text(
-                              'See Review',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 13),
-                            ),
-                          ],
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ItemDetailsAdventures(
+                              title: item.title,
+                              imageUrl: item.imageUrl,
+                              description: item.description,
+                              duration: item.duration,
+                              bestfor: item.bestfor,
+                              price: item.price,
+                              googleMapsUrl: item.googleMapsUrl,
+                              bestTimetoVisit: item.bestTimetoVisit,
+                              whatToBring: item.whatToBring,
+                              whatToWear: item.whatToWear,
+                              precautions: item.precautions,
+                              activities: item.activities)));
+                },
+                child: Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child:
+                              Image.network(item.imageUrl, fit: BoxFit.cover),
                         ),
-                      ),
-                    ],
+                        Positioned.fill(
+                          child:
+                              Container(color: Colors.black.withOpacity(0.5)),
+                        ),
+                        Positioned(
+                          left: 16,
+                          bottom: 16,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.title,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                              const Text(
+                                'See Review',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 13),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

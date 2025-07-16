@@ -7,14 +7,15 @@ class Review {
   final String rating;
   final String createdAt;
 
-  Review(
-      {required this.id,
-      required this.category,
-      required this.title,
-      required this.username,
-      required this.reviewText,
-      required this.rating,
-      required this.createdAt});
+  Review({
+    required this.id,
+    required this.category,
+    required this.title,
+    required this.username,
+    required this.reviewText,
+    required this.rating,
+    required this.createdAt,
+  });
 
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
