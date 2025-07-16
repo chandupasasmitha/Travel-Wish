@@ -70,16 +70,26 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_rating_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_rating_bar
+      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
+
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+    
   http:
     dependency: "direct main"
     description:
@@ -96,6 +106,17 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+
+
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.2"
+
   leak_tracker:
     dependency: transitive
     description:
@@ -228,6 +249,7 @@ packages:
       sha256: f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006
       url: "https://pub.dev"
     source: hosted
+
     version: "1.4.0"
   url_launcher:
     dependency: "direct main"
@@ -293,6 +315,17 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
+
+    version: "0.7.3"
+  typed_data:
+    dependency: transitive
+    description:
+      name: typed_data
+      sha256: f9049c039ebfeb4cf7a7104a675823cd72dba8297f264b6637062516699fa006
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
+
   vector_math:
     dependency: transitive
     description:
@@ -308,7 +341,9 @@ packages:
       sha256: ddfa8d30d89985b96407efce8acbdd124701f96741f2d981ca860662f1c0dc02
       url: "https://pub.dev"
     source: hosted
+    
     version: "15.0.0"
+
   web:
     dependency: transitive
     description:
