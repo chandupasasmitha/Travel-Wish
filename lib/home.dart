@@ -28,11 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // List of options available on the home screen
   final List<Map<String, dynamic>> options = [
     {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
-    {
-      'icon': Icons.hotel,
-      'label': 'Accommodation',
-      'route': AccommodationPage()
-    },
+    {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
     {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
     {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
