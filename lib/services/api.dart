@@ -5,119 +5,56 @@ import 'package:http/http.dart' as http;
 class Api {
   static const String baseUrl = "http://10.0.2.2:2000/api/";
 
-  // HELPER METHODS
-  static Future<http.Response> _makeRequest(String method, String endpoint, {Map<String, dynamic>? body, bool debug = false}) async {
-    var url = Uri.parse("$baseUrl$endpoint");
-    if (debug) {
-      debugPrint("Making $method request to: $url");
-      if (body != null) debugPrint("Request body: $body");
-    }
-    
-    http.Response response;
-    Map<String, String> headers = {"Content-Type": "application/json"};
-    
-    try {
-      switch (method.toUpperCase()) {
-        case 'GET':
-          response = await http.get(url, headers: headers);
-          break;
-        case 'POST':
-          response = await http.post(url, headers: headers, body: body != null ? jsonEncode(body) : null);
-          break;
-        case 'PUT':
-          response = await http.put(url, headers: headers, body: body != null ? jsonEncode(body) : null);
-          break;
-        case 'DELETE':
-          response = await http.delete(url, headers: headers);
-          break;
-        default:
-          throw Exception("Unsupported HTTP method: $method");
-      }
-    } catch (e) {
-      if (debug) debugPrint("Request failed: $e");
-      rethrow;
-    }
-    
-    if (debug) {
-      debugPrint("Response status: ${response.statusCode}");
-      debugPrint("Response body: ${response.body}");
-    }
-    return response;
-  }
-
-  static List<Map<String, dynamic>> _parseListResponse(http.Response response) {
-    if (response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-      
-      if (responseData is Map && responseData.containsKey('success') && responseData['success'] == true) {
-        if (responseData.containsKey('data') && responseData['data'] is List) {
-          return List<Map<String, dynamic>>.from(responseData['data']);
-        }
-      }
-      
-      if (responseData is List) {
-        return List<Map<String, dynamic>>.from(responseData);
-      } else if (responseData is Map && responseData.containsKey('data')) {
-        return List<Map<String, dynamic>>.from(responseData['data']);
-      }
-    }
-    throw Exception("Failed to parse response: ${response.statusCode}");
-  }
-
-  static Map<String, dynamic> _parseMapResponse(http.Response response) {
-    if (response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-      
-      if (responseData is Map<String, dynamic>) {
-        return responseData;
-      } else if (responseData is Map && responseData.containsKey('data')) {
-        return Map<String, dynamic>.from(responseData['data']);
-      }
-    }
-    throw Exception("Failed to parse response: ${response.statusCode}");
-  }
-
   // USER METHODS
-  static Future<void> adduser(Map udata) async {
+  static adduser(Map udata) async {
+    print(udata);
+    var url = Uri.parse("${baseUrl}add_data");
     try {
-      print(udata);
-      final response = await _makeRequest('POST', 'add_data', body: Map<String, dynamic>.from(udata));
-      if (response.statusCode == 200) {
-        var data1 = jsonDecode(response.body.toString());
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(udata),
+      );
+      if (res.statusCode == 200) {
+        var data1 = jsonDecode(res.body.toString());
         print(data1);
       } else {
         throw Exception("Failed to add user");
       }
     } catch (e) {
-      debugPrint("Error adding user: $e");
-      throw Exception("Failed to add user: $e");
+      debugPrint(e.toString());
     }
   }
 
-  static Future<void> getuser() async {
+  static getuser() async {
+    var url = Uri.parse("${baseUrl}get_data");
     try {
-      final response = await _makeRequest('GET', 'get_data');
-      if (response.statusCode == 200) {
-        var data1 = jsonDecode(response.body.toString());
+      final res = await http.get(url);
+      if (res.statusCode == 200) {
+        var data1 = jsonDecode(res.body.toString());
         print(data1);
       } else {
         throw Exception("Failed to get user");
       }
     } catch (e) {
-      debugPrint("Error getting user: $e");
-      throw Exception("Failed to get user: $e");
+      debugPrint(e.toString());
     }
   }
 
   static Future<bool> loginUser(Map loginData) async {
+    var url = Uri.parse("${baseUrl}login");
     try {
-      final response = await _makeRequest('POST', 'login', body: Map<String, dynamic>.from(loginData));
-      var data = jsonDecode(response.body.toString());
-      if (response.statusCode == 200 && data['message'] == "Login successful") {
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(loginData),
+      );
+      var data = jsonDecode(res.body.toString());
+      if (res.statusCode == 200 && data['message'] == "Login successful") {
         print("Login Success: $data");
         return true;
       } else {
-        print("Login Failed: ${response.body}");
+        print("Login Failed: ${res.body}");
         return false;
       }
     } catch (e) {
@@ -128,9 +65,35 @@ class Api {
 
   // ACCOMMODATION METHODS
   static Future<List<Map<String, dynamic>>> getAccommodations() async {
+    var url = Uri.parse("${baseUrl}accommodations");
     try {
-      final response = await _makeRequest('GET', 'accommodations');
-      return _parseListResponse(response);
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map &&
+            responseData.containsKey('success') &&
+            responseData['success'] == true) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] is List) {
+            return List<Map<String, dynamic>>.from(responseData['data']);
+          }
+        }
+
+        if (responseData is List) {
+          return List<Map<String, dynamic>>.from(responseData);
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to fetch accommodations: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error fetching accommodations: $e");
       throw Exception("Failed to fetch accommodations: $e");
@@ -138,9 +101,27 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> getAccommodationById(String id) async {
+    var url = Uri.parse("${baseUrl}accommodations/$id");
     try {
-      final response = await _makeRequest('GET', 'accommodations/$id');
-      return _parseMapResponse(response);
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map<String, dynamic>) {
+          return responseData;
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return Map<String, dynamic>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception(
+            "Failed to fetch accommodation details: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error fetching accommodation details: $e");
       throw Exception("Failed to fetch accommodation details: $e");
@@ -148,20 +129,52 @@ class Api {
   }
 
   static Future<List<Map<String, dynamic>>> searchAccommodations({
-    String? query, double? minPrice, double? maxPrice, double? minRating, 
-    String? location, String? propertyType,
+    String? query,
+    double? minPrice,
+    double? maxPrice,
+    double? minRating,
+    String? location,
+    String? propertyType,
   }) async {
-    try {
-      Map<String, dynamic> searchParams = {};
-      if (query != null) searchParams['query'] = query;
-      if (minPrice != null) searchParams['minPrice'] = minPrice;
-      if (maxPrice != null) searchParams['maxPrice'] = maxPrice;
-      if (minRating != null) searchParams['minRating'] = minRating;
-      if (location != null) searchParams['location'] = location;
-      if (propertyType != null) searchParams['propertyType'] = propertyType;
+    var url = Uri.parse("${baseUrl}accommodations/search");
 
-      final response = await _makeRequest('POST', 'accommodations/search', body: searchParams);
-      return _parseListResponse(response);
+    Map<String, dynamic> searchParams = {};
+    if (query != null) searchParams['query'] = query;
+    if (minPrice != null) searchParams['minPrice'] = minPrice;
+    if (maxPrice != null) searchParams['maxPrice'] = maxPrice;
+    if (minRating != null) searchParams['minRating'] = minRating;
+    if (location != null) searchParams['location'] = location;
+    if (propertyType != null) searchParams['propertyType'] = propertyType;
+
+    try {
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(searchParams),
+      );
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map &&
+            responseData.containsKey('success') &&
+            responseData['success'] == true) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] is List) {
+            return List<Map<String, dynamic>>.from(responseData['data']);
+          }
+        }
+
+        if (responseData is List) {
+          return List<Map<String, dynamic>>.from(responseData);
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to search accommodations: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error searching accommodations: $e");
       throw Exception("Failed to search accommodations: $e");
@@ -170,9 +183,41 @@ class Api {
 
   // GUIDE METHODS
   static Future<List<Map<String, dynamic>>> getGuides() async {
+    var url = Uri.parse("${baseUrl}guides");
+    debugPrint("Making request to: $url");
+    
     try {
-      final response = await _makeRequest('GET', 'guides', debug: true);
-      return _parseListResponse(response);
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      debugPrint("Response status: ${res.statusCode}");
+      debugPrint("Response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        debugPrint("Decoded response: $responseData");
+
+        if (responseData is Map &&
+            responseData.containsKey('success') &&
+            responseData['success'] == true) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] is List) {
+            return List<Map<String, dynamic>>.from(responseData['data']);
+          }
+        }
+
+        if (responseData is List) {
+          return List<Map<String, dynamic>>.from(responseData);
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to fetch guides: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error fetching guides: $e");
       throw Exception("Failed to fetch guides: $e");
@@ -180,9 +225,31 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> getGuideById(String id) async {
+    var url = Uri.parse("${baseUrl}guide/$id");
+    debugPrint("Making request to: $url");
+    
     try {
-      final response = await _makeRequest('GET', 'guide/$id', debug: true);
-      return _parseMapResponse(response);
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      debugPrint("Response status: ${res.statusCode}");
+      debugPrint("Response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map<String, dynamic>) {
+          return responseData;
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return Map<String, dynamic>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to fetch guide details: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error fetching guide details: $e");
       throw Exception("Failed to fetch guide details: $e");
@@ -190,26 +257,61 @@ class Api {
   }
 
   static Future<List<Map<String, dynamic>>> searchGuides({
-    String? location, String? language, String? availability, int? page, int? limit,
+    String? location,
+    String? language,
+    String? availability,
+    int? page,
+    int? limit,
   }) async {
+    var url = Uri.parse("${baseUrl}guides");
+
+    Map<String, String> queryParams = {};
+    if (location != null && location != 'all') queryParams['location'] = location;
+    if (language != null && language != 'all') queryParams['language'] = language;
+    if (availability != null && availability != 'all') queryParams['availability'] = availability;
+    if (page != null) queryParams['page'] = page.toString();
+    if (limit != null) queryParams['limit'] = limit.toString();
+
+    if (queryParams.isNotEmpty) {
+      String queryString = queryParams.entries
+          .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+      url = Uri.parse("${url}?$queryString");
+    }
+
+    debugPrint("Making search request to: $url");
+
     try {
-      String endpoint = 'guides';
-      Map<String, String> queryParams = {};
-      if (location != null && location != 'all') queryParams['location'] = location;
-      if (language != null && language != 'all') queryParams['language'] = language;
-      if (availability != null && availability != 'all') queryParams['availability'] = availability;
-      if (page != null) queryParams['page'] = page.toString();
-      if (limit != null) queryParams['limit'] = limit.toString();
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
 
-      if (queryParams.isNotEmpty) {
-        String queryString = queryParams.entries
-            .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-            .join('&');
-        endpoint = '$endpoint?$queryString';
+      debugPrint("Search response status: ${res.statusCode}");
+      debugPrint("Search response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map &&
+            responseData.containsKey('success') &&
+            responseData['success'] == true) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] is List) {
+            return List<Map<String, dynamic>>.from(responseData['data']);
+          }
+        }
+
+        if (responseData is List) {
+          return List<Map<String, dynamic>>.from(responseData);
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to search guides: ${res.statusCode}");
       }
-
-      final response = await _makeRequest('GET', endpoint, debug: true);
-      return _parseListResponse(response);
     } catch (e) {
       debugPrint("Error searching guides: $e");
       throw Exception("Failed to search guides: $e");
@@ -217,12 +319,25 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> addGuide(Map<String, dynamic> guideData) async {
+    var url = Uri.parse("${baseUrl}addGuide");
+    debugPrint("Making add guide request to: $url");
+    debugPrint("Guide data: $guideData");
+    
     try {
-      final response = await _makeRequest('POST', 'addGuide', body: guideData, debug: true);
-      if (response.statusCode == 201) {
-        return jsonDecode(response.body);
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(guideData),
+      );
+
+      debugPrint("Add guide response status: ${res.statusCode}");
+      debugPrint("Add guide response body: ${res.body}");
+
+      if (res.statusCode == 201) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to add guide");
       }
     } catch (e) {
@@ -232,12 +347,25 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> updateGuide(String id, Map<String, dynamic> guideData) async {
+    var url = Uri.parse("${baseUrl}guide/$id");
+    debugPrint("Making update guide request to: $url");
+    debugPrint("Update data: $guideData");
+    
     try {
-      final response = await _makeRequest('PUT', 'guide/$id', body: guideData, debug: true);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(guideData),
+      );
+
+      debugPrint("Update guide response status: ${res.statusCode}");
+      debugPrint("Update guide response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to update guide");
       }
     } catch (e) {
@@ -247,12 +375,23 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> deleteGuide(String id) async {
+    var url = Uri.parse("${baseUrl}guide/$id");
+    debugPrint("Making delete guide request to: $url");
+    
     try {
-      final response = await _makeRequest('DELETE', 'guide/$id', debug: true);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.delete(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      debugPrint("Delete guide response status: ${res.statusCode}");
+      debugPrint("Delete guide response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to delete guide");
       }
     } catch (e) {
@@ -263,9 +402,41 @@ class Api {
 
   // TAXI METHODS
   static Future<List<Map<String, dynamic>>> getTaxiDrivers() async {
+    var url = Uri.parse("${baseUrl}taxis");
+    debugPrint("Making request to: $url");
+    
     try {
-      final response = await _makeRequest('GET', 'taxis', debug: true);
-      return _parseListResponse(response);
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      debugPrint("Response status: ${res.statusCode}");
+      debugPrint("Response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        debugPrint("Decoded response: $responseData");
+
+        if (responseData is Map &&
+            responseData.containsKey('success') &&
+            responseData['success'] == true) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] is List) {
+            return List<Map<String, dynamic>>.from(responseData['data']);
+          }
+        }
+
+        if (responseData is List) {
+          return List<Map<String, dynamic>>.from(responseData);
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to fetch taxi drivers: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error fetching taxi drivers: $e");
       throw Exception("Failed to fetch taxi drivers: $e");
@@ -273,9 +444,31 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> getTaxiDriverById(String id) async {
+    var url = Uri.parse("${baseUrl}taxi/$id");
+    debugPrint("Making request to: $url");
+    
     try {
-      final response = await _makeRequest('GET', 'taxi/$id', debug: true);
-      return _parseMapResponse(response);
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      debugPrint("Response status: ${res.statusCode}");
+      debugPrint("Response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map<String, dynamic>) {
+          return responseData;
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return Map<String, dynamic>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to fetch taxi driver details: ${res.statusCode}");
+      }
     } catch (e) {
       debugPrint("Error fetching taxi driver details: $e");
       throw Exception("Failed to fetch taxi driver details: $e");
@@ -283,27 +476,64 @@ class Api {
   }
 
   static Future<List<Map<String, dynamic>>> searchTaxiDrivers({
-    String? city, String? vehicleType, int? minCapacity, int? maxCapacity, 
-    bool? hasAC, bool? hasLuggage, int? page, int? limit,
+    String? city,
+    String? vehicleType,
+    int? minCapacity,
+    int? maxCapacity,
+    bool? hasAC,
+    bool? hasLuggage,
+    int? page,
+    int? limit,
   }) async {
+    var url = Uri.parse("${baseUrl}taxis");
+
+    Map<String, String> queryParams = {};
+    if (city != null && city != 'all') queryParams['city'] = city;
+    if (vehicleType != null && vehicleType != 'all') queryParams['vehicleType'] = vehicleType;
+    if (minCapacity != null) queryParams['capacity'] = minCapacity.toString();
+    if (page != null) queryParams['page'] = page.toString();
+    if (limit != null) queryParams['limit'] = limit.toString();
+
+    if (queryParams.isNotEmpty) {
+      String queryString = queryParams.entries
+          .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+      url = Uri.parse("${url}?$queryString");
+    }
+
+    debugPrint("Making search request to: $url");
+
     try {
-      String endpoint = 'taxis';
-      Map<String, String> queryParams = {};
-      if (city != null && city != 'all') queryParams['city'] = city;
-      if (vehicleType != null && vehicleType != 'all') queryParams['vehicleType'] = vehicleType;
-      if (minCapacity != null) queryParams['capacity'] = minCapacity.toString();
-      if (page != null) queryParams['page'] = page.toString();
-      if (limit != null) queryParams['limit'] = limit.toString();
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
 
-      if (queryParams.isNotEmpty) {
-        String queryString = queryParams.entries
-            .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-            .join('&');
-        endpoint = '$endpoint?$queryString';
+      debugPrint("Search response status: ${res.statusCode}");
+      debugPrint("Search response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+
+        if (responseData is Map &&
+            responseData.containsKey('success') &&
+            responseData['success'] == true) {
+          if (responseData.containsKey('data') &&
+              responseData['data'] is List) {
+            return List<Map<String, dynamic>>.from(responseData['data']);
+          }
+        }
+
+        if (responseData is List) {
+          return List<Map<String, dynamic>>.from(responseData);
+        } else if (responseData is Map && responseData.containsKey('data')) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Unexpected response format");
+        }
+      } else {
+        throw Exception("Failed to search taxi drivers: ${res.statusCode}");
       }
-
-      final response = await _makeRequest('GET', endpoint, debug: true);
-      return _parseListResponse(response);
     } catch (e) {
       debugPrint("Error searching taxi drivers: $e");
       throw Exception("Failed to search taxi drivers: $e");
@@ -311,12 +541,25 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> addTaxiDriver(Map<String, dynamic> taxiData) async {
+    var url = Uri.parse("${baseUrl}addTaxi");
+    debugPrint("Making add taxi request to: $url");
+    debugPrint("Taxi data: $taxiData");
+    
     try {
-      final response = await _makeRequest('POST', 'addTaxi', body: taxiData, debug: true);
-      if (response.statusCode == 201) {
-        return jsonDecode(response.body);
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(taxiData),
+      );
+
+      debugPrint("Add taxi response status: ${res.statusCode}");
+      debugPrint("Add taxi response body: ${res.body}");
+
+      if (res.statusCode == 201) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to add taxi driver");
       }
     } catch (e) {
@@ -326,12 +569,25 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> updateTaxiDriver(String id, Map<String, dynamic> taxiData) async {
+    var url = Uri.parse("${baseUrl}taxi/$id");
+    debugPrint("Making update taxi request to: $url");
+    debugPrint("Update data: $taxiData");
+    
     try {
-      final response = await _makeRequest('PUT', 'taxi/$id', body: taxiData, debug: true);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(taxiData),
+      );
+
+      debugPrint("Update taxi response status: ${res.statusCode}");
+      debugPrint("Update taxi response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to update taxi driver");
       }
     } catch (e) {
@@ -341,12 +597,23 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> deleteTaxiDriver(String id) async {
+    var url = Uri.parse("${baseUrl}taxi/$id");
+    debugPrint("Making delete taxi request to: $url");
+    
     try {
-      final response = await _makeRequest('DELETE', 'taxi/$id', debug: true);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.delete(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      debugPrint("Delete taxi response status: ${res.statusCode}");
+      debugPrint("Delete taxi response body: ${res.body}");
+
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to delete taxi driver");
       }
     } catch (e) {
@@ -355,115 +622,42 @@ class Api {
     }
   }
 
-  // COMMUNICATION METHODS
-  static Future<List<Map<String, dynamic>>> getCommunicationServices() async {
-    try {
-      final response = await _makeRequest('GET', 'communications', debug: true);
-      return _parseListResponse(response);
-    } catch (e) {
-      debugPrint("Error fetching communication services: $e");
-      throw Exception("Failed to fetch communication services: $e");
-    }
-  }
-
-  static Future<Map<String, dynamic>> getCommunicationServiceById(String id) async {
-    try {
-      final response = await _makeRequest('GET', 'communication/$id', debug: true);
-      return _parseMapResponse(response);
-    } catch (e) {
-      debugPrint("Error fetching communication service details: $e");
-      throw Exception("Failed to fetch communication service details: $e");
-    }
-  }
-
-  static Future<List<Map<String, dynamic>>> searchCommunicationServices({
-    String? serviceType, String? paymentMethod, String? coverageArea, 
-    String? query, int? page, int? limit,
-  }) async {
-    try {
-      String endpoint = 'communications';
-      Map<String, String> queryParams = {};
-      if (serviceType != null && serviceType != 'all') queryParams['serviceType'] = serviceType;
-      if (paymentMethod != null && paymentMethod != 'all') queryParams['paymentMethod'] = paymentMethod;
-      if (coverageArea != null && coverageArea != 'all') queryParams['coverageArea'] = coverageArea;
-      if (page != null) queryParams['page'] = page.toString();
-      if (limit != null) queryParams['limit'] = limit.toString();
-
-      if (queryParams.isNotEmpty) {
-        String queryString = queryParams.entries
-            .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-            .join('&');
-        endpoint = '$endpoint?$queryString';
-      }
-
-      final response = await _makeRequest('GET', endpoint, debug: true);
-      return _parseListResponse(response);
-    } catch (e) {
-      debugPrint("Error searching communication services: $e");
-      throw Exception("Failed to search communication services: $e");
-    }
-  }
-
-  static Future<Map<String, dynamic>> addCommunicationService(Map<String, dynamic> serviceData) async {
-    try {
-      final response = await _makeRequest('POST', 'addCommunication', body: serviceData, debug: true);
-      if (response.statusCode == 201) {
-        return jsonDecode(response.body);
-      } else {
-        var errorData = jsonDecode(response.body);
-        throw Exception(errorData['error'] ?? "Failed to add communication service");
-      }
-    } catch (e) {
-      debugPrint("Error adding communication service: $e");
-      throw Exception("Failed to add communication service: $e");
-    }
-  }
-
-  static Future<Map<String, dynamic>> updateCommunicationService(String id, Map<String, dynamic> serviceData) async {
-    try {
-      final response = await _makeRequest('PUT', 'communication/$id', body: serviceData, debug: true);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        var errorData = jsonDecode(response.body);
-        throw Exception(errorData['error'] ?? "Failed to update communication service");
-      }
-    } catch (e) {
-      debugPrint("Error updating communication service: $e");
-      throw Exception("Failed to update communication service: $e");
-    }
-  }
-
-  static Future<Map<String, dynamic>> deleteCommunicationService(String id) async {
-    try {
-      final response = await _makeRequest('DELETE', 'communication/$id', debug: true);
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        var errorData = jsonDecode(response.body);
-        throw Exception(errorData['error'] ?? "Failed to delete communication service");
-      }
-    } catch (e) {
-      debugPrint("Error deleting communication service: $e");
-      throw Exception("Failed to delete communication service: $e");
-    }
-  }
-
-  // BOOKING METHODS
+  // BOOKING METHODS (for guides and taxis)
   static Future<Map<String, dynamic>> bookGuide({
-    required String guideId, required String userId, required String tourDate,
-    required String tourLocation, String? message,
+    required String guideId,
+    required String userId,
+    required String tourDate,
+    required String tourLocation,
+    String? message,
   }) async {
+    var url = Uri.parse("${baseUrl}bookGuide");
+    
+    Map<String, dynamic> bookingData = {
+      'guideId': guideId,
+      'userId': userId,
+      'tourDate': tourDate,
+      'tourLocation': tourLocation,
+      if (message != null) 'message': message,
+    };
+
+    debugPrint("Making booking request to: $url");
+    debugPrint("Booking data: $bookingData");
+
     try {
-      Map<String, dynamic> bookingData = {
-        'guideId': guideId, 'userId': userId, 'tourDate': tourDate,
-        'tourLocation': tourLocation, if (message != null) 'message': message,
-      };
-      final response = await _makeRequest('POST', 'bookGuide', body: bookingData, debug: true);
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(bookingData),
+      );
+
+      debugPrint("Booking response status: ${res.statusCode}");
+      debugPrint("Booking response body: ${res.body}");
+
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to book guide");
       }
     } catch (e) {
@@ -473,21 +667,44 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> bookTaxi({
-    required String taxiId, required String userId, required String pickupLocation,
-    required String dropoffLocation, required String tripDate, required String tripTime,
+    required String taxiId,
+    required String userId,
+    required String pickupLocation,
+    required String dropoffLocation,
+    required String tripDate,
+    required String tripTime,
     String? message,
   }) async {
+    var url = Uri.parse("${baseUrl}bookTaxi");
+    
+    Map<String, dynamic> bookingData = {
+      'taxiId': taxiId,
+      'userId': userId,
+      'pickupLocation': pickupLocation,
+      'dropoffLocation': dropoffLocation,
+      'tripDate': tripDate,
+      'tripTime': tripTime,
+      if (message != null) 'message': message,
+    };
+
+    debugPrint("Making taxi booking request to: $url");
+    debugPrint("Taxi booking data: $bookingData");
+
     try {
-      Map<String, dynamic> bookingData = {
-        'taxiId': taxiId, 'userId': userId, 'pickupLocation': pickupLocation,
-        'dropoffLocation': dropoffLocation, 'tripDate': tripDate, 'tripTime': tripTime,
-        if (message != null) 'message': message,
-      };
-      final response = await _makeRequest('POST', 'bookTaxi', body: bookingData, debug: true);
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(bookingData),
+      );
+
+      debugPrint("Taxi booking response status: ${res.statusCode}");
+      debugPrint("Taxi booking response body: ${res.body}");
+
+      if (res.statusCode == 201 || res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData;
       } else {
-        var errorData = jsonDecode(response.body);
+        var errorData = jsonDecode(res.body);
         throw Exception(errorData['error'] ?? "Failed to book taxi");
       }
     } catch (e) {
@@ -499,8 +716,9 @@ class Api {
   // UTILITY METHODS
   static Future<bool> testConnection() async {
     try {
-      final response = await _makeRequest('GET', 'guides');
-      return response.statusCode == 200;
+      var url = Uri.parse("${baseUrl}guides");
+      final res = await http.get(url);
+      return res.statusCode == 200;
     } catch (e) {
       debugPrint("Connection test failed: $e");
       return false;
@@ -508,10 +726,11 @@ class Api {
   }
 
   static Future<Map<String, dynamic>> getAppStatus() async {
+    var url = Uri.parse("${baseUrl}status");
     try {
-      final response = await _makeRequest('GET', 'status');
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+      final res = await http.get(url);
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
       } else {
         throw Exception("Failed to get app status");
       }
