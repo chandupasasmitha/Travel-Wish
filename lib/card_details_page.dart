@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: CardDetailsPage(),
+  ));
+}
+
+// ...rest of your CardDetailsPage code..
+
 class CardDetailsPage extends StatefulWidget {
   @override
   _CardDetailsPageState createState() => _CardDetailsPageState();
