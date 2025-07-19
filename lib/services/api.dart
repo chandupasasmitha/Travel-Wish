@@ -185,4 +185,60 @@ class Api {
       throw Exception("Failed to search accommodations: $e");
     }
   }
+
+  static Future<Map<String, dynamic>> createBooking(
+      Map<String, dynamic> bookingData) async {
+    var url = Uri.parse(
+        "${baseUrl}bookings"); // NEW: Define a new endpoint for bookings
+    try {
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(bookingData),
+      );
+
+      var responseData = jsonDecode(res.body);
+      debugPrint(
+          'Booking API Response: $responseData (Status: ${res.statusCode})');
+
+      if (res.statusCode == 201) {
+        // 201 Created is typical for successful POST
+        return {'success': true, 'data': responseData};
+      } else {
+        return {
+          'success': false,
+          'error': responseData['error'] ?? 'Unknown error',
+          'statusCode': res.statusCode
+        };
+      }
+    } catch (e) {
+      debugPrint("Error creating booking: $e");
+      return {'success': false, 'error': e.toString()};
+    }
+  }
+
+  // Add a method to check booking status (optional, for polling)
+  static Future<Map<String, dynamic>> getBookingStatus(String bookingId) async {
+    var url =
+        Uri.parse("${baseUrl}bookings/$bookingId/status"); // Example endpoint
+    try {
+      final res = await http.get(url);
+      var responseData = jsonDecode(res.body);
+      debugPrint(
+          'Booking Status API Response: $responseData (Status: ${res.statusCode})');
+
+      if (res.statusCode == 200) {
+        return {'success': true, 'data': responseData};
+      } else {
+        return {
+          'success': false,
+          'error': responseData['error'] ?? 'Unknown error',
+          'statusCode': res.statusCode
+        };
+      }
+    } catch (e) {
+      debugPrint("Error getting booking status: $e");
+      return {'success': false, 'error': e.toString()};
+    }
+  }
 }
