@@ -93,7 +93,7 @@ class Content2 extends StatelessWidget {
                 child: IconButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
+                        MaterialPageRoute(builder: (context) => ThingsToDo()));
                   },
                   icon: Icon(Icons.arrow_back),
                 ),

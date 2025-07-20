@@ -8,11 +8,11 @@ import 'learningpoints/learningpoints.dart';
 import 'ayurwedha/ayurwedha.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ThingsToDo());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ThingsToDo extends StatelessWidget {
+  const ThingsToDo({super.key});
 
   @override
   Widget build(BuildContext context) {

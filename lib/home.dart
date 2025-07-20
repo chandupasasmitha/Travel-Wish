@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:test/thingstodo/things_to_do.dart';
 import 'accommodation.dart'; // Import the Accommodation page
+import 'guide.dart'; // Import the Guide page
+import 'taxi.dart'; // Import the Taxi page
+import 'services.dart'; // Import the Services page
 
 void main() {
   runApp(MyApp());
@@ -31,11 +35,23 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
     {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
-    {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
-    {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': null},
-    {'icon': Icons.people, 'label': 'Guides', 'route': null},
+    {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
+    {
+      'icon': Icons.local_taxi,
+      'label': 'Taxi',
+      'route': Taxi()
+    }, // Added Taxi route
+    {
+      'icon': Icons.people,
+      'label': 'Guides',
+      'route': Guide()
+    }, // Added Guide route
     {'icon': Icons.map, 'label': 'Map', 'route': null},
-    {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': null},
+    {
+      'icon': Icons.miscellaneous_services,
+      'label': 'Services',
+      'route': ServicesPage()
+    }, // Added Services route
   ];
 
   // List of popular places with corresponding images
@@ -125,6 +141,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => options[index]['route'],
+                        ),
+                      );
+                    } else {
+                      // Show message for pages that are not implemented yet
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('${options[index]['label']} coming soon!'),
+                          duration: Duration(seconds: 2),
                         ),
                       );
                     }
