@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'accommodation.dart'; // Import the Accommodation page
 import 'guide.dart'; // Import the Guide page
 import 'taxi.dart'; // Import the Taxi page
+import 'services.dart'; // Import the Services page
 
 void main() {
   runApp(MyApp());
@@ -28,17 +29,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // List of options available on the home screen
-  final List<Map<String, dynamic>> options = [
-    {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
-    {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
-    {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
-    {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
-    {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
-    {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': null},
-    {'icon': Icons.people, 'label': 'Guides', 'route': Guide()}, // Added Guide route
-    {'icon': Icons.map, 'label': 'Map', 'route': null},
-    {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': null},
-  ];
+ final List<Map<String, dynamic>> options = [
+  {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
+  {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
+  {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
+  {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
+  {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
+  {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': Taxi()}, // Added Taxi route
+  {'icon': Icons.local_activity, 'label': 'Activities', 'route': null}, // Fixed: Added quotes around 'Activities'
+  {'icon': Icons.local_offer, 'label': 'Offers', 'route': null},
+  {'icon': Icons.people, 'label': 'Guides', 'route': Guide()}, // Added Guide route
+  {'icon': Icons.map, 'label': 'Map', 'route': null},
+  {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': ServicesPage()}, // Added Services route
+];
 
   // List of popular places with corresponding images
   final List<Map<String, String>> popularPlaces = [

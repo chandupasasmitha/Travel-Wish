@@ -71,7 +71,7 @@
       "name": "flutter_web_plugins",
       "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.7"
     },
     {
       "name": "http",
@@ -141,7 +141,7 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -195,49 +195,49 @@
     },
     {
       "name": "url_launcher",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.3.2",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher-6.3.2",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
     {
       "name": "url_launcher_android",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.3.16",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_android-6.3.16",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
     {
       "name": "url_launcher_ios",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.3.3",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_ios-6.3.3",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "url_launcher_linux",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.1",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "url_launcher_macos",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.2.2",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_macos-3.2.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "url_launcher_platform_interface",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_platform_interface-2.3.2",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_platform_interface-2.3.2",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
     {
       "name": "url_launcher_web",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_web-2.4.1",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_web-2.4.1",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
     {
       "name": "url_launcher_windows",
-      "rootUri": "file:///C:/Users/chand/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.1.4",
+      "rootUri": "file:///C:/Users/Dulanjana/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_windows-3.1.4",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -266,10 +266,6 @@
       "languageVersion": "3.6"
     }
   ],
-
-
-  "generated": "2025-07-16T08:51:45.639998Z",
-
   "generator": "pub",
   "generatorVersion": "3.8.1",
   "flutterRoot": "file:///C:/src/flutter",
