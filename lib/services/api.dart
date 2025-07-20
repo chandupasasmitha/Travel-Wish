@@ -5,14 +5,15 @@ import 'package:http/http.dart' as http;
 class Api {
   static const String baseUrl = "http://10.0.2.2:2000/api/";
 
+  // USER METHODS
   static adduser(Map udata) async {
     print(udata);
     var url = Uri.parse("${baseUrl}add_data");
     try {
       final res = await http.post(
         url,
-        headers: {"Content-Type": "application/json"}, // ADD HEADER
-        body: jsonEncode(udata), // CONVERT TO JSON
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(udata),
       );
       if (res.statusCode == 200) {
         var data1 = jsonDecode(res.body.toString());
@@ -62,7 +63,7 @@ class Api {
     }
   }
 
-  // New method to fetch accommodations
+  // ACCOMMODATION METHODS
   static Future<List<Map<String, dynamic>>> getAccommodations() async {
     var url = Uri.parse("${baseUrl}accommodations");
     try {
@@ -74,7 +75,6 @@ class Api {
       if (res.statusCode == 200) {
         var responseData = jsonDecode(res.body);
 
-        // Handle your API response format
         if (responseData is Map &&
             responseData.containsKey('success') &&
             responseData['success'] == true) {
@@ -84,7 +84,6 @@ class Api {
           }
         }
 
-        // Fallback for other formats
         if (responseData is List) {
           return List<Map<String, dynamic>>.from(responseData);
         } else if (responseData is Map && responseData.containsKey('data')) {
@@ -101,7 +100,6 @@ class Api {
     }
   }
 
-  // Method to fetch accommodation details by ID
   static Future<Map<String, dynamic>> getAccommodationById(String id) async {
     var url = Uri.parse("${baseUrl}accommodations/$id");
     try {
@@ -130,7 +128,6 @@ class Api {
     }
   }
 
-  // Method to search accommodations
   static Future<List<Map<String, dynamic>>> searchAccommodations({
     String? query,
     double? minPrice,
@@ -159,7 +156,6 @@ class Api {
       if (res.statusCode == 200) {
         var responseData = jsonDecode(res.body);
 
-        // Handle your API response format
         if (responseData is Map &&
             responseData.containsKey('success') &&
             responseData['success'] == true) {
@@ -169,7 +165,6 @@ class Api {
           }
         }
 
-        // Fallback for other formats
         if (responseData is List) {
           return List<Map<String, dynamic>>.from(responseData);
         } else if (responseData is Map && responseData.containsKey('data')) {
@@ -183,62 +178,6 @@ class Api {
     } catch (e) {
       debugPrint("Error searching accommodations: $e");
       throw Exception("Failed to search accommodations: $e");
-    }
-  }
-
-  static Future<Map<String, dynamic>> createBooking(
-      Map<String, dynamic> bookingData) async {
-    var url = Uri.parse(
-        "${baseUrl}bookings"); // NEW: Define a new endpoint for bookings
-    try {
-      final res = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(bookingData),
-      );
-
-      var responseData = jsonDecode(res.body);
-      debugPrint(
-          'Booking API Response: $responseData (Status: ${res.statusCode})');
-
-      if (res.statusCode == 201) {
-        // 201 Created is typical for successful POST
-        return {'success': true, 'data': responseData};
-      } else {
-        return {
-          'success': false,
-          'error': responseData['error'] ?? 'Unknown error',
-          'statusCode': res.statusCode
-        };
-      }
-    } catch (e) {
-      debugPrint("Error creating booking: $e");
-      return {'success': false, 'error': e.toString()};
-    }
-  }
-
-  // Add a method to check booking status (optional, for polling)
-  static Future<Map<String, dynamic>> getBookingStatus(String bookingId) async {
-    var url =
-        Uri.parse("${baseUrl}bookings/$bookingId/status"); // Example endpoint
-    try {
-      final res = await http.get(url);
-      var responseData = jsonDecode(res.body);
-      debugPrint(
-          'Booking Status API Response: $responseData (Status: ${res.statusCode})');
-
-      if (res.statusCode == 200) {
-        return {'success': true, 'data': responseData};
-      } else {
-        return {
-          'success': false,
-          'error': responseData['error'] ?? 'Unknown error',
-          'statusCode': res.statusCode
-        };
-      }
-    } catch (e) {
-      debugPrint("Error getting booking status: $e");
-      return {'success': false, 'error': e.toString()};
     }
   }
 }
