@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'emergency_bell.dart';
+import 'emergency1990.dart';
 
 void main() {
   runApp(const EmergencyHome());
@@ -31,7 +33,6 @@ class EmergencyScreen extends StatelessWidget {
         builder: (context, constraints) {
           return Stack(
             children: [
-              // Background Image
               Positioned.fill(
                 child: Image.asset(
                   'assets/background01.png',
@@ -48,7 +49,6 @@ class EmergencyScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Header
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -68,8 +68,6 @@ class EmergencyScreen extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.05),
-
-                        // Title
                         Row(
                           children: [
                             Icon(
@@ -89,8 +87,6 @@ class EmergencyScreen extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: screenHeight * 0.03),
-
-                        // Emergency Cards (Grid on larger screens)
                         LayoutBuilder(
                           builder: (context, constraints) {
                             return isTablet || isDesktop
@@ -98,18 +94,62 @@ class EmergencyScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       _buildEmergencyCard(
-                                          'assets/bell.png', screenWidth, screenHeight),
+                                        'assets/bell.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => TravelWishEmergencyUI(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                       _buildEmergencyCard(
-                                          'assets/1990.png', screenWidth, screenHeight),
+                                        'assets/1990.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => TravelWishAmbulanceUI(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   )
                                 : Column(
                                     children: [
                                       _buildEmergencyCard(
-                                          'assets/bell.png', screenWidth, screenHeight),
+                                        'assets/bell.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => TravelWishEmergencyUI(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                       SizedBox(height: screenHeight * 0.03),
                                       _buildEmergencyCard(
-                                          'assets/1990.png', screenWidth, screenHeight),
+                                        'assets/1990.png',
+                                        screenWidth,
+                                        screenHeight,
+                                        () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => TravelWishAmbulanceUI(),
+                                            ),
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                           },
@@ -119,8 +159,6 @@ class EmergencyScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // Floating Action Button (Responsive Positioning & Size)
               Positioned(
                 bottom: screenHeight * 0.03,
                 right: screenWidth * 0.05,
@@ -141,48 +179,56 @@ class EmergencyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencyCard(String imagePath, double screenWidth, double screenHeight) {
-    return Container(
-      width: screenWidth > 600 ? screenWidth * 0.4 : screenWidth * 0.8, // Adjust width for tablets
-      padding: EdgeInsets.all(screenWidth * 0.04),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Image.asset(
-            imagePath,
-            width: screenWidth * 0.3,
-            height: screenWidth * 0.3,
-          ),
-          SizedBox(height: screenHeight * 0.02),
-          Text(
-            "Press & Hold To Activate Emergency Alert",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: screenWidth * 0.045,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+  Widget _buildEmergencyCard(
+    String imagePath,
+    double screenWidth,
+    double screenHeight,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: screenWidth > 600 ? screenWidth * 0.4 : screenWidth * 0.8,
+        padding: EdgeInsets.all(screenWidth * 0.04),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              spreadRadius: 2,
             ),
-          ),
-          SizedBox(height: screenHeight * 0.005),
-          Text(
-            "Our Agents will Contact You Soon.",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: screenWidth * 0.035,
-              color: Colors.black54,
+          ],
+        ),
+        child: Column(
+          children: [
+            Image.asset(
+              imagePath,
+              width: screenWidth * 0.3,
+              height: screenWidth * 0.3,
             ),
-          ),
-        ],
+            SizedBox(height: screenHeight * 0.02),
+            Text(
+              "Press & Hold To Activate Emergency Alert",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenWidth * 0.045,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.005),
+            Text(
+              "Our Agents will Contact You Soon.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenWidth * 0.035,
+                color: Colors.black54,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
