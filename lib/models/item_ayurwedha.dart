@@ -4,18 +4,16 @@ class Item {
   final String category;
   final String subcategory;
   final String imageUrl;
+
   final String description;
   final String googleMapsUrl;
-  final String duration;
-  final String contactInfo;
-  final String bestfor;
-  final String price;
-  final DateTime bestTimetoVisit;
-  final String activities;
-  final String whatToWear;
-  final String whatToBring;
-  final String precautions;
+  final String openingHours;
   final String contactno;
+  final List<int> price;
+  final List<int> duration;
+  final List<String> treatmentname;
+  final DateTime bestTimetoVisit;
+  final String entryfee;
   final String websiteUrl;
   final String address;
 
@@ -28,15 +26,12 @@ class Item {
       required this.description,
       required this.duration,
       required this.googleMapsUrl,
-      required this.bestfor,
-      required this.contactInfo,
       required this.price,
       required this.bestTimetoVisit,
-      required this.activities,
-      required this.whatToBring,
-      required this.whatToWear,
-      required this.precautions,
+      required this.entryfee,
+      required this.openingHours,
       required this.contactno,
+      required this.treatmentname,
       required this.websiteUrl,
       required this.address});
 
@@ -48,18 +43,15 @@ class Item {
         subcategory: json['subcategory'],
         imageUrl: json['imageUrl'],
         description: json['description'] ?? '',
-        duration: json['duration'] ?? '',
+        duration: List<int>.from(['duration'] ?? []),
         googleMapsUrl: json['googleMapUrl'] ?? '',
-        bestfor: json['bestfor'] ?? '',
-        contactInfo: json['contactInfo'] ?? '',
         price: json['price'] ?? '',
+        openingHours: json['openingHours'] ?? '',
+        treatmentname: json['treatmentname'] ?? '',
         bestTimetoVisit: json['bestTimetoVisit'] != null
             ? DateTime.parse(json['bestTimetoVisit'])
             : DateTime.now(),
-        whatToBring: json['whatToBring'] ?? '',
-        whatToWear: json['whatToWear'] ?? '',
-        activities: json['activities'] ?? '',
-        precautions: json['precautions'] ?? '',
+        entryfee: json['entryfee'] ?? '',
         contactno: json['contactno'] ?? '',
         websiteUrl: json['wesiteUrl'] ?? '',
         address: json['address'] ?? '');

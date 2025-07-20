@@ -1,34 +1,18 @@
 {
-    "configurations": [
-        {
-            "name": "Dart",
-            "type": "dart",
-            "request": "launch",
-            "program": "bin/main.dart"
-        },
-        {
-            "name": "Flutter (lib\\buythings.dart)",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib/buythings.dart"
-        },
-        {
-            "name": "Flutter (lib\\buythings.dart)",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib\\buythings.dart"
-        },
-        {
-            "name": "Flutter (lib\\adventures.dart)",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib\\adventures.dart"
-        },
-        {
-            "name": "Flutter (lib\\things_to_do.dart)",
-            "type": "dart",
-            "request": "launch",
-            "program": "lib\\things_to_do.dart"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+        "name": "web_configuration",
+        "request": "launch",
+        "type": "dart",        
+        "args": ["d","brave", "--web-port","5000"],
+        "program": "lib\\thingstodo\\things_to_do.dart"
+    },
+    {
+        "name": "Flutter (lib\\thingstodo\\things_to_do.dart)",
+        "type": "dart",
+        "request": "launch",
+        "program": "lib\\thingstodo\\things_to_do.dart"
+    }
+]
 }

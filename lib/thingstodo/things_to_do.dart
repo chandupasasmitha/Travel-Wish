@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:test/thingstodo/placestovisit/placestovisit.dart';
+import 'package:test/thingstodo/specialevents/specialevents.dart';
 import 'dart:ui';
 import 'buythings/buythings.dart';
 import 'adventures/adventures.dart';
-import '../learningpoints.dart';
+import 'learningpoints/learningpoints.dart';
+import 'ayurwedha/ayurwedha.dart';
 
 void main() {
   runApp(MyApp());
@@ -144,8 +147,10 @@ class Content1 extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => BuyThings()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => placestovisit()));
                     },
                     child: Container(
                       //More Button
@@ -258,7 +263,10 @@ class Content1 extends StatelessWidget {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Ayurwedha()));
+                    },
                     child: Container(
                       //More Button 2
                       height: 40,
@@ -422,14 +430,22 @@ class Content1 extends StatelessWidget {
                       Text("Around 2000 places")
                     ],
                   ),
-                  Container(
-                    //More Button 2
-                    height: 40,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFD8EFFF),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(child: Text("More >")),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => specialevents()));
+                    },
+                    child: Container(
+                      //More Button 2
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFD8EFFF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("More >")),
+                    ),
                   )
                 ],
               ),

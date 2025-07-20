@@ -143,19 +143,24 @@ class _CategoriesState extends State<Categories> {
   Future<void> fetchItems() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:3000/api/items'),
+        Uri.parse(
+            'http://localhost:2000/api/buythings'), // IMPORTANT: 10.0.2.2 for Android emulator
+        headers: {
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        List<dynamic> data = jsonResponse['data'];
+
         List<Item> fetchedItems = data
-            .where((item) => item['category'] == 'buythings')
+            .where((item) => item['category'] == 'buythings') // Filter category
             .map((item) => Item.fromJson(item))
-            .toList(); //filter the category = 'buythings'
+            .toList();
 
-        // Group items by category
+        // Group items by subcategory
         Map<String, List<Item>> categoryMap = {};
-
         for (var item in fetchedItems) {
           final key = item.subcategory.toLowerCase();
           if (categoryMap.containsKey(key)) {
@@ -169,10 +174,10 @@ class _CategoriesState extends State<Categories> {
           categorizedItems = categoryMap;
         });
       } else {
-        print('Failed to load items');
+        print('Failed to load items. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
+      print('Error fetching items: $e');
     }
   }
 
@@ -219,17 +224,24 @@ class _CategoriesState extends State<Categories> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ItemDetailsBuythings(
-                                    title: item.title,
-                                    imageUrl: item.imageUrl,
-                                    description: item.description,
-                                    location: item.location,
-                                    hours: item.openingHours,
-                                    entryFee: item.entryFee,
-                                    googleMapsUrl: item.googleMapsUrl,
-                                    isCard: item.isCard,
-                                    isCash: item.isCash,
-                                    isQRScan: item.isQRScan,
-                                    isParking: item.isParking)));
+                                      title: item.title,
+                                      images: item.images,
+                                      description: item.description,
+                                      location: item.location,
+                                      hours: item.openingHours,
+                                      entryFee: item.entryFee,
+                                      googleMapsUrl: item.googleMapsUrl,
+                                      isCard: item.isCard,
+                                      isCash: item.isCash,
+                                      isQRScan: item.isQRScan,
+                                      isParking: item.isParking,
+                                      contactno: item.contactno,
+                                      websiteUrl: item.websiteUrl,
+                                      address: item.address,
+                                      wifi: item.wifi,
+                                      washrooms: item.washrooms,
+                                      familyFriendly: item.familyFriendly,
+                                    )));
                       },
                       child: buildItemCard(item));
                 },
@@ -253,7 +265,7 @@ class _CategoriesState extends State<Categories> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.network(item.imageUrl, fit: BoxFit.cover),
+              child: Image.network(item.images[0].url, fit: BoxFit.cover),
             ),
             Positioned.fill(
               child: Container(color: Colors.black.withOpacity(0.5)),

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../models/review.dart';
 
-class ItemDetailsAdventures extends StatelessWidget {
+class ItemDetailsPlacestovisit extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String description;
@@ -17,12 +17,10 @@ class ItemDetailsAdventures extends StatelessWidget {
   final String whatToWear;
   final String precautions;
   final String activities;
-
   final String contactno;
-  final String websiteUrl;
   final String address;
 
-  const ItemDetailsAdventures(
+  const ItemDetailsPlacestovisit(
       {super.key,
       required this.title,
       required this.imageUrl,
@@ -37,7 +35,6 @@ class ItemDetailsAdventures extends StatelessWidget {
       required this.activities,
       required this.price,
       required this.contactno,
-      required this.websiteUrl,
       required this.address});
 
   void _launchMap() async {
@@ -470,7 +467,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        websiteUrl,
+                                        'websiteUrl',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Quicksand'),
