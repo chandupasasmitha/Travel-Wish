@@ -62,6 +62,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "flutter_staggered_grid_view",
+      "rootUri": "file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_staggered_grid_view-0.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///C:/src/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -138,6 +144,12 @@
       "rootUri": "file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "photo_view",
+      "rootUri": "file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/photo_view-0.14.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "plugin_platform_interface",

@@ -241,6 +241,7 @@ class _CategoriesState extends State<Categories> {
                                       wifi: item.wifi,
                                       washrooms: item.washrooms,
                                       familyFriendly: item.familyFriendly,
+                                      category: item.category,
                                     )));
                       },
                       child: buildItemCard(item));

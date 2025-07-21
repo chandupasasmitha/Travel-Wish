@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:test/main.dart';
 import 'package:test/thingstodo/placestovisit/placestovisit.dart';
 import 'package:test/thingstodo/specialevents/specialevents.dart';
+import 'package:test/home.dart';
 import 'dart:ui';
 import 'buythings/buythings.dart';
 import 'adventures/adventures.dart';
@@ -93,7 +95,12 @@ class Content1 extends StatelessWidget {
           Row(
             // back button + things to do text
             children: [
-              Icon(Icons.arrow_back),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
+                  },
+                  child: Icon(Icons.arrow_back)),
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
