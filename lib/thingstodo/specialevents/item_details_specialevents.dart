@@ -4,41 +4,39 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../models/review.dart';
 
-class ItemDetailsAdventures extends StatelessWidget {
+class ItemDetailsSpecialevents extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String description;
-  final String duration;
-  final String bestfor;
-  final String price;
   final String googleMapsUrl;
-  final DateTime bestTimetoVisit;
-  final String whatToBring;
-  final String whatToWear;
-  final String precautions;
-  final String activities;
-
+  final DateTime date;
   final String contactno;
-  final String websiteUrl;
+  final String bestfor;
+  final String ticketPrice;
+  final String dresscode;
+  final String parking;
   final String address;
+  final bool bus;
+  final bool taxi;
+  final bool train;
 
-  const ItemDetailsAdventures(
-      {super.key,
-      required this.title,
-      required this.imageUrl,
-      required this.description,
-      required this.bestfor,
-      required this.duration,
-      required this.bestTimetoVisit,
-      required this.googleMapsUrl,
-      required this.whatToBring,
-      required this.whatToWear,
-      required this.precautions,
-      required this.activities,
-      required this.price,
-      required this.contactno,
-      required this.websiteUrl,
-      required this.address});
+  const ItemDetailsSpecialevents({
+    super.key,
+    required this.title,
+    required this.imageUrl,
+    required this.description,
+    required this.date,
+    required this.googleMapsUrl,
+    required this.bestfor,
+    required this.dresscode,
+    required this.ticketPrice,
+    required this.parking,
+    required this.contactno,
+    required this.address,
+    required this.bus,
+    required this.taxi,
+    required this.train,
+  });
 
   void _launchMap() async {
     if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
@@ -165,12 +163,12 @@ class ItemDetailsAdventures extends StatelessWidget {
                                           MediaQuery.of(context).size.height *
                                               0.01),
                                   infoCard(
-                                      Icons.schedule, 'Duration:', duration),
+                                      Icons.schedule, 'Duration:', 'duration'),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.01),
-                                  infoCard(Icons.money, 'Price:', price),
+                                  infoCard(Icons.money, 'Price:', 'price'),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -181,16 +179,12 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.01),
-                                  infoCard(
-                                      Icons.calendar_month_outlined,
-                                      'Best Time to Visit:',
-                                      bestTimetoVisit.toString()),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.01),
                                   infoCard(Icons.run_circle_outlined,
-                                      'Activities Included:', activities),
+                                      'Activities Included:', 'activities'),
                                 ],
                               ),
                             ),
@@ -333,7 +327,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        whatToWear,
+                                        'whatToWear',
                                         style: TextStyle(fontSize: 16),
                                       )
                                     ],
@@ -359,7 +353,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        whatToBring,
+                                        'whatToBring',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Quicksand'),
@@ -470,7 +464,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        websiteUrl,
+                                        'websiteUrl',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Quicksand'),

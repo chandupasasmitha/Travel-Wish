@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:test/thingstodo/adventures/item_details_adventures.dart';
+import 'package:test/thingstodo/Learningpoints/item_details_learningpoints.dart';
 import 'package:test/thingstodo/things_to_do.dart';
-import '../../models/item_adventures.dart';
+import '../../models/item_learningpoints.dart';
 import 'dart:convert';
 
 void main() {
-  runApp(Adventures());
+  runApp(Learningpoints());
 }
 
-class Adventures extends StatelessWidget {
-  const Adventures({super.key});
+class Learningpoints extends StatelessWidget {
+  const Learningpoints({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,7 @@ class Content3 extends StatelessWidget {
                 ),
               ),
               Text(
-                'Adventure',
+                'Learning Points',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               )
             ],
@@ -103,7 +103,7 @@ class Content3 extends StatelessWidget {
             height: 10,
           ),
           const Expanded(
-            child: adventures(),
+            child: learningpoints(),
           ),
         ],
       ),
@@ -111,16 +111,16 @@ class Content3 extends StatelessWidget {
   }
 }
 
-//Adventures is under content3
+//Learningpoints is under content3
 
-class adventures extends StatefulWidget {
-  const adventures({super.key});
+class learningpoints extends StatefulWidget {
+  const learningpoints({super.key});
 
   @override
-  State<adventures> createState() => _adventuresState();
+  State<learningpoints> createState() => _learningpointsState();
 }
 
-class _adventuresState extends State<adventures> {
+class _learningpointsState extends State<learningpoints> {
   List<Item> items = []; //defining the list
 
   @override
@@ -132,15 +132,15 @@ class _adventuresState extends State<adventures> {
   Future<void> fetchItems() async {
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:2000/api/adventures'));
+          await http.get(Uri.parse('http://localhost:2000/api/learningpoints'));
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(
             response.body); //recieves the response body and save it to a list
         setState(() {
           items = data
-              .where((item) => item['category'] == 'adventures')
+              .where((item) => item['category'] == 'learningpoints')
               .map((item) => Item.fromJson(item))
-              .toList(); //map only the catergory = 'adventures'
+              .toList(); //map only the catergory = 'Learningpoints'
         });
       } else {
         print('Failed to load items');
@@ -171,22 +171,20 @@ class _adventuresState extends State<adventures> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ItemDetailsAdventures(
+                          builder: (context) => ItemDetailsLearningpoints(
                                 title: item.title,
+                                category: item.category,
+                                subcategory: item.subcategory,
                                 imageUrl: item.imageUrl,
                                 description: item.description,
                                 duration: item.duration,
                                 bestfor: item.bestfor,
-                                price: item.price,
+                                avgprice: item.avgprice,
                                 googleMapsUrl: item.googleMapsUrl,
-                                bestTimetoVisit: item.bestTimetoVisit,
-                                whatToBring: item.whatToBring,
-                                whatToWear: item.whatToWear,
-                                precautions: item.precautions,
-                                activities: item.activities,
                                 contactno: item.contactno,
                                 websiteUrl: item.websiteUrl,
                                 address: item.address,
+                                tourname: item.tourname,
                               )));
                 },
                 child: Card(

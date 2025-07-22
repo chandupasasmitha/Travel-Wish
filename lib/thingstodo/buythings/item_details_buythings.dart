@@ -3,10 +3,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../models/review.dart';
+import '../../models/image.dart';
+import '../../widgets/imageGallery.dart';
 
 class ItemDetailsBuythings extends StatelessWidget {
   final String title;
-  final String imageUrl;
+  final List<ImageModel> images;
   final String description;
   final String location;
   final String hours;
@@ -16,20 +18,33 @@ class ItemDetailsBuythings extends StatelessWidget {
   final bool isCash;
   final bool isQRScan;
   final String isParking;
+  final String contactno;
+  final String websiteUrl;
+  final String address;
+  final String wifi;
+  final String washrooms;
+  final String familyFriendly;
 
-  const ItemDetailsBuythings(
-      {super.key,
-      required this.title,
-      required this.imageUrl,
-      required this.description,
-      required this.location,
-      required this.hours,
-      required this.entryFee,
-      required this.googleMapsUrl,
-      required this.isCard,
-      required this.isCash,
-      required this.isQRScan,
-      required this.isParking});
+  const ItemDetailsBuythings({
+    super.key,
+    required this.title,
+    required this.images,
+    required this.description,
+    required this.location,
+    required this.hours,
+    required this.entryFee,
+    required this.googleMapsUrl,
+    required this.isCard,
+    required this.isCash,
+    required this.isQRScan,
+    required this.isParking,
+    required this.contactno,
+    required this.websiteUrl,
+    required this.address,
+    required this.wifi,
+    required this.washrooms,
+    required this.familyFriendly,
+  });
 
   void _launchMap() async {
     if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
@@ -50,7 +65,7 @@ class ItemDetailsBuythings extends StatelessWidget {
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
             fontFamily: 'QuickSand',
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -77,7 +92,6 @@ class ItemDetailsBuythings extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.5),
-
                         spreadRadius: 5,
                         blurRadius: 10,
                         offset:
@@ -87,14 +101,13 @@ class ItemDetailsBuythings extends StatelessWidget {
                   ),
                   clipBehavior: Clip.hardEdge,
                   child: Image.network(
-                    imageUrl,
+                    images[0].url,
                     fit: BoxFit.fitWidth,
                     height: 240,
                   ),
                 ),
               ),
             ),
-
             SliverList(
               delegate: SliverChildListDelegate(
                 [
@@ -110,162 +123,210 @@ class ItemDetailsBuythings extends StatelessWidget {
                             Text(
                               title,
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 40,
-                                  fontFamily: 'Quicksand'),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 40,
+                                fontFamily: 'Quicksand',
+                              ),
                             ),
                             const Text(
                               'About',
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Quicksand'),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Quicksand',
+                              ),
                             ),
                             const SizedBox(height: 10),
-                            Text(description,
-                                style: const TextStyle(fontSize: 16)),
+                            Text(
+                              description,
+                              style: const TextStyle(fontSize: 16),
+                            ),
                             const SizedBox(height: 20),
                             Text(
                               '-- Quick Info --',
                               style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Quicksand'),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Quicksand',
+                              ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(25),
+                              padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: const Color.fromARGB(
-                                            111, 22, 142, 190),
-                                        spreadRadius: 0.3,
-                                        blurRadius: 12,
-                                        offset: Offset(0, 4))
-                                  ]),
-                              child: Row(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color.fromARGB(111, 22, 142, 190),
+                                    spreadRadius: 0.3,
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  )
+                                ],
+                              ),
+                              child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   infoCard(
-                                      Icons.location_on, 'Location', location),
-                                  infoCard(Icons.schedule, 'Hours', hours),
-                                  infoCard(Icons.money, 'Entry Fee', entryFee),
-                                  infoCard(Icons.local_parking,
-                                      'Parking Availability', isParking),
+                                      Icons.location_on, 'Location:', location),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
+                                  infoCard(Icons.schedule, 'Hours:', hours),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
+                                  infoCard(Icons.money, 'Entry Fee:', entryFee),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
+                                  infoCard(
+                                    Icons.local_parking,
+                                    'Parking Availability:',
+                                    isParking,
+                                  ),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05),
 
+                            TouristGalleryWidget(
+                              images: images,
+                              height: 300,
+                              showThumbnails: true,
+                              enableZoom: true,
+                            ),
+
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.05,
+                            ),
                             // Description
                             Text(
                               '-- Payment Info --',
                               style: TextStyle(
-                                  fontFamily: 'Quicksand', fontSize: 22),
+                                fontFamily: 'Quicksand',
+                                fontSize: 20,
+                              ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(25),
+                              padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color.fromARGB(
-                                          111, 22, 142, 190),
-                                      spreadRadius: 0.3,
-                                      blurRadius: 12,
-                                      offset: Offset(0, 4),
-                                    )
-                                  ]),
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color.fromARGB(111, 22, 142, 190),
+                                    spreadRadius: 0.3,
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  )
+                                ],
+                              ),
                               child: Column(
                                 children: [
                                   Column(
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.payment,
-                                              color: Colors.blue, size: 30),
+                                          Icon(
+                                            Icons.payment,
+                                            color: Colors.blue,
+                                            size: 30,
+                                          ),
                                           Text(
                                             'Payment Methods:',
                                             style: TextStyle(
-                                                fontFamily: 'Quicksand',
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                              fontFamily: 'Quicksand',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.02),
                                       Row(
                                         children: [
                                           Text(
                                             'Card:',
                                             style: TextStyle(
-                                                fontFamily: 'Quicksand',
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                              fontFamily: 'Quicksand',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           SizedBox(width: 8),
                                           if (isCard) ...[
-                                            Icon(Icons.check_box,
-                                                color: Colors.green)
+                                            Icon(
+                                              Icons.check_box,
+                                              color: Colors.green,
+                                            )
                                           ] else ...[
-                                            Icon(Icons.close_rounded,
-                                                color: Colors.redAccent)
+                                            Icon(
+                                              Icons.close_rounded,
+                                              color: Colors.redAccent,
+                                            )
                                           ]
                                         ],
                                       ),
                                       SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.04),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.03,
+                                      ),
                                       Row(
                                         children: [
-                                          Text('Cash:',
-                                              style: TextStyle(
-                                                  fontFamily: 'Quicksand',
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold)),
+                                          Text(
+                                            'Cash:',
+                                            style: TextStyle(
+                                              fontFamily: 'Quicksand',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                           SizedBox(width: 8),
                                           if (isCash) ...[
-                                            Icon(Icons.check_box,
-                                                color: Colors.green)
+                                            Icon(
+                                              Icons.check_box,
+                                              color: Colors.green,
+                                            )
                                           ] else ...[
-                                            Icon(Icons.close_rounded,
-                                                color: Colors.redAccent)
+                                            Icon(
+                                              Icons.close_rounded,
+                                              color: Colors.redAccent,
+                                            )
                                           ]
                                         ],
                                       ),
                                       SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.04),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.03,
+                                      ),
                                       Row(
                                         children: [
                                           Text(
                                             'QR scan:',
                                             style: TextStyle(
-                                                fontFamily: 'Quicksand',
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                              fontFamily: 'Quicksand',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                           SizedBox(width: 8),
                                           if (isQRScan) ...[
-                                            Icon(Icons.check_box,
-                                                color: Colors.green)
+                                            Icon(
+                                              Icons.check_box,
+                                              color: Colors.green,
+                                            )
                                           ] else ...[
-                                            Icon(Icons.close_rounded,
-                                                color: Colors.redAccent)
+                                            Icon(
+                                              Icons.close_rounded,
+                                              color: Colors.redAccent,
+                                            )
                                           ]
                                         ],
                                       ),
@@ -275,31 +336,31 @@ class ItemDetailsBuythings extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.04),
-
+                              height: MediaQuery.of(context).size.height * 0.04,
+                            ),
                             Text(
                               '-- User Reviews & Ratings --',
                               style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Quicksand'),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Quicksand',
+                              ),
                             ),
-
                             Container(
-                              padding: EdgeInsets.all(25),
+                              padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color.fromARGB(
-                                          111, 22, 142, 190),
-                                      spreadRadius: 0.3,
-                                      blurRadius: 12,
-                                      offset: Offset(0, 4),
-                                    )
-                                  ]),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color.fromARGB(111, 22, 142, 190),
+                                    spreadRadius: 0.3,
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  )
+                                ],
+                              ),
                               child: FutureBuilder<List<Review>>(
                                 future: fetchReviews(),
                                 builder: (context, snapshot) {
@@ -313,11 +374,11 @@ class ItemDetailsBuythings extends StatelessWidget {
                                     return Text('No reviews found');
                                   } else {
                                     final reviews = snapshot.data!.where(
-                                        (review) => review.title == title);
+                                      (review) => review.title == title,
+                                    );
                                     if (reviews.isEmpty) {
                                       return Text('No reviews found');
                                     }
-
                                     return Column(
                                       children: reviews.map((review) {
                                         final rating =
@@ -325,34 +386,38 @@ class ItemDetailsBuythings extends StatelessWidget {
                                                 0.0;
                                         return ListTile(
                                           leading: CircleAvatar(
-                                              child: Text(
-                                            review.username[0],
-                                            style: TextStyle(
+                                            child: Text(
+                                              review.username[0],
+                                              style: TextStyle(
                                                 fontFamily: 'Quicksand',
-                                                fontSize: 18),
-                                          )),
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
                                           title: Row(
                                             children: [
                                               Text(
                                                 review.username,
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Quicksand',
-                                                    fontSize: 18),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Quicksand',
+                                                  fontSize: 16,
+                                                ),
                                               ),
                                               SizedBox(width: 8),
                                               Row(
                                                 children: List.generate(
                                                   5,
                                                   (index) => Icon(
-                                                      index < rating.floor()
-                                                          ? Icons.star
-                                                          : (index < rating
-                                                              ? Icons.star_half
-                                                              : Icons
-                                                                  .star_border),
-                                                      color: Colors.amber,
-                                                      size: 20),
+                                                    index < rating.floor()
+                                                        ? Icons.star
+                                                        : (index < rating
+                                                            ? Icons.star_half
+                                                            : Icons
+                                                                .star_border),
+                                                    color: Colors.amber,
+                                                    size: 20,
+                                                  ),
                                                 ),
                                               )
                                             ],
@@ -360,7 +425,8 @@ class ItemDetailsBuythings extends StatelessWidget {
                                           subtitle: Text(
                                             review.reviewText,
                                             style: TextStyle(
-                                                fontFamily: 'Quicksand'),
+                                              fontFamily: 'Quicksand',
+                                            ),
                                           ),
                                         );
                                       }).toList(),
@@ -369,32 +435,32 @@ class ItemDetailsBuythings extends StatelessWidget {
                                 },
                               ),
                             ),
-
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.04),
-
+                              height: MediaQuery.of(context).size.height * 0.04,
+                            ),
                             Text(
                               '-- Good To Know --',
                               style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Quicksand'),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Quicksand',
+                              ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(25),
+                              padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color.fromARGB(
-                                          111, 22, 142, 190),
-                                      spreadRadius: 0.3,
-                                      blurRadius: 12,
-                                      offset: Offset(0, 4),
-                                    )
-                                  ]),
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color.fromARGB(111, 22, 142, 190),
+                                    spreadRadius: 0.3,
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  )
+                                ],
+                              ),
                               child: Column(
                                 children: [
                                   Row(
@@ -408,20 +474,21 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         'Wi-Fi:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        'Yes',
-                                        style: TextStyle(fontSize: 18),
+                                        wifi,
+                                        style: TextStyle(fontSize: 16),
                                       )
                                     ],
                                   ),
                                   SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
                                   Row(
                                     children: [
                                       Icon(
@@ -433,23 +500,25 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         'Washrooms:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        'Yes',
+                                        washrooms,
                                         style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       )
                                     ],
                                   ),
                                   SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
                                   Row(
                                     children: [
                                       Icon(
@@ -461,48 +530,50 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         'Family Friendly:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        'Yes',
+                                        familyFriendly,
                                         style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       )
                                     ],
                                   ),
                                 ],
                               ),
                             ),
-
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.04),
-
+                              height: MediaQuery.of(context).size.height * 0.04,
+                            ),
                             Text(
                               '-- Contact Info --',
                               style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Quicksand'),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Quicksand',
+                              ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(25),
+                              padding: EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color.fromARGB(
-                                          111, 22, 142, 190),
-                                      spreadRadius: 0.3,
-                                      blurRadius: 12,
-                                      offset: Offset(0, 4),
-                                    )
-                                  ]),
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color.fromARGB(111, 22, 142, 190),
+                                    spreadRadius: 0.3,
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  )
+                                ],
+                              ),
                               child: Column(
                                 children: [
                                   Row(
@@ -516,23 +587,25 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         'ContactNo:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        '0112345678',
+                                        contactno,
                                         style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       )
                                     ],
                                   ),
                                   SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
                                   Row(
                                     children: [
                                       Icon(
@@ -544,23 +617,25 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         'Website:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        'www.website.com',
+                                        websiteUrl,
                                         style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       )
                                     ],
                                   ),
                                   SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.03,
+                                  ),
                                   Row(
                                     children: [
                                       Icon(
@@ -572,16 +647,18 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         'Address:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        'No. 12, kalawana, rathnapura',
+                                        address,
                                         style: TextStyle(
-                                            fontSize: 18,
-                                            fontFamily: 'Quicksand'),
+                                          fontSize: 16,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       )
                                     ],
                                   ),
@@ -589,9 +666,8 @@ class ItemDetailsBuythings extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.04),
-
+                              height: MediaQuery.of(context).size.height * 0.04,
+                            ),
                             // Map Button
                             ElevatedButton.icon(
                               onPressed: _launchMap,
@@ -599,7 +675,9 @@ class ItemDetailsBuythings extends StatelessWidget {
                               label: const Text(
                                 'View on Map',
                                 style: TextStyle(
-                                    fontFamily: 'Quicksand', fontSize: 18),
+                                  fontFamily: 'Quicksand',
+                                  fontSize: 16,
+                                ),
                               ),
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(double.infinity, 50),
@@ -610,9 +688,8 @@ class ItemDetailsBuythings extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.02),
-
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
                             ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context);
@@ -630,7 +707,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                 'Go Back',
                                 style: TextStyle(
                                   fontFamily: 'Quicksand',
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
@@ -650,14 +727,11 @@ class ItemDetailsBuythings extends StatelessWidget {
 
   Future<List<Review>> fetchReviews() async {
     // Your API endpoint for fetching reviews of a place
-    final url = Uri.parse('http://localhost:3000/api/reviews');
-
+    final url = Uri.parse('http://localhost:2000/api/reviews');
     try {
       final response = await http.get(url);
-
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body);
-
         // Map each JSON object to a Review
         return jsonData
             .map((reviewJson) => Review.fromJson(reviewJson))
@@ -672,18 +746,26 @@ class ItemDetailsBuythings extends StatelessWidget {
   }
 
   Widget infoCard(IconData icon, String title, String value) {
-    return Column(
+    return Row(
       children: [
         Icon(icon, color: Colors.blue, size: 30),
         const SizedBox(height: 5),
-        Text(title,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Quicksand',
-                fontSize: 17)),
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Quicksand',
+            fontSize: 17,
+          ),
+        ),
         const SizedBox(height: 2),
-        Text(value,
-            style: const TextStyle(fontSize: 15, fontFamily: 'Quicksand')),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 15,
+            fontFamily: 'Quicksand',
+          ),
+        ),
       ],
     );
   }
