@@ -9,12 +9,12 @@ class Restaurant extends StatefulWidget {
 }
 
 class _RestaurantState extends State<Restaurant> {
-  List<Map<String, dynamic>> Restaurants = [];
+  List<Map<String, dynamic>> restaurants = [];
   bool isLoading = true;
   String sortBy = 'name';
   String filterBy = 'all';
   String selectedLocation = 'all';
-  String selectedLanguage = 'all';
+  String selectedCuisine = 'all';
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _RestaurantState extends State<Restaurant> {
     try {
       final data = await Api.getRestaurants();
       setState(() {
-        Restaurants = data;
+        restaurants = data;
         isLoading = false;
       });
     } catch (e) {
@@ -40,55 +40,54 @@ class _RestaurantState extends State<Restaurant> {
       // Ensure the context is still valid before showing a SnackBar
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading Restaurants: $e')),
+          SnackBar(content: Text('Error loading restaurants: $e')),
         );
       }
     }
   }
 
   List<Map<String, dynamic>> getSortedAndFilteredRestaurants() {
-    List<Map<String, dynamic>> filtered = Restaurants;
+    List<Map<String, dynamic>> filtered = restaurants;
 
     // Apply location filter
     if (selectedLocation != 'all') {
-      filtered = filtered.where((Restaurant) {
-        List<dynamic> locations = Restaurant['coveredLocations'] ?? [];
-        return locations.contains(selectedLocation);
+      filtered = filtered.where((restaurant) {
+        String location = restaurant['location'] ?? '';
+        return location.toLowerCase().contains(selectedLocation.toLowerCase());
       }).toList();
     }
 
-    // Apply language filter
-    if (selectedLanguage != 'all') {
-      filtered = filtered.where((Restaurant) {
-        List<dynamic> languages = Restaurant['languages'] ?? [];
-        return languages.contains(selectedLanguage);
+    // Apply cuisine filter
+    if (selectedCuisine != 'all') {
+      filtered = filtered.where((restaurant) {
+        List<dynamic> cuisines = restaurant['cuisineTypes'] ?? [];
+        return cuisines.contains(selectedCuisine);
       }).toList();
     }
 
-    // Apply availability filter
+    // Apply price range filter
     if (filterBy != 'all') {
-      filtered = filtered.where((Restaurant) {
-        List<dynamic> availability = Restaurant['availability'] ?? [];
-        return availability.contains(filterBy);
+      filtered = filtered.where((restaurant) {
+        String priceRange = restaurant['priceRange'] ?? '';
+        return priceRange == filterBy;
       }).toList();
     }
 
     // Apply sorting
     filtered.sort((a, b) {
       switch (sortBy) {
-        case 'experience':
-          // Sort by experience length (assuming it's a string describing experience)
-          final expA = (a['experiences'] ?? '').length;
-          final expB = (b['experiences'] ?? '').length;
-          return expB.compareTo(expA);
-        case 'languages':
-          final langA = (a['languages'] ?? []).length;
-          final langB = (b['languages'] ?? []).length;
-          return langB.compareTo(langA);
-        case 'locations':
-          final locA = (a['coveredLocations'] ?? []).length;
-          final locB = (b['coveredLocations'] ?? []).length;
-          return locB.compareTo(locA);
+        case 'rating':
+          final ratingA = (a['rating'] ?? 0.0).toDouble();
+          final ratingB = (b['rating'] ?? 0.0).toDouble();
+          return ratingB.compareTo(ratingA);
+        case 'price':
+          final priceA = _getPriceValue(a['priceRange'] ?? '');
+          final priceB = _getPriceValue(b['priceRange'] ?? '');
+          return priceA.compareTo(priceB);
+        case 'distance':
+          final distanceA = (a['distance'] ?? 0.0).toDouble();
+          final distanceB = (b['distance'] ?? 0.0).toDouble();
+          return distanceA.compareTo(distanceB);
         case 'name':
         default:
           return (a['name'] ?? '').compareTo(b['name'] ?? '');
@@ -98,51 +97,85 @@ class _RestaurantState extends State<Restaurant> {
     return filtered;
   }
 
-  static IconData getGenderIcon(String gender) {
-    switch (gender.toLowerCase()) {
-      case 'male':
-        return Icons.person;
-      case 'female':
-        return Icons.person_outline;
-      case 'other':
-        return Icons.person_2;
+  int _getPriceValue(String priceRange) {
+    switch (priceRange) {
+      case '\$':
+        return 1;
+      case '\$\$':
+        return 2;
+      case '\$\$\$':
+        return 3;
+      case '\$\$\$\$':
+        return 4;
       default:
-        return Icons.person;
+        return 0;
     }
   }
 
-  static List<Widget> _buildLanguageChips(List<dynamic> languages) {
-    if (languages.isEmpty) {
+  static IconData getCuisineIcon(String cuisine) {
+    switch (cuisine.toLowerCase()) {
+      case 'italian':
+        return Icons.local_pizza;
+      case 'chinese':
+        return Icons.ramen_dining;
+      case 'indian':
+        return Icons.rice_bowl;
+      case 'japanese':
+        return Icons.set_meal;
+      case 'mexican':
+        return Icons.local_dining;
+      case 'american':
+        return Icons.lunch_dining;
+      case 'thai':
+        return Icons.rice_bowl;
+      case 'sri lankan':
+        return Icons.restaurant;
+      default:
+        return Icons.restaurant_menu;
+    }
+  }
+
+  static List<Widget> _buildCuisineChips(List<dynamic> cuisines) {
+    if (cuisines.isEmpty) {
       return [
         Chip(
-          label: Text('No languages', style: TextStyle(fontSize: 10)),
+          label: Text('No cuisine info', style: TextStyle(fontSize: 10)),
           backgroundColor: Colors.grey[200],
         )
       ];
     }
 
-    return languages.take(3).map((language) {
+    return cuisines.take(3).map((cuisine) {
       return Chip(
-        label: Text(language.toString(), style: TextStyle(fontSize: 10)),
-        backgroundColor: _getLanguageColor(language.toString()),
+        label: Text(cuisine.toString(), style: TextStyle(fontSize: 10)),
+        backgroundColor: _getCuisineColor(cuisine.toString()),
+        avatar: Icon(
+          getCuisineIcon(cuisine.toString()),
+          size: 16,
+          color: Colors.grey[700],
+        ),
       );
     }).toList();
   }
 
-  static Color _getLanguageColor(String language) {
-    switch (language.toLowerCase()) {
-      case 'english':
-        return Colors.blue.withOpacity(0.2);
-      case 'sinhala':
-        return Colors.green.withOpacity(0.2);
-      case 'tamil':
+  static Color _getCuisineColor(String cuisine) {
+    switch (cuisine.toLowerCase()) {
+      case 'italian':
+        return Colors.red.withOpacity(0.2);
+      case 'chinese':
+        return Colors.yellow.withOpacity(0.2);
+      case 'indian':
         return Colors.orange.withOpacity(0.2);
       case 'japanese':
-        return Colors.red.withOpacity(0.2);
-      case 'german':
-        return Colors.purple.withOpacity(0.2);
-      case 'french':
         return Colors.pink.withOpacity(0.2);
+      case 'mexican':
+        return Colors.green.withOpacity(0.2);
+      case 'american':
+        return Colors.blue.withOpacity(0.2);
+      case 'thai':
+        return Colors.purple.withOpacity(0.2);
+      case 'sri lankan':
+        return Colors.teal.withOpacity(0.2);
       default:
         return Colors.grey.withOpacity(0.2);
     }
@@ -162,7 +195,7 @@ class _RestaurantState extends State<Restaurant> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'RestaurantS',
+          'RESTAURANTS',
           style: TextStyle(
             color: Colors.white,
             fontSize: 18,
@@ -183,11 +216,11 @@ class _RestaurantState extends State<Restaurant> {
             padding: EdgeInsets.all(16),
             child: Row(
               children: [
-                Icon(Icons.tour, color: Color(0xFF4A90E2), size: 20),
+                Icon(Icons.restaurant, color: Color(0xFF4A90E2), size: 20),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Find your perfect tour Restaurant',
+                    'Discover amazing restaurants near you',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -219,7 +252,7 @@ class _RestaurantState extends State<Restaurant> {
                     child: displayedRestaurants.isEmpty
                         ? Center(
                             child: Text(
-                              "No Restaurants found.",
+                              "No restaurants found.",
                               style: TextStyle(color: Colors.grey[600]),
                             ),
                           )
@@ -227,23 +260,18 @@ class _RestaurantState extends State<Restaurant> {
                             padding: EdgeInsets.all(16),
                             itemCount: displayedRestaurants.length,
                             itemBuilder: (context, index) {
-                              final Restaurant = displayedRestaurants[index];
+                              final restaurant = displayedRestaurants[index];
                               return RestaurantCard(
-                                Restaurant: Restaurant,
+                                restaurant: restaurant,
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => RestaurantDetailsPage(
-                                  //       RestaurantId:Restaurant['id'],
-                                  //     ),
-                                  //   ),
-                                  // );
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            'Restaurant details: ${Restaurant['name']}')),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          RestaurantDetailsPage(
+                                        restaurantId: restaurant['_id'],
+                                      ),
+                                    ),
                                   );
                                 },
                               );
@@ -348,9 +376,9 @@ class _RestaurantState extends State<Restaurant> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 16),
               _buildSortOption('Name', 'name'),
-              _buildSortOption('Experience', 'experience'),
-              _buildSortOption('Languages', 'languages'),
-              _buildSortOption('Locations Covered', 'locations'),
+              _buildSortOption('Rating', 'rating'),
+              _buildSortOption('Price', 'price'),
+              _buildSortOption('Distance', 'distance'),
             ],
           ),
         );
@@ -368,12 +396,14 @@ class _RestaurantState extends State<Restaurant> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Filter By Availability',
+              Text('Filter By Price Range',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 16),
               _buildFilterOption('All', 'all'),
-              _buildFilterOption('Weekdays', 'Weekdays'),
-              _buildFilterOption('Weekends', 'Weekends'),
+              _buildFilterOption('Budget (\$)', '\$'),
+              _buildFilterOption('Moderate (\$\$)', '\$\$'),
+              _buildFilterOption('Expensive (\$\$\$)', '\$\$\$'),
+              _buildFilterOption('Fine Dining (\$\$\$\$)', '\$\$\$\$'),
             ],
           ),
         );
@@ -489,20 +519,23 @@ class _RestaurantState extends State<Restaurant> {
 }
 
 class RestaurantCard extends StatelessWidget {
-  final Map<String, dynamic> Restaurant;
+  final Map<String, dynamic> restaurant;
   final VoidCallback onTap;
 
   const RestaurantCard({
     Key? key,
-    required this.Restaurant,
+    required this.restaurant,
     required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> languages = Restaurant['languages'] ?? [];
-    List<dynamic> locations = Restaurant['coveredLocations'] ?? [];
-    List<dynamic> availability = Restaurant['availability'] ?? [];
+    List<dynamic> cuisines = restaurant['cuisineTypes'] ?? [];
+    String location = restaurant['location'] ?? '';
+    double rating = (restaurant['rating'] ?? 0.0).toDouble();
+    String priceRange = restaurant['priceRange'] ?? '\$';
+    double distance = (restaurant['distance'] ?? 0.0).toDouble();
+    bool isOpen = restaurant['isOpen'] ?? false;
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -532,7 +565,7 @@ class RestaurantCard extends StatelessWidget {
                   width: 80,
                   height: 80,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(12),
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -548,17 +581,16 @@ class RestaurantCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            _RestaurantState.getGenderIcon(
-                                Restaurant['gender'] ?? 'Male'),
+                            Icons.restaurant,
                             color: Colors.white,
                             size: 32,
                           ),
                           SizedBox(height: 4),
                           Text(
-                            Restaurant['gender'] ?? 'N/A',
+                            priceRange,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 10,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                             textAlign: TextAlign.center,
@@ -573,24 +605,77 @@ class RestaurantCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        Restaurant['name'] ?? 'Unknown',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black87,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              restaurant['name'] ?? 'Unknown Restaurant',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: isOpen
+                                  ? Colors.green.withOpacity(0.1)
+                                  : Colors.red.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              isOpen ? 'Open' : 'Closed',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: isOpen ? Colors.green : Colors.red,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.email, size: 14, color: Colors.grey[600]),
+                          Icon(Icons.star, size: 14, color: Colors.amber),
+                          SizedBox(width: 4),
+                          Text(
+                            rating.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Icon(Icons.location_on,
+                              size: 14, color: Colors.grey[600]),
+                          SizedBox(width: 4),
+                          Text(
+                            '${distance.toStringAsFixed(1)} km',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(Icons.location_city,
+                              size: 14, color: Colors.grey[600]),
                           SizedBox(width: 4),
                           Expanded(
                             child: Text(
-                              Restaurant['email'] ?? 'No email',
+                              location.isNotEmpty
+                                  ? location
+                                  : 'Location not specified',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[600],
@@ -601,86 +686,29 @@ class RestaurantCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(Icons.phone, size: 14, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Text(
-                            Restaurant['contact'] ?? 'No contact',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
                       SizedBox(height: 8),
                       Wrap(
                         spacing: 4,
                         runSpacing: 4,
-                        children:
-                            _RestaurantState._buildLanguageChips(languages),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Icon(Icons.location_on,
-                              size: 14, color: Colors.grey[600]),
-                          SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              locations.isNotEmpty
-                                  ? '${locations.length} location${locations.length > 1 ? 's' : ''}'
-                                  : 'No locations',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ),
-                        ],
+                        children: _RestaurantState._buildCuisineChips(cuisines),
                       ),
                       SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: availability.contains('Weekdays') &&
-                                      availability.contains('Weekends')
-                                  ? Colors.green.withOpacity(0.1)
-                                  : availability.contains('Weekdays')
-                                      ? Colors.blue.withOpacity(0.1)
-                                      : availability.contains('Weekends')
-                                          ? Colors.orange.withOpacity(0.1)
-                                          : Colors.grey.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              availability.contains('Weekdays') &&
-                                      availability.contains('Weekends')
-                                  ? 'Full Week'
-                                  : availability.contains('Weekdays')
-                                      ? 'Weekdays'
-                                      : availability.contains('Weekends')
-                                          ? 'Weekends'
-                                          : 'No availability',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: availability.contains('Weekdays') &&
-                                        availability.contains('Weekends')
-                                    ? Colors.green
-                                    : availability.contains('Weekdays')
-                                        ? Colors.blue
-                                        : availability.contains('Weekends')
-                                            ? Colors.orange
-                                            : Colors.grey,
+                          Row(
+                            children: [
+                              Icon(Icons.access_time,
+                                  size: 14, color: Colors.grey[600]),
+                              SizedBox(width: 4),
+                              Text(
+                                restaurant['deliveryTime'] ?? '30-45 min',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                           Icon(
                             Icons.arrow_forward_ios,
