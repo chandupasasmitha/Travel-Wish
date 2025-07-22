@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test/main.dart';
+
 import 'package:test/thingstodo/placestovisit/placestovisit.dart';
 import 'package:test/thingstodo/specialevents/specialevents.dart';
 import 'package:test/home.dart';

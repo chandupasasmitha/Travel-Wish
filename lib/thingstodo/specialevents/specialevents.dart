@@ -131,16 +131,19 @@ class _SpecialeventsState extends State<Specialevents> {
 
   Future<void> fetchItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:2000/api/specialevents'));
+      final response = await http.get(
+        Uri.parse('http://localhost:2000/api/specialevents'),
+      );
+
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(
-            response.body); //recieves the response body and save it to a list
+        final decoded = jsonDecode(response.body);
+        final List<dynamic> data = decoded['data']; // ⬅️ extract "data" array
+
         setState(() {
           items = data
               .where((item) => item['category'] == 'specialevents')
-              .map((item) => Item.fromJson(item))
-              .toList(); //map only the catergory = 'specialevents'
+              .map((item) => Item.fromJson(item as Map<String, dynamic>))
+              .toList();
         });
       } else {
         print('Failed to load items');
@@ -173,7 +176,9 @@ class _SpecialeventsState extends State<Specialevents> {
                       MaterialPageRoute(
                           builder: (context) => ItemDetailsSpecialevents(
                                 title: item.title,
-                                imageUrl: item.imageUrl,
+                                location: item.location,
+                                category: item.category,
+                                images: item.images,
                                 description: item.description,
                                 date: item.date,
                                 bestfor: item.bestfor,
@@ -198,8 +203,8 @@ class _SpecialeventsState extends State<Specialevents> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child:
-                              Image.network(item.imageUrl, fit: BoxFit.cover),
+                          child: Image.network(item.images[0].url,
+                              fit: BoxFit.cover),
                         ),
                         Positioned.fill(
                           child:

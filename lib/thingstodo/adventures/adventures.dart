@@ -173,7 +173,9 @@ class _adventuresState extends State<adventures> {
                       MaterialPageRoute(
                           builder: (context) => ItemDetailsAdventures(
                                 title: item.title,
-                                imageUrl: item.imageUrl,
+                                address: item.address,
+                                category: item.category,
+                                images: item.images,
                                 description: item.description,
                                 duration: item.duration,
                                 bestfor: item.bestfor,
@@ -184,9 +186,7 @@ class _adventuresState extends State<adventures> {
                                 whatToWear: item.whatToWear,
                                 precautions: item.precautions,
                                 activities: item.activities,
-                                contactno: item.contactno,
-                                websiteUrl: item.websiteUrl,
-                                address: item.address,
+                                contactInfo: item.contactInfo,
                               )));
                 },
                 child: Card(
@@ -199,8 +199,8 @@ class _adventuresState extends State<adventures> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child:
-                              Image.network(item.imageUrl, fit: BoxFit.cover),
+                          child: Image.network(item.images[0].url,
+                              fit: BoxFit.cover),
                         ),
                         Positioned.fill(
                           child:

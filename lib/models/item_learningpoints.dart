@@ -1,17 +1,18 @@
+import '../../models/image.dart';
+
 class Item {
   final String id;
   final String title;
   final String category;
-  final String subcategory;
-  final String imageUrl;
-  final Map<String, dynamic> tourname;
-
+  final List<ImageModel> images; // Added: matches schema's images array
   final String description;
   final String googleMapsUrl;
   final String duration;
   final String contactno;
   final String bestfor;
   final String avgprice;
+  final String tourname;
+  final String price; // Added: matches schema's price object
   final String websiteUrl;
   final String address;
 
@@ -19,26 +20,32 @@ class Item {
     required this.id,
     required this.title,
     required this.category,
-    required this.subcategory,
-    required this.imageUrl,
+    required this.images,
     required this.description,
-    required this.duration,
     required this.googleMapsUrl,
-    required this.bestfor,
+    required this.duration,
     required this.contactno,
-    required this.websiteUrl,
-    required this.address,
+    required this.bestfor,
     required this.avgprice,
     required this.tourname,
+    required this.price,
+    required this.websiteUrl,
+    required this.address,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) {
+    final List<dynamic>? imagesJson = json['images'];
+    final List<ImageModel> parsedImages = imagesJson != null
+        ? imagesJson
+            .map((imageMap) =>
+                ImageModel.fromJson(imageMap as Map<String, dynamic>))
+            .toList()
+        : [];
     return Item(
       id: json['_id']?.toString() ?? '',
       title: json['title'] ?? '',
       category: json['category'] ?? '',
-      subcategory: json['subcategory'] ?? '',
-      imageUrl: json['imageUrl'] ?? '',
+      images: parsedImages,
       description: json['description'] ?? '',
       duration: json['duration'] ?? '',
       googleMapsUrl: json['googleMapsUrl'] ?? '',
@@ -47,7 +54,8 @@ class Item {
       websiteUrl: json['websiteUrl'] ?? '',
       address: json['address'] ?? '',
       avgprice: json['avgprice'] ?? '',
-      tourname: Map<String, dynamic>.from(json['tourname'] ?? {}),
+      price: json['price'] ?? '',
+      tourname: json['tourname'] ?? '',
     );
   }
 }

@@ -134,8 +134,9 @@ class _learningpointsState extends State<learningpoints> {
       final response =
           await http.get(Uri.parse('http://localhost:2000/api/learningpoints'));
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(
-            response.body); //recieves the response body and save it to a list
+        final decoded = jsonDecode(response.body);
+        final List<dynamic> data = decoded['data'];
+        //recieves the response body and save it to a list
         setState(() {
           items = data
               .where((item) => item['category'] == 'learningpoints')
@@ -174,8 +175,7 @@ class _learningpointsState extends State<learningpoints> {
                           builder: (context) => ItemDetailsLearningpoints(
                                 title: item.title,
                                 category: item.category,
-                                subcategory: item.subcategory,
-                                imageUrl: item.imageUrl,
+                                images: item.images,
                                 description: item.description,
                                 duration: item.duration,
                                 bestfor: item.bestfor,
@@ -185,6 +185,7 @@ class _learningpointsState extends State<learningpoints> {
                                 websiteUrl: item.websiteUrl,
                                 address: item.address,
                                 tourname: item.tourname,
+                                price: item.price,
                               )));
                 },
                 child: Card(
@@ -197,8 +198,8 @@ class _learningpointsState extends State<learningpoints> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child:
-                              Image.network(item.imageUrl, fit: BoxFit.cover),
+                          child: Image.network(item.images[0].url,
+                              fit: BoxFit.cover),
                         ),
                         Positioned.fill(
                           child:

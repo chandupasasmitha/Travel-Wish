@@ -173,18 +173,22 @@ class _PlacestovisitState extends State<Placestovisit> {
                       MaterialPageRoute(
                           builder: (context) => ItemDetailsPlacestovisit(
                                 title: item.title,
-                                imageUrl: item.imageUrl,
+                                images: item.images,
+                                category: item.category,
                                 description: item.description,
-                                duration: item.tripDuration,
+                                tripDuration: item.tripDuration,
                                 bestfor: item.bestfor,
-                                price: item.ticketPrice,
+                                ticketPrice: item.ticketPrice,
                                 googleMapsUrl: item.googleMapsUrl,
                                 bestTimetoVisit: item.bestTimetoVisit,
                                 whatToBring: item.whatToBring,
                                 whatToWear: item.whatToWear,
                                 precautions: item.precautions,
                                 activities: item.activities,
-                                contactno: item.contactno,
+                                contactInfo: item.contactInfo,
+                                bus: item.bus,
+                                taxi: item.taxi,
+                                train: item.train,
                                 address: item.address,
                               )));
                 },
@@ -198,8 +202,8 @@ class _PlacestovisitState extends State<Placestovisit> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child:
-                              Image.network(item.imageUrl, fit: BoxFit.cover),
+                          child: Image.network(item.images[0].url,
+                              fit: BoxFit.cover),
                         ),
                         Positioned.fill(
                           child:
