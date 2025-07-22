@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'loginpage.dart';
 import 'signuppage.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  // ✅ Stripe public key for test mode
+  Stripe.publishableKey =
+      'pk_test_51RlqMsQ0MZyvxx0lsc3WgV7Z0AHuKqjWcercr4o8aglWtiit7lMLAup84wtAv3kCXJkbnSWtzXq43RUY8LOTODMn008XXp22dd'; // Replace with your Stripe test key
+
+  // Optional: Apply default settings
+  await Stripe.instance.applySettings();
+
   runApp(const MyApp());
 }
 
@@ -91,16 +100,20 @@ class HomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.02),
                           ),
                           child: Text(
                             'Log In',
-                            style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                color: Colors.black),
                           ),
                         ),
                       ),
@@ -125,16 +138,20 @@ class HomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => const SignUpScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.02),
                           ),
                           child: Text(
                             'Sign Up',
-                            style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                color: Colors.black),
                           ),
                         ),
                       ),

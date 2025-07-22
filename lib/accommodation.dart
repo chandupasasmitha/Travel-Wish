@@ -31,16 +31,14 @@ class _AccommodationPageState extends State<AccommodationPage> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
     );
-    if (picked != null) {
-      setState(() {
-        if (isStartDate) {
-          startDate = picked;
-        } else {
-          endDate = picked;
-        }
-      });
+    setState(() {
+      if (isStartDate) {
+        startDate = picked;
+      } else {
+        endDate = picked;
+      }
+    });
     }
-  }
 
   @override
   Widget build(BuildContext context) {
