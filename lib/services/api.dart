@@ -302,4 +302,213 @@ class Api {
       throw Exception("Booking taxi failed: $e");
     }
   }
+// ==================== RESTUARANT METHODS ====================
+
+  static Future<List<Map<String, dynamic>>> getRestaurants() async {
+    // Simulate API delay
+    await Future.delayed(Duration(seconds: 1));
+
+    // Mock restaurant data
+    return [
+      {
+        '_id': '1',
+        'name': 'Spice Garden',
+        'location': 'Colombo',
+        'rating': 4.5,
+        'priceRange': '\$\$',
+        'distance': 2.3,
+        'isOpen': true,
+        'deliveryTime': '25-35 min',
+        'cuisineTypes': ['Sri Lankan', 'Indian', 'Thai'],
+      },
+      {
+        '_id': '2',
+        'name': 'Pizza Palace',
+        'location': 'Gampaha',
+        'rating': 4.2,
+        'priceRange': '\$\$',
+        'distance': 5.1,
+        'isOpen': true,
+        'deliveryTime': '30-40 min',
+        'cuisineTypes': ['Italian', 'American'],
+      },
+      {
+        '_id': '3',
+        'name': 'Dragon House',
+        'location': 'Kandy',
+        'rating': 4.7,
+        'priceRange': '\$\$\$',
+        'distance': 1.8,
+        'isOpen': false,
+        'deliveryTime': '20-30 min',
+        'cuisineTypes': ['Chinese', 'Japanese'],
+      },
+      {
+        '_id': '4',
+        'name': 'Curry Leaf',
+        'location': 'Colombo',
+        'rating': 4.3,
+        'priceRange': '\$',
+        'distance': 3.2,
+        'isOpen': true,
+        'deliveryTime': '35-45 min',
+        'cuisineTypes': ['Sri Lankan', 'Indian'],
+      },
+      {
+        '_id': '5',
+        'name': 'Taco Fiesta',
+        'location': 'Galle',
+        'rating': 4.1,
+        'priceRange': '\$\$',
+        'distance': 4.5,
+        'isOpen': true,
+        'deliveryTime': '25-35 min',
+        'cuisineTypes': ['Mexican', 'American'],
+      },
+    ];
+  }
+
+  static Future<Map<String, dynamic>> getRestaurantById(String id) async {
+    // Simulate API delay
+    await Future.delayed(Duration(seconds: 1));
+
+    // Mock detailed restaurant data
+    Map<String, dynamic> mockData = {
+      '1': {
+        'data': {
+          '_id': '1',
+          'name': 'Spice Garden',
+          'address': '123 Main Street, Colombo 03, Sri Lanka',
+          'contact': '+94 11 234 5678',
+          'rating': 4.5,
+          'reviewCount': 245,
+          'priceRange': '\$\$',
+          'isOpen': true,
+          'deliveryTime': '25-35 min',
+          'cuisineTypes': ['Sri Lankan', 'Indian', 'Thai'],
+          'description':
+              'Experience authentic Sri Lankan and Indian cuisine in a warm, welcoming atmosphere. Our chefs use traditional spices and cooking methods to create unforgettable flavors.',
+          'popularDishes': [
+            {
+              'name': 'Kottu Roti',
+              'description': 'Traditional Sri Lankan street food',
+              'price': 850
+            },
+            {
+              'name': 'Chicken Curry',
+              'description': 'Spicy authentic curry',
+              'price': 1200
+            },
+            {
+              'name': 'Fish Ambul Thiyal',
+              'description': 'Sour fish curry',
+              'price': 1350
+            }
+          ],
+          'openingHours': {
+            'monday': '11:00 AM - 10:00 PM',
+            'tuesday': '11:00 AM - 10:00 PM',
+            'wednesday': '11:00 AM - 10:00 PM',
+            'thursday': '11:00 AM - 10:00 PM',
+            'friday': '11:00 AM - 11:00 PM',
+            'saturday': '11:00 AM - 11:00 PM',
+            'sunday': '12:00 PM - 9:00 PM'
+          }
+        }
+      },
+      '2': {
+        'data': {
+          '_id': '2',
+          'name': 'Pizza Palace',
+          'address': '456 Gampaha Road, Gampaha, Sri Lanka',
+          'contact': '+94 33 567 8901',
+          'rating': 4.2,
+          'reviewCount': 189,
+          'priceRange': '\$\$',
+          'isOpen': true,
+          'deliveryTime': '30-40 min',
+          'cuisineTypes': ['Italian', 'American'],
+          'description':
+              'Serving the finest Italian pizzas and American classics. Made with fresh ingredients and traditional recipes passed down through generations.',
+          'popularDishes': [
+            {
+              'name': 'Margherita Pizza',
+              'description': 'Classic tomato and mozzarella',
+              'price': 1800
+            },
+            {
+              'name': 'Pepperoni Pizza',
+              'description': 'Pepperoni with cheese',
+              'price': 2200
+            },
+            {
+              'name': 'Chicken Wings',
+              'description': 'Buffalo style wings',
+              'price': 950
+            }
+          ],
+          'openingHours': {
+            'monday': '12:00 PM - 11:00 PM',
+            'tuesday': '12:00 PM - 11:00 PM',
+            'wednesday': '12:00 PM - 11:00 PM',
+            'thursday': '12:00 PM - 11:00 PM',
+            'friday': '12:00 PM - 12:00 AM',
+            'saturday': '12:00 PM - 12:00 AM',
+            'sunday': '1:00 PM - 10:00 PM'
+          }
+        }
+      },
+      '3': {
+        'data': {
+          '_id': '3',
+          'name': 'Dragon House',
+          'address': '789 Kandy Road, Kandy, Sri Lanka',
+          'contact': '+94 81 345 6789',
+          'rating': 4.7,
+          'reviewCount': 312,
+          'priceRange': '\$\$\$',
+          'isOpen': false,
+          'deliveryTime': '20-30 min',
+          'cuisineTypes': ['Chinese', 'Japanese'],
+          'description':
+              'Authentic Chinese and Japanese cuisine prepared by master chefs. Experience the perfect blend of traditional flavors and modern presentation.',
+          'popularDishes': [
+            {
+              'name': 'Sweet & Sour Pork',
+              'description': 'Traditional Chinese style',
+              'price': 2200
+            },
+            {
+              'name': 'Chicken Fried Rice',
+              'description': 'Wok-fried with vegetables',
+              'price': 1650
+            },
+            {
+              'name': 'Sushi Platter',
+              'description': 'Fresh assorted sushi',
+              'price': 3200
+            }
+          ],
+          'openingHours': {
+            'monday': '6:00 PM - 11:00 PM',
+            'tuesday': '6:00 PM - 11:00 PM',
+            'wednesday': '6:00 PM - 11:00 PM',
+            'thursday': '6:00 PM - 11:00 PM',
+            'friday': '6:00 PM - 12:00 AM',
+            'saturday': '6:00 PM - 12:00 AM',
+            'sunday': 'Closed'
+          }
+        }
+      }
+    };
+
+    return mockData[id] ??
+        {
+          'data': {
+            '_id': id,
+            'name': 'Restaurant Not Found',
+            'error': 'Restaurant details not available'
+          }
+        };
+  }
 }
