@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'services/api.dart'; // Assuming your api.dart is in a services folder
-// import 'Restaurant_details_page.dart'; // Uncomment when you create the details page
+import 'restaurant_details_page.dart'; // Uncomment when you create the details page
 
 class Restaurant extends StatefulWidget {
   @override
@@ -231,20 +231,15 @@ class _RestaurantState extends State<Restaurant> {
                               return RestaurantCard(
                                 Restaurant: Restaurant,
                                 onTap: () {
-                                  // Navigate to Restaurant details page
-                                  // Uncomment when you create the Restaurant_details_page.dart
-                                  /*
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RestaurantDetailsPage(
-                                        RestaurantId: Restaurant['_id'],
-                                      ),
-                                    ),
-                                  );
-                                  */
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => RestaurantDetailsPage(
+                                  //       RestaurantId:Restaurant['id'],
+                                  //     ),
+                                  //   ),
+                                  // );
 
-                                  // Temporary placeholder
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
