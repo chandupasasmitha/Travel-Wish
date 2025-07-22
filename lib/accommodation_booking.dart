@@ -139,6 +139,7 @@ class _BookingPageState extends State<BookingPage> {
     try {
       final response = await Api.createBooking(
           bookingData); // Call your API to create booking
+      debugPrint('Booking API response: $response'); // <-- Add this line
 
       if (response['success'] == true) {
         setState(() {
