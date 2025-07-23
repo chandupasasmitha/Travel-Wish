@@ -3,6 +3,7 @@ import 'accommodation.dart'; // Import the Accommodation page
 import 'guide.dart'; // Import the Guide page
 import 'taxi.dart'; // Import the Taxi page
 import 'services.dart'; // Import the Services page
+import 'notification_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -85,7 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             IconButton(
               icon: Icon(Icons.notifications, color: Colors.black),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                );
+              },
             ),
           ],
         ),
