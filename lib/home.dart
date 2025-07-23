@@ -6,6 +6,10 @@ import 'taxi.dart'; // Import the Taxi page
 import 'services.dart'; // Import the Services page
 import 'notification_page.dart';
 
+// Assume you have the current user's ID available, e.g., from login
+String currentUserId =
+    "60c72b2f9f1b2c001c8e4d5f"; // Replace with actual user ID
+
 void main() {
   runApp(MyApp());
 }
@@ -86,11 +90,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             IconButton(
-              icon: Icon(Icons.notifications, color: Colors.black),
+              icon: const Icon(Icons.notifications),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        NotificationsScreen(userId: currentUserId),
+                  ),
                 );
               },
             ),
