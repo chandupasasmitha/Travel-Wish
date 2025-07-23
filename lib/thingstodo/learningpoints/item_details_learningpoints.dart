@@ -51,6 +51,7 @@ class ItemDetailsLearningpoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'QuickSand', // Default font family for all text
         textTheme: ThemeData.light().textTheme.apply(
@@ -59,7 +60,7 @@ class ItemDetailsLearningpoints extends StatelessWidget {
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
             fontFamily: 'QuickSand',
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -83,16 +84,7 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                       bottomLeft: Radius.circular(40),
                       bottomRight: Radius.circular(40),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-
-                        spreadRadius: 5,
-                        blurRadius: 10,
-                        offset:
-                            Offset(-1, 7), // horizontal, vertical shadow offset
-                      ),
-                    ],
+                    boxShadow: [],
                   ),
                   clipBehavior: Clip.hardEdge,
                   child: Image.network(
@@ -121,18 +113,19 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 40,
+                                  color: Colors.blue,
                                   fontFamily: 'Quicksand'),
                             ),
                             const Text(
                               'About',
                               style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Quicksand'),
                             ),
                             const SizedBox(height: 10),
                             Text(description,
-                                style: const TextStyle(fontSize: 16)),
+                                style: const TextStyle(fontSize: 14)),
                             const SizedBox(height: 20),
                             Text(
                               '-- Quick Info --',
@@ -164,7 +157,7 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.01),
-                                  infoCard(Icons.money, 'Price:', price),
+                                  infoCard(Icons.money, 'Price:', avgprice),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -180,12 +173,10 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                             ),
                             SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.05),
+                                    MediaQuery.of(context).size.height * 0.03),
 
                             GalleryScreen(images: images),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05),
+
                             Text(
                               '-- User Reviews & Ratings --',
                               style: TextStyle(
@@ -196,188 +187,161 @@ class ItemDetailsLearningpoints extends StatelessWidget {
 
                             Stack(
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color.fromARGB(
-                                            111, 22, 142, 190),
-                                        spreadRadius: 0.3,
-                                        blurRadius: 12,
-                                        offset: Offset(0, 4),
-                                      )
-                                    ],
-                                  ),
-                                  child: FutureBuilder<List<Review>>(
-                                    future: fetchReviews(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      } else if (snapshot.hasError) {
-                                        return Text('Error: ${snapshot.error}');
-                                      } else if (!snapshot.hasData ||
-                                          snapshot.data!.isEmpty) {
-                                        return Text('No reviews found');
-                                      } else {
-                                        final reviews = snapshot.data!.where(
-                                          (review) => review.title == title,
-                                        );
-                                        if (reviews.isEmpty) {
-                                          return Text('No reviews found');
-                                        }
-                                        return ListView(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          children: reviews.map((review) {
-                                            final rating = double.tryParse(
-                                                    review.rating) ??
-                                                0.0;
-                                            return ListTile(
-                                              leading: CircleAvatar(
-                                                child: Text(
-                                                  review.username[0],
-                                                  style: TextStyle(
-                                                    fontFamily: 'Quicksand',
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
+                                // 👇 Your whole scrollable content
+                                SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color.fromARGB(
+                                                    111, 22, 142, 190),
+                                                spreadRadius: 0.3,
+                                                blurRadius: 12,
+                                                offset: Offset(0, 4),
                                               ),
-                                              title: Row(
-                                                children: [
-                                                  Text(
-                                                    review.username,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Quicksand',
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 8),
-                                                  Row(
-                                                    children: List.generate(
-                                                      5,
-                                                      (index) => Icon(
-                                                        index < rating.floor()
-                                                            ? Icons.star
-                                                            : (index < rating
-                                                                ? Icons
-                                                                    .star_half
-                                                                : Icons
-                                                                    .star_border),
-                                                        color: Colors.amber,
-                                                        size: 20,
+                                            ],
+                                          ),
+                                          constraints: BoxConstraints(
+                                            minHeight: 150,
+                                            maxHeight:
+                                                300, // Makes reviews box scrollable inside
+                                          ),
+                                          child: FutureBuilder<List<Review>>(
+                                            future: fetchReviews(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else if (!snapshot.hasData ||
+                                                  snapshot.data!.isEmpty) {
+                                                return Text('No reviews found');
+                                              } else {
+                                                final reviews =
+                                                    snapshot.data!.where(
+                                                  (review) =>
+                                                      review.title == title,
+                                                );
+                                                if (reviews.isEmpty) {
+                                                  return Text(
+                                                      'No reviews found');
+                                                }
+                                                return ListView(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  children:
+                                                      reviews.map((review) {
+                                                    final rating =
+                                                        double.tryParse(review
+                                                                .rating) ??
+                                                            0.0;
+                                                    return ListTile(
+                                                      leading: CircleAvatar(
+                                                        child: Text(
+                                                          review.username[0]
+                                                              .toUpperCase(),
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Quicksand',
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              subtitle: Text(
-                                                review.reviewText,
-                                                style: TextStyle(
-                                                  fontFamily: 'Quicksand',
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                        );
-                                      }
-                                    },
+                                                      title: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            review.username,
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Quicksand',
+                                                              fontSize: 14,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                          SizedBox(
+                                                              height:
+                                                                  4), // spacing between name & stars
+                                                          Row(
+                                                            children:
+                                                                List.generate(
+                                                              5,
+                                                              (index) => Icon(
+                                                                index <
+                                                                        rating
+                                                                            .floor()
+                                                                    ? Icons.star
+                                                                    : (index < rating
+                                                                        ? Icons
+                                                                            .star_half
+                                                                        : Icons
+                                                                            .star_border),
+                                                                color: Colors
+                                                                    .amber,
+                                                                size: 20,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      subtitle: Text(
+                                                        review.reviewText,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Quicksand',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        // space to avoid FAB overlap
+                                      ],
+                                    ),
                                   ),
                                 ),
+
+                                // 👇 FAB pinned to bottom-right of the screen
                                 Positioned(
-                                  bottom: 10,
+                                  bottom: 20,
                                   right: 20,
                                   child: FloatingActionButton(
-                                    child: Icon(Icons.add),
                                     onPressed: () {
                                       ReviewPage().showAddReviewDialog(
                                           context, title, category);
                                     },
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 210, 208, 211),
+                                    child: Icon(Icons.add, color: Colors.white),
                                   ),
                                 ),
                               ],
                             ),
-
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.04),
-
-                            Text(
-                              '-- Tips --',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Quicksand'),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(25),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color.fromARGB(
-                                          111, 22, 142, 190),
-                                      spreadRadius: 0.3,
-                                      blurRadius: 12,
-                                      offset: Offset(0, 4),
-                                    )
-                                  ]),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.checkroom_outlined,
-                                        color: Colors.blue,
-                                        size: 30,
-                                      ),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        'What to Wear:',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      ),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        'whatToWear',
-                                        style: TextStyle(fontSize: 16),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.local_drink,
-                                        color: Colors.blue,
-                                        size: 30,
-                                      ),
-                                      SizedBox(width: 4),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03),
-                                ],
-                              ),
-                            ),
-
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.04),
 
                             Text(
                               '-- Contact Info --',
@@ -389,41 +353,49 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.all(25),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color.fromARGB(
-                                          111, 22, 142, 190),
-                                      spreadRadius: 0.3,
-                                      blurRadius: 12,
-                                      offset: Offset(0, 4),
-                                    )
-                                  ]),
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        const Color.fromARGB(111, 22, 142, 190),
+                                    spreadRadius: 0.3,
+                                    blurRadius: 12,
+                                    offset: Offset(0, 4),
+                                  )
+                                ],
+                              ),
                               child: Column(
                                 children: [
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Icon(
                                         Icons.phone,
                                         color: Colors.blue,
-                                        size: 30,
+                                        size: 25,
                                       ),
                                       SizedBox(width: 4),
                                       Text(
                                         'ContactNo:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
-                                      Text(
-                                        contactno,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'Quicksand'),
-                                      )
+                                      Expanded(
+                                        child: Text(
+                                          contactno,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Quicksand',
+                                          ),
+                                          softWrap: true,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -431,27 +403,54 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                                           MediaQuery.of(context).size.height *
                                               0.03),
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Icon(
                                         Icons.link_rounded,
                                         color: Colors.blue,
-                                        size: 30,
+                                        size: 25,
                                       ),
                                       SizedBox(width: 4),
                                       Text(
                                         'Website:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
-                                      Text(
-                                        websiteUrl,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'Quicksand'),
-                                      )
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () async {
+                                            final Uri url =
+                                                Uri.parse(websiteUrl);
+                                            if (await canLaunchUrl(url)) {
+                                              await launchUrl(url);
+                                            } else {
+                                              // Handle error or show message
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        'Could not launch $websiteUrl')),
+                                              );
+                                            }
+                                          },
+                                          child: Text(
+                                            websiteUrl,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Quicksand',
+                                              color: Colors.blue,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(
@@ -459,32 +458,40 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                                           MediaQuery.of(context).size.height *
                                               0.03),
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Icon(
                                         Icons.location_city_outlined,
                                         color: Colors.blue,
-                                        size: 30,
+                                        size: 25,
                                       ),
                                       SizedBox(width: 4),
                                       Text(
                                         'Address:',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            fontFamily: 'Quicksand'),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          fontFamily: 'Quicksand',
+                                        ),
                                       ),
                                       SizedBox(width: 4),
-                                      Text(
-                                        address,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'Quicksand'),
-                                      )
+                                      Expanded(
+                                        child: Text(
+                                          address,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Quicksand',
+                                          ),
+                                          softWrap: true,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
+
                             SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.04),
@@ -496,7 +503,7 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                               label: const Text(
                                 'View on Map',
                                 style: TextStyle(
-                                    fontFamily: 'Quicksand', fontSize: 16),
+                                    fontFamily: 'Quicksand', fontSize: 14),
                               ),
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(double.infinity, 50),
@@ -527,7 +534,7 @@ class ItemDetailsLearningpoints extends StatelessWidget {
                                 'Go Back',
                                 style: TextStyle(
                                   fontFamily: 'Quicksand',
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -570,17 +577,29 @@ class ItemDetailsLearningpoints extends StatelessWidget {
 
   Widget infoCard(IconData icon, String title, String value) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start, // <--- Add this line
       children: [
-        Icon(icon, color: Colors.blue, size: 30),
+        Icon(icon, color: Colors.blue, size: 25),
         const SizedBox(width: 5),
-        Text(title,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Quicksand',
-                fontSize: 17)),
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Quicksand',
+            fontSize: 14,
+          ),
+        ),
         const SizedBox(width: 2),
-        Text(value,
-            style: const TextStyle(fontSize: 15, fontFamily: 'Quicksand')),
+        Expanded(
+          // <--- Wrap the value Text with Expanded
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 15, fontFamily: 'Quicksand'),
+            // Optional: You can add overflow properties if you prefer truncation
+            // overflow: TextOverflow.ellipsis,
+            // maxLines: 2, // Adjust as needed
+          ),
+        ),
       ],
     );
   }
@@ -607,7 +626,6 @@ class GalleryScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
         const Text(
           "--Gallery Section--",
           style: TextStyle(

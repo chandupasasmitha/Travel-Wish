@@ -134,8 +134,9 @@ class _adventuresState extends State<adventures> {
       final response =
           await http.get(Uri.parse('http://localhost:2000/api/adventures'));
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(
-            response.body); //recieves the response body and save it to a list
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        List<dynamic> data = jsonResponse[
+            'data']; //recieves the response body and save it to a list
         setState(() {
           items = data
               .where((item) => item['category'] == 'adventures')
@@ -150,7 +151,6 @@ class _adventuresState extends State<adventures> {
     }
   }
 
-//Creating the card
   @override
   Widget build(BuildContext context) {
     return items.isEmpty
@@ -173,7 +173,7 @@ class _adventuresState extends State<adventures> {
                       MaterialPageRoute(
                           builder: (context) => ItemDetailsAdventures(
                                 title: item.title,
-                                address: item.address,
+                                location: item.location,
                                 category: item.category,
                                 images: item.images,
                                 description: item.description,
@@ -199,8 +199,10 @@ class _adventuresState extends State<adventures> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: Image.network(item.images[0].url,
-                              fit: BoxFit.cover),
+                          child: Image.network(
+                            item.images[0].url,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Positioned.fill(
                           child:
@@ -209,18 +211,28 @@ class _adventuresState extends State<adventures> {
                         Positioned(
                           left: 16,
                           bottom: 16,
+                          right: 16, // add right to constrain width
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 item.title,
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontFamily: 'Quicksand',
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
                               ),
+                              const SizedBox(height: 4),
                               const Text(
                                 'See Review',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 13),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),

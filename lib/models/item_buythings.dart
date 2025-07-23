@@ -17,7 +17,7 @@ class Item {
   final bool isCash;
   final bool isQRScan;
   final String isParking;
-  final String contactno;
+
   final String websiteUrl;
   final String address;
 
@@ -41,7 +41,6 @@ class Item {
     required this.isCash,
     required this.isQRScan,
     required this.isParking,
-    required this.contactno,
     required this.websiteUrl,
     required this.address,
     required this.wifi,
@@ -73,7 +72,6 @@ class Item {
         isCash: json['isCash'] ?? false,
         isQRScan: json['isQRScan'] ?? false,
         isParking: json['isParking'] ?? '',
-        contactno: json['contactno'] ?? '',
         websiteUrl: json['websiteUrl'] ?? '',
         address: json['address'] ?? '',
         wifi: json['wifi'] ?? '',

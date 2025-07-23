@@ -50,7 +50,7 @@ class Item {
       duration: json['duration'] ?? '',
       googleMapsUrl: json['googleMapsUrl'] ?? '',
       bestfor: json['bestfor'] ?? '',
-      contactno: json['contactno'] ?? '',
+      contactno: json['contactInfo'] ?? '',
       websiteUrl: json['websiteUrl'] ?? '',
       address: json['address'] ?? '',
       avgprice: json['avgprice'] ?? '',

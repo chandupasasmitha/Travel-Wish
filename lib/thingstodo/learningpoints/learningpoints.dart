@@ -208,18 +208,36 @@ class _learningpointsState extends State<learningpoints> {
                         Positioned(
                           left: 16,
                           bottom: 16,
+                          right:
+                              16, // add right padding so text doesn't overflow the card's right edge
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 item.title,
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.normal, // ensure not bold
+                                ),
+                                maxLines: 2, // limit max lines to 2 (optional)
+                                overflow: TextOverflow
+                                    .ellipsis, // show ellipsis if still too long
+                                softWrap: true, // wrap text if long
                               ),
+                              const SizedBox(height: 4),
                               const Text(
                                 'See Review',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 13),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
                               ),
                             ],
                           ),

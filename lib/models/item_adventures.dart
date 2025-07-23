@@ -13,14 +13,16 @@ class Item {
   final String contactInfo;
   final String bestfor;
   final String price;
-  final DateTime bestTimetoVisit;
+  final String bestTimetoVisit;
   final String activities;
   final String whatToWear;
   final String whatToBring;
   final String precautions;
+  final String location;
 
   Item({
     required this.id,
+    required this.location,
     required this.address,
     required this.title,
     required this.category,
@@ -58,9 +60,8 @@ class Item {
       bestfor: json['bestfor'] ?? '',
       contactInfo: json['contactInfo'] ?? '',
       price: json['price'] ?? '',
-      bestTimetoVisit: json['bestTimetoVisit'] != null
-          ? DateTime.parse(json['bestTimetoVisit'])
-          : DateTime.now(),
+      location: json['location'] ?? '',
+      bestTimetoVisit: json['bestTimetoVisit'] ?? '',
       whatToBring: json['whatToBring'] ?? '',
       whatToWear: json['whatToWear'] ?? '',
       activities: json['activities'] ?? '',

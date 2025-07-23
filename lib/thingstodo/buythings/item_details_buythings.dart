@@ -21,7 +21,7 @@ class ItemDetailsBuythings extends StatelessWidget {
   final bool isCash;
   final bool isQRScan;
   final String isParking;
-  final String contactno;
+  final String contactInfo;
   final String websiteUrl;
   final String address;
   final String wifi;
@@ -43,7 +43,7 @@ class ItemDetailsBuythings extends StatelessWidget {
     required this.isCash,
     required this.isQRScan,
     required this.isParking,
-    required this.contactno,
+    required this.contactInfo,
     required this.websiteUrl,
     required this.address,
     required this.wifi,
@@ -70,7 +70,7 @@ class ItemDetailsBuythings extends StatelessWidget {
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
             fontFamily: 'QuickSand',
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -136,7 +136,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                             const Text(
                               'About',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Quicksand',
                               ),
@@ -144,9 +144,11 @@ class ItemDetailsBuythings extends StatelessWidget {
                             const SizedBox(height: 10),
                             Text(
                               description,
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 14),
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.03,
+                            ),
                             Text(
                               '-- Quick Info --',
                               style: TextStyle(
@@ -238,7 +240,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                             'Payment Methods:',
                                             style: TextStyle(
                                               fontFamily: 'Quicksand',
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -250,7 +252,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                             'Card:',
                                             style: TextStyle(
                                               fontFamily: 'Quicksand',
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -279,7 +281,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                             'Cash:',
                                             style: TextStyle(
                                               fontFamily: 'Quicksand',
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -308,7 +310,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                             'QR scan:',
                                             style: TextStyle(
                                               fontFamily: 'Quicksand',
-                                              fontSize: 16,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -346,110 +348,157 @@ class ItemDetailsBuythings extends StatelessWidget {
                             ),
                             Stack(
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: const Color.fromARGB(
-                                            111, 22, 142, 190),
-                                        spreadRadius: 0.3,
-                                        blurRadius: 12,
-                                        offset: Offset(0, 4),
-                                      )
-                                    ],
-                                  ),
-                                  child: FutureBuilder<List<Review>>(
-                                    future: fetchReviews(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      } else if (snapshot.hasError) {
-                                        return Text('Error: ${snapshot.error}');
-                                      } else if (!snapshot.hasData ||
-                                          snapshot.data!.isEmpty) {
-                                        return Text('No reviews found');
-                                      } else {
-                                        final reviews = snapshot.data!.where(
-                                          (review) => review.title == title,
-                                        );
-                                        if (reviews.isEmpty) {
-                                          return Text('No reviews found');
-                                        }
-                                        return ListView(
-                                          shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          children: reviews.map((review) {
-                                            final rating = double.tryParse(
-                                                    review.rating) ??
-                                                0.0;
-                                            return ListTile(
-                                              leading: CircleAvatar(
-                                                child: Text(
-                                                  review.username[0],
-                                                  style: TextStyle(
-                                                    fontFamily: 'Quicksand',
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
+                                // 👇 Your whole scrollable content
+                                SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color.fromARGB(
+                                                    111, 22, 142, 190),
+                                                spreadRadius: 0.3,
+                                                blurRadius: 12,
+                                                offset: Offset(0, 4),
                                               ),
-                                              title: Row(
-                                                children: [
-                                                  Text(
-                                                    review.username,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Quicksand',
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 8),
-                                                  Row(
-                                                    children: List.generate(
-                                                      5,
-                                                      (index) => Icon(
-                                                        index < rating.floor()
-                                                            ? Icons.star
-                                                            : (index < rating
-                                                                ? Icons
-                                                                    .star_half
-                                                                : Icons
-                                                                    .star_border),
-                                                        color: Colors.amber,
-                                                        size: 20,
+                                            ],
+                                          ),
+                                          constraints: BoxConstraints(
+                                            minHeight: 150,
+                                            maxHeight:
+                                                300, // Makes reviews box scrollable inside
+                                          ),
+                                          child: FutureBuilder<List<Review>>(
+                                            future: fetchReviews(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else if (!snapshot.hasData ||
+                                                  snapshot.data!.isEmpty) {
+                                                return Text('No reviews found');
+                                              } else {
+                                                final reviews =
+                                                    snapshot.data!.where(
+                                                  (review) =>
+                                                      review.title == title,
+                                                );
+                                                if (reviews.isEmpty) {
+                                                  return Text(
+                                                      'No reviews found');
+                                                }
+                                                return ListView(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      BouncingScrollPhysics(),
+                                                  children:
+                                                      reviews.map((review) {
+                                                    final rating =
+                                                        double.tryParse(review
+                                                                .rating) ??
+                                                            0.0;
+                                                    return ListTile(
+                                                      leading: CircleAvatar(
+                                                        child: Text(
+                                                          review.username[0]
+                                                              .toUpperCase(),
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Quicksand',
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              subtitle: Text(
-                                                review.reviewText,
-                                                style: TextStyle(
-                                                  fontFamily: 'Quicksand',
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                        );
-                                      }
-                                    },
+                                                      title: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            review.username,
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'Quicksand',
+                                                              fontSize: 14,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                          SizedBox(
+                                                              height:
+                                                                  4), // spacing between name & stars
+                                                          Row(
+                                                            children:
+                                                                List.generate(
+                                                              5,
+                                                              (index) => Icon(
+                                                                index <
+                                                                        rating
+                                                                            .floor()
+                                                                    ? Icons.star
+                                                                    : (index < rating
+                                                                        ? Icons
+                                                                            .star_half
+                                                                        : Icons
+                                                                            .star_border),
+                                                                color: Colors
+                                                                    .amber,
+                                                                size: 20,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      subtitle: Text(
+                                                        review.reviewText,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Quicksand',
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        // space to avoid FAB overlap
+                                      ],
+                                    ),
                                   ),
                                 ),
+
+                                // 👇 FAB pinned to bottom-right of the screen
                                 Positioned(
                                   bottom: 20,
                                   right: 20,
                                   child: FloatingActionButton(
-                                    child: Icon(Icons.add),
                                     onPressed: () {
                                       ReviewPage().showAddReviewDialog(
                                           context, title, category);
                                     },
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 210, 208, 211),
+                                    child: Icon(Icons.add, color: Colors.white),
                                   ),
                                 ),
                               ],
@@ -495,13 +544,13 @@ class ItemDetailsBuythings extends StatelessWidget {
                                         'Wi-Fi:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                         ),
                                       ),
                                       SizedBox(width: 4),
                                       Text(
                                         wifi,
-                                        style: TextStyle(fontSize: 16),
+                                        style: TextStyle(fontSize: 14),
                                       )
                                     ],
                                   ),
@@ -521,7 +570,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                         'Washrooms:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       ),
@@ -529,7 +578,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         washrooms,
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       )
@@ -551,7 +600,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                         'Family Friendly:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       ),
@@ -559,7 +608,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       Text(
                                         familyFriendly,
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       )
@@ -596,7 +645,10 @@ class ItemDetailsBuythings extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
+                                  // Contact Number Row
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start, // <--- Add this
                                     children: [
                                       Icon(
                                         Icons.phone,
@@ -608,16 +660,18 @@ class ItemDetailsBuythings extends StatelessWidget {
                                         'ContactNo:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       ),
                                       SizedBox(width: 4),
-                                      Text(
-                                        contactno,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'Quicksand',
+                                      Expanded(
+                                        child: Text(
+                                          contactInfo,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Quicksand',
+                                          ),
                                         ),
                                       )
                                     ],
@@ -626,7 +680,10 @@ class ItemDetailsBuythings extends StatelessWidget {
                                     height: MediaQuery.of(context).size.height *
                                         0.03,
                                   ),
+                                  // Website URL Row
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Icon(
                                         Icons.link_rounded,
@@ -638,16 +695,38 @@ class ItemDetailsBuythings extends StatelessWidget {
                                         'Website:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       ),
                                       SizedBox(width: 4),
-                                      Text(
-                                        websiteUrl,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'Quicksand',
+                                      Expanded(
+                                        child: GestureDetector(
+                                          // Wrap the Text with GestureDetector
+                                          onTap: () async {
+                                            final Uri url =
+                                                Uri.parse(websiteUrl);
+                                            if (await canLaunchUrl(url)) {
+                                              await launchUrl(url);
+                                            } else {
+                                              // Handle error, e.g., show a SnackBar or a dialog
+                                              print('Could not launch $url');
+                                              // ScaffoldMessenger.of(context).showSnackBar(
+                                              //   SnackBar(content: Text('Could not open website.')),
+                                              // );
+                                            }
+                                          },
+                                          child: Text(
+                                            websiteUrl,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Quicksand',
+                                              color: Colors
+                                                  .blue, // Make it look like a link
+                                              decoration: TextDecoration
+                                                  .underline, // Underline to indicate it's a link
+                                            ),
+                                          ),
                                         ),
                                       )
                                     ],
@@ -656,7 +735,10 @@ class ItemDetailsBuythings extends StatelessWidget {
                                     height: MediaQuery.of(context).size.height *
                                         0.03,
                                   ),
+                                  // Address Row
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start, // <--- Add this
                                     children: [
                                       Icon(
                                         Icons.location_city_outlined,
@@ -668,16 +750,18 @@ class ItemDetailsBuythings extends StatelessWidget {
                                         'Address:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontFamily: 'Quicksand',
                                         ),
                                       ),
                                       SizedBox(width: 4),
-                                      Text(
-                                        address,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'Quicksand',
+                                      Expanded(
+                                        child: Text(
+                                          address,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Quicksand',
+                                          ),
                                         ),
                                       )
                                     ],
@@ -696,7 +780,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                 'View on Map',
                                 style: TextStyle(
                                   fontFamily: 'Quicksand',
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
@@ -727,7 +811,7 @@ class ItemDetailsBuythings extends StatelessWidget {
                                 'Go Back',
                                 style: TextStyle(
                                   fontFamily: 'Quicksand',
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -800,14 +884,14 @@ class ItemDetailsBuythings extends StatelessWidget {
   Widget infoCard(IconData icon, String title, String value) {
     return Row(
       children: [
-        Icon(icon, color: Colors.blue, size: 30),
+        Icon(icon, color: Colors.blue, size: 25),
         const SizedBox(height: 5),
         Text(
           title,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Quicksand',
-            fontSize: 17,
+            fontSize: 14,
           ),
         ),
         const SizedBox(height: 2),
