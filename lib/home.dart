@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/thingstodo/things_to_do.dart';
 import 'accommodation.dart'; // Import the Accommodation page
 import 'guide.dart'; // Import the Guide page
 import 'taxi.dart'; // Import the Taxi page
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
     {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
-    {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
+    {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
     {
       'icon': Icons.local_taxi,
       'label': 'Taxi',

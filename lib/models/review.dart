@@ -20,11 +20,11 @@ class Review {
   factory Review.fromJson(Map<String, dynamic> json) {
     return Review(
         id: json['id'].toString(),
-        category: json['category'],
-        title: json['title'],
-        username: json['username'],
+        category: json['category'] ?? '',
+        title: json['title'] ?? '',
+        username: json['username'] ?? '',
         reviewText: json['reviewText'] ?? '',
-        rating: json['rating'],
-        createdAt: json['createdAt']);
+        rating: json['rating']?.toString() ?? '',
+        createdAt: json['createdAt'] ?? '');
   }
 }
