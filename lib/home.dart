@@ -35,6 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
     {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
+    {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
+    {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': Taxi()}, // Added Taxi route
+    {'icon': Icons.people, 'label': 'Guides', 'route': Guide()}, // Added Guide route
+    {'icon': Icons.map, 'label': 'Map', 'route': null},
+    {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': ServicesPage()}, // Added Services route
     {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
     {
       'icon': Icons.local_taxi,
