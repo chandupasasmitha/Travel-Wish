@@ -4,39 +4,34 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../models/review.dart';
 
-class ItemDetailsAdventures extends StatelessWidget {
+class ItemDetailsAyurwedha extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String description;
-  final String duration;
-  final String bestfor;
-  final String price;
   final String googleMapsUrl;
-  final DateTime bestTimetoVisit;
-  final String whatToBring;
-  final String whatToWear;
-  final String precautions;
-  final String activities;
-
+  final String openingHours;
   final String contactno;
+  final List<int> price;
+  final List<int> duration;
+  final List<String> treatmentname;
+  final DateTime bestTimetoVisit;
+  final String entryfee;
   final String websiteUrl;
   final String address;
 
-  const ItemDetailsAdventures(
+  const ItemDetailsAyurwedha(
       {super.key,
       required this.title,
       required this.imageUrl,
       required this.description,
-      required this.bestfor,
       required this.duration,
-      required this.bestTimetoVisit,
       required this.googleMapsUrl,
-      required this.whatToBring,
-      required this.whatToWear,
-      required this.precautions,
-      required this.activities,
       required this.price,
+      required this.bestTimetoVisit,
+      required this.entryfee,
+      required this.openingHours,
       required this.contactno,
+      required this.treatmentname,
       required this.websiteUrl,
       required this.address});
 
@@ -165,18 +160,18 @@ class ItemDetailsAdventures extends StatelessWidget {
                                           MediaQuery.of(context).size.height *
                                               0.01),
                                   infoCard(
-                                      Icons.schedule, 'Duration:', duration),
+                                      Icons.schedule, 'EntryFee:', entryfee),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.01),
-                                  infoCard(Icons.money, 'Price:', price),
+                                  infoCard(Icons.money, 'Price:', ""),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.01),
                                   infoCard(Icons.family_restroom, 'BestFor:',
-                                      bestfor),
+                                      'bestfor'),
                                   SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height *
@@ -190,7 +185,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                           MediaQuery.of(context).size.height *
                                               0.01),
                                   infoCard(Icons.run_circle_outlined,
-                                      'Activities Included:', activities),
+                                      'Opening Hours:', openingHours),
                                 ],
                               ),
                             ),
@@ -333,7 +328,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        whatToWear,
+                                        'whatToWear',
                                         style: TextStyle(fontSize: 16),
                                       )
                                     ],
@@ -359,7 +354,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        whatToBring,
+                                        'whatToBring',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Quicksand'),
@@ -470,7 +465,7 @@ class ItemDetailsAdventures extends StatelessWidget {
                                       ),
                                       SizedBox(width: 4),
                                       Text(
-                                        websiteUrl,
+                                        'websiteUrl',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Quicksand'),

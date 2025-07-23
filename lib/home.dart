@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/thingstodo/things_to_do.dart';
 import 'accommodation.dart'; // Import the Accommodation page
 import 'guide.dart'; // Import the Guide page
 import 'taxi.dart'; // Import the Taxi page
@@ -39,6 +40,23 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.people, 'label': 'Guides', 'route': Guide()}, // Added Guide route
     {'icon': Icons.map, 'label': 'Map', 'route': null},
     {'icon': Icons.miscellaneous_services, 'label': 'Services', 'route': ServicesPage()}, // Added Services route
+    {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
+    {
+      'icon': Icons.local_taxi,
+      'label': 'Taxi',
+      'route': Taxi()
+    }, // Added Taxi route
+    {
+      'icon': Icons.people,
+      'label': 'Guides',
+      'route': Guide()
+    }, // Added Guide route
+    {'icon': Icons.map, 'label': 'Map', 'route': null},
+    {
+      'icon': Icons.miscellaneous_services,
+      'label': 'Services',
+      'route': ServicesPage()
+    }, // Added Services route
   ];
 
   // List of popular places with corresponding images

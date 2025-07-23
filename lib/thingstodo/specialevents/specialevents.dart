@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:test/thingstodo/specialevents/item_details_specialevents.dart';
 import 'package:test/thingstodo/things_to_do.dart';
-import 'models/item_buythings.dart';
+import '../../../models/item_specialevents.dart';
 import 'dart:convert';
 
 void main() {
-  runApp(Ayurweda());
+  runApp(specialevents());
 }
 
-class Ayurweda extends StatelessWidget {
-  const Ayurweda({super.key});
+class specialevents extends StatelessWidget {
+  const specialevents({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,13 +88,13 @@ class Content3 extends StatelessWidget {
                 child: IconButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
+                        MaterialPageRoute(builder: (context) => ThingsToDo()));
                   },
                   icon: Icon(Icons.arrow_back),
                 ),
               ),
               Text(
-                'Adventure',
+                'Special Events',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
               )
             ],
@@ -102,7 +103,7 @@ class Content3 extends StatelessWidget {
             height: 10,
           ),
           const Expanded(
-            child: Ayurweda(),
+            child: Specialevents(),
           ),
         ],
       ),
@@ -110,16 +111,16 @@ class Content3 extends StatelessWidget {
   }
 }
 
-//Ayurweda is under content3
+//specialevents is under content3
 
-class ayurweda extends StatefulWidget {
-  const ayurweda({super.key});
+class Specialevents extends StatefulWidget {
+  const Specialevents({super.key});
 
   @override
-  State<ayurweda> createState() => _ayurwedaState();
+  State<Specialevents> createState() => _SpecialeventsState();
 }
 
-class _ayurwedaState extends State<ayurweda> {
+class _SpecialeventsState extends State<Specialevents> {
   List<Item> items = []; //defining the list
 
   @override
@@ -128,19 +129,18 @@ class _ayurwedaState extends State<ayurweda> {
     fetchItems();
   }
 
-  // recieves the  response body and save it to a list, then map the category = 'ayurweda'
   Future<void> fetchItems() async {
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:3000/api/items'));
+          await http.get(Uri.parse('http://localhost:2000/api/specialevents'));
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(
             response.body); //recieves the response body and save it to a list
         setState(() {
           items = data
-              .where((item) => item['category'] == 'ayurweda')
+              .where((item) => item['category'] == 'specialevents')
               .map((item) => Item.fromJson(item))
-              .toList(); //map only the catergory = 'ayurweda'
+              .toList(); //map only the catergory = 'specialevents'
         });
       } else {
         print('Failed to load items');
@@ -166,41 +166,66 @@ class _ayurwedaState extends State<ayurweda> {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              return Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Image.network(item.imageUrl, fit: BoxFit.cover),
-                      ),
-                      Positioned.fill(
-                        child: Container(color: Colors.black.withOpacity(0.5)),
-                      ),
-                      Positioned(
-                        left: 16,
-                        bottom: 16,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.title,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 18),
-                            ),
-                            const Text(
-                              'See Review',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 13),
-                            ),
-                          ],
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ItemDetailsSpecialevents(
+                                title: item.title,
+                                imageUrl: item.imageUrl,
+                                description: item.description,
+                                date: item.date,
+                                bestfor: item.bestfor,
+                                ticketPrice: item.ticketPrice,
+                                googleMapsUrl: item.googleMapsUrl,
+                                dresscode: item.dresscode,
+                                parking: item.parking,
+                                train: item.train,
+                                bus: item.bus,
+                                taxi: item.taxi,
+                                contactno: item.contactno,
+                                address: item.address,
+                              )));
+                },
+                child: Card(
+                  elevation: 3,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child:
+                              Image.network(item.imageUrl, fit: BoxFit.cover),
                         ),
-                      ),
-                    ],
+                        Positioned.fill(
+                          child:
+                              Container(color: Colors.black.withOpacity(0.5)),
+                        ),
+                        Positioned(
+                          left: 16,
+                          bottom: 16,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.title,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                              const Text(
+                                'See Review',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 13),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
