@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test/thingstodo/things_to_do.dart';
-import 'accommodation.dart'; // Import the Accommodation page
-import 'guide.dart'; // Import the Guide page
-import 'taxi.dart'; // Import the Taxi page
-import 'services.dart'; // Import the Services page
+import 'accommodation.dart';
+import 'guide.dart';
+import 'taxi.dart';
+import 'services.dart';
 import 'notification_page.dart';
-
-// Assume you have the current user's ID available, e.g., from login
-String currentUserId =
-    "60c72b2f9f1b2c001c8e4d5f"; // Replace with actual user ID
+import 'services/api.dart';
+import 'utils/user_manager.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,6 +33,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? currentUserId;
+  bool isLoading = true;
+  int unreadCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      Map<String, String?> userData = await UserManager.getUserData();
+      setState(() {
+        currentUserId = userData['userId'];
+        isLoading = false;
+      });
+
+      if (currentUserId != null) {
+        _loadUnreadCount();
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadUnreadCount() async {
+    if (currentUserId != null) {
+      try {
+        int count = await Api.getUnreadNotificationCount(currentUserId!);
+        setState(() {
+          unreadCount = count;
+        });
+      } catch (e) {
+        print('Error loading unread count: $e');
+      }
+    }
+  }
+
   // List of options available on the home screen
   final List<Map<String, dynamic>> options = [
     {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
@@ -41,22 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
     {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
     {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
-    {
-      'icon': Icons.local_taxi,
-      'label': 'Taxi',
-      'route': Taxi()
-    }, // Added Taxi route
-    {
-      'icon': Icons.people,
-      'label': 'Guides',
-      'route': Guide()
-    }, // Added Guide route
+    {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': Taxi()},
+    {'icon': Icons.people, 'label': 'Guides', 'route': Guide()},
     {'icon': Icons.map, 'label': 'Map', 'route': null},
     {
       'icon': Icons.miscellaneous_services,
       'label': 'Services',
       'route': ServicesPage()
-    }, // Added Services route
+    },
   ];
 
   // List of popular places with corresponding images
@@ -69,6 +102,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -77,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Row(
               children: [
-                Image.asset('assets/logo.png', height: 40), // App logo
+                Image.asset('assets/logo.png', height: 40),
                 SizedBox(width: 8),
                 Text(
                   'travelWish',
@@ -89,17 +130,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        NotificationsScreen(userId: currentUserId),
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.notifications),
+                  onPressed: () {
+                    if (currentUserId != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NotificationsScreen(userId: currentUserId!),
+                        ),
+                      ).then((_) {
+                        // Refresh unread count when returning from notifications
+                        _loadUnreadCount();
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please log in to view notifications'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                if (unreadCount > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        unreadCount > 99 ? '99+' : '$unreadCount',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                );
-              },
+              ],
             ),
           ],
         ),
@@ -124,6 +206,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       widget.username,
                       style: TextStyle(fontSize: 24, color: Colors.black),
                     ),
+                    if (currentUserId == null)
+                      Text(
+                        'Please log in for full features',
+                        style: TextStyle(fontSize: 12, color: Colors.red),
+                      ),
                   ],
                 ),
                 CircleAvatar(
@@ -134,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 20),
 
-            // Grid of options - FIXED: Removed fixed height and used correct GridView
+            // Grid of options
             GridView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -142,13 +229,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 1, // Adjust for better fit
+                childAspectRatio: 1,
               ),
               itemCount: options.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    // Navigate to respective page if a route is available
                     if (options[index]['route'] != null) {
                       Navigator.push(
                         context,
@@ -157,7 +243,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                     } else {
-                      // Show message for pages that are not implemented yet
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content:
@@ -170,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: 35, // Slightly reduced to fit better
+                        radius: 35,
                         backgroundColor: Colors.white,
                         child: Icon(
                           options[index]['icon'],

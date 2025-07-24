@@ -1,69 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'signuppage.dart';
 import 'services/api.dart';
 import 'home.dart';
-// import 'utils/user_manager.dart'; // Import the UserManager we created earlier
-
-class UserManager {
-  static const String _userIdKey = 'userId';
-  static const String _userNameKey = 'userName';
-  static const String _userEmailKey = 'userEmail';
-
-  // Save user data after successful login
-  static Future<bool> saveUserData({
-    required String userId,
-    required String userName,
-    required String userEmail,
-  }) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_userIdKey, userId);
-      await prefs.setString(_userNameKey, userName);
-      await prefs.setString(_userEmailKey, userEmail);
-      return true;
-    } catch (e) {
-      print('Error saving user data: $e');
-      return false;
-    }
-  }
-
-  // Get current user ID
-  static Future<String?> getUserId() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      return prefs.getString(_userIdKey);
-    } catch (e) {
-      print('Error getting user ID: $e');
-      return null;
-    }
-  }
-
-  // Get current user name
-  static Future<String?> getUserName() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      return prefs.getString(_userNameKey);
-    } catch (e) {
-      print('Error getting user name: $e');
-      return null;
-    }
-  }
-
-  // Clear user data (logout)
-  static Future<bool> clearUserData() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_userIdKey);
-      await prefs.remove(_userNameKey);
-      await prefs.remove(_userEmailKey);
-      return true;
-    } catch (e) {
-      print('Error clearing user data: $e');
-      return false;
-    }
-  }
-}
+import 'utils/user_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -99,12 +38,15 @@ class _LoginScreenState extends State<LoginScreen> {
           // Extract user data from the response
           Map<String, dynamic> userData = result['userData'] ?? {};
 
-          // You might need to adjust these field names based on your backend response
-          String userId = userData['_id'] ?? userData['id'] ?? '';
+          // Adjust these field names based on your backend response
+          String userId = userData['_id'] ??
+              userData['id'] ??
+              DateTime.now().millisecondsSinceEpoch.toString();
           String userName = userData['username'] ??
               userData['name'] ??
               usernameController.text;
-          String userEmail = userData['email'] ?? '';
+          String userEmail =
+              userData['email'] ?? '${usernameController.text}@example.com';
 
           if (userId.isNotEmpty) {
             // Save user data using UserManager
