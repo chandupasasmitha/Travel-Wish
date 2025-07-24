@@ -4,6 +4,7 @@ import 'package:test/thingstodo/Learningpoints/item_details_learningpoints.dart'
 import 'package:test/thingstodo/things_to_do.dart';
 import '../../models/item_learningpoints.dart';
 import 'dart:convert';
+import '../../config.dart';
 
 void main() {
   runApp(Learningpoints());
@@ -131,8 +132,7 @@ class _learningpointsState extends State<learningpoints> {
 
   Future<void> fetchItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:2000/api/learningpoints'));
+      final response = await http.get(Uri.parse('$baseUrl/api/learningpoints'));
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
         final List<dynamic> data = decoded['data'];

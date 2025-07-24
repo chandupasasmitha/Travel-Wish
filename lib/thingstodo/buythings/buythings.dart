@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:test/thingstodo/buythings/item_details_buythings.dart';
 import 'package:test/thingstodo/things_to_do.dart';
 import '../../models/item_buythings.dart';
+import '../../config.dart';
 
 void main() {
   runApp(BuyThings());
@@ -144,7 +145,7 @@ class _CategoriesState extends State<Categories> {
     try {
       final response = await http.get(
         Uri.parse(
-            'http://localhost:2000/api/buythings'), // IMPORTANT: 10.0.2.2 for Android emulator
+            '$baseUrl/api/buythings'), // IMPORTANT: 10.0.2.2 for Android emulator
         headers: {
           'Content-Type': 'application/json',
         },

@@ -6,6 +6,7 @@ import '../../models/review.dart';
 import '../../models/image.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/gallery.dart';
+import '../../config.dart';
 
 class ItemDetailsSpecialevents extends StatelessWidget {
   final String title;
@@ -606,7 +607,7 @@ class ItemDetailsSpecialevents extends StatelessWidget {
 
   Future<List<Review>> fetchReviews() async {
     // Your API endpoint for fetching reviews of a place
-    final url = Uri.parse('http://localhost:2000/api/reviews');
+    final url = Uri.parse('$baseUrl/api/reviews');
 
     try {
       final response = await http.get(url);
@@ -732,7 +733,7 @@ class ReviewPage {
     required String reviewText,
     required double rating,
   }) async {
-    final url = Uri.parse('http://localhost:2000/api/reviews');
+    final url = Uri.parse('$baseUrl/api/reviews');
     String dateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     try {
       final response = await http.post(

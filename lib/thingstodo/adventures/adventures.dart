@@ -4,6 +4,7 @@ import 'package:test/thingstodo/adventures/item_details_adventures.dart';
 import 'package:test/thingstodo/things_to_do.dart';
 import '../../models/item_adventures.dart';
 import 'dart:convert';
+import '../../config.dart';
 
 void main() {
   runApp(Adventures());
@@ -131,8 +132,7 @@ class _adventuresState extends State<adventures> {
 
   Future<void> fetchItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:2000/api/adventures'));
+      final response = await http.get(Uri.parse('$baseUrl/api/adventures'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
         List<dynamic> data = jsonResponse[

@@ -4,6 +4,7 @@ import 'package:test/thingstodo/specialevents/item_details_specialevents.dart';
 import 'package:test/thingstodo/things_to_do.dart';
 import '../../../models/item_specialevents.dart';
 import 'dart:convert';
+import '../../config.dart';
 
 void main() {
   runApp(specialevents());
@@ -132,7 +133,7 @@ class _SpecialeventsState extends State<Specialevents> {
   Future<void> fetchItems() async {
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:2000/api/specialevents'),
+        Uri.parse('$baseUrl/api/specialevents'),
       );
 
       if (response.statusCode == 200) {

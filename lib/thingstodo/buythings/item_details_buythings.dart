@@ -6,6 +6,7 @@ import 'dart:convert';
 import '../../models/review.dart';
 import '../../models/image.dart';
 import '../../widgets/gallery.dart';
+import '../../config.dart';
 
 // Import the widget file
 
@@ -855,7 +856,7 @@ class ItemDetailsBuythings extends StatelessWidget {
     required String reviewText,
     required double rating,
   }) async {
-    final url = Uri.parse('http://localhost:2000/api/reviews');
+    final url = Uri.parse('$baseUrl/api/reviews');
     try {
       final response = await http.post(
         url,
@@ -982,7 +983,7 @@ class ReviewPage {
     required String reviewText,
     required double rating,
   }) async {
-    final url = Uri.parse('http://localhost:2000/api/reviews');
+    final url = Uri.parse('$baseUrl/api/reviews');
     String dateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
     try {
       final response = await http.post(

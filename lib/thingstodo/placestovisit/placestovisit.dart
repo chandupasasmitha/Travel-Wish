@@ -4,6 +4,7 @@ import 'package:test/thingstodo/placestovisit/item_details_placestovisit.dart';
 import 'package:test/thingstodo/things_to_do.dart';
 import '../../../models/item_placestovisit.dart';
 import 'dart:convert';
+import '../../config.dart';
 
 void main() {
   runApp(placestovisit());
@@ -131,8 +132,7 @@ class _PlacestovisitState extends State<Placestovisit> {
 
   Future<void> fetchItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:2000/api/placestovisit'));
+      final response = await http.get(Uri.parse('$baseUrl/api/placestovisit'));
       if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(
             response.body); //recieves the response body and save it to a list
