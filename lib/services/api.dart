@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String baseUrl = "http://10.0.2.2:2000/api/";
+  static const String baseUrl = "http://localhost:2000/api/";
 
   // ==================== USER METHODS ====================
   static adduser(Map udata) async {
@@ -300,6 +300,30 @@ class Api {
       return jsonDecode(res.body);
     } catch (e) {
       throw Exception("Booking taxi failed: $e");
+    }
+  }
+// ==================== RESTUARANT METHODS ====================
+
+  static Future<List<Map<String, dynamic>>> getRestaurants() async {
+    var url = Uri.parse("${baseUrl}restaurants");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      var data = jsonDecode(res.body);
+      return List<Map<String, dynamic>>.from(data['data']);
+    } catch (e) {
+      throw Exception("Failed to fetch restaurants: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getRestaurantById(String id) async {
+    var url = Uri.parse("${baseUrl}restaurant/$id");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      return jsonDecode(res.body);
+    } catch (e) {
+      throw Exception("Failed to fetch restaurant details: $e");
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/restaurant.dart';
 import 'package:test/thingstodo/things_to_do.dart';
 import 'accommodation.dart'; // Import the Accommodation page
 import 'guide.dart'; // Import the Guide page
@@ -33,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> options = [
     {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
     {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
-    {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
+    {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': Restaurant()},
     {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
     {'icon': Icons.explore, 'label': 'Things to do', 'route': null},
     {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': Taxi()}, // Added Taxi route

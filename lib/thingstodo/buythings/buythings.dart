@@ -235,12 +235,13 @@ class _CategoriesState extends State<Categories> {
                                       isCash: item.isCash,
                                       isQRScan: item.isQRScan,
                                       isParking: item.isParking,
-                                      contactno: item.contactno,
+                                      contactInfo: item.contactInfo,
                                       websiteUrl: item.websiteUrl,
                                       address: item.address,
                                       wifi: item.wifi,
                                       washrooms: item.washrooms,
                                       familyFriendly: item.familyFriendly,
+                                      category: item.category,
                                     )));
                       },
                       child: buildItemCard(item));
@@ -264,25 +265,47 @@ class _CategoriesState extends State<Categories> {
         borderRadius: BorderRadius.circular(15),
         child: Stack(
           children: [
+            // Background Image
             Positioned.fill(
-              child: Image.network(item.images[0].url, fit: BoxFit.cover),
+              child: Image.network(
+                item.images[0].url,
+                fit: BoxFit.cover,
+              ),
             ),
+            // Semi-transparent Overlay
             Positioned.fill(
-              child: Container(color: Colors.black.withOpacity(0.5)),
+              child: Container(
+                color: Colors.black.withOpacity(0.4), // Slightly less dark
+              ),
             ),
+            // Text Content
             Positioned(
               left: 16,
+              right: 16,
               bottom: 16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, // Avoids unnecessary height
                 children: [
                   Text(
                     item.title,
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15, // Set font size to 15
+                      fontFamily: 'Quicksand',
+                      letterSpacing: 0.5,
+                    ),
+                    maxLines: 2, // Allow 2 lines instead of 1 for overflow
+                    overflow:
+                        TextOverflow.visible, // Allow text to wrap to next line
                   ),
-                  const Text(
+                  const SizedBox(height: 4),
+                  Text(
                     'See Review',
-                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: 13, // Review font size 13
+                    ),
                   ),
                 ],
               ),
