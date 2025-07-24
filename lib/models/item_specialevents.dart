@@ -1,12 +1,13 @@
+import './image.dart';
+
 class Item {
-  final String id;
   final String title;
+  final String location;
   final String category;
-  final String subcategory;
-  final String imageUrl;
+  final List<ImageModel> images;
   final String description;
   final String googleMapsUrl;
-  final DateTime date;
+  final String date;
   final String contactno;
   final String bestfor;
   final String ticketPrice;
@@ -18,42 +19,51 @@ class Item {
   final bool train;
 
   Item({
-    required this.id,
     required this.title,
+    required this.location,
     required this.category,
-    required this.subcategory,
-    required this.imageUrl,
+    required this.images,
     required this.description,
-    required this.date,
     required this.googleMapsUrl,
-    required this.bestfor,
-    required this.dresscode,
-    required this.ticketPrice,
-    required this.parking,
+    required this.date,
     required this.contactno,
+    required this.bestfor,
+    required this.ticketPrice,
+    required this.dresscode,
+    required this.parking,
     required this.address,
-    required this.bus,
-    required this.taxi,
-    required this.train,
+    this.bus = false,
+    this.taxi = false,
+    this.train = false,
   });
 
   factory Item.fromJson(Map<String, dynamic> json) {
+    final dynamic imagesJson = json['images'];
+    final List<ImageModel> parsedImages;
+
+    if (imagesJson is List) {
+      parsedImages = imagesJson
+          .map((image) => ImageModel.fromJson(image as Map<String, dynamic>))
+          .toList();
+    } else if (imagesJson is Map) {
+      parsedImages = [ImageModel.fromJson(imagesJson as Map<String, dynamic>)];
+    } else {
+      parsedImages = [];
+    }
+
     return Item(
-      id: json['_id'].toString(),
-      title: json['title'],
-      category: json['category'],
-      subcategory: json['subcategory'],
-      imageUrl: json['imageUrl'],
+      title: json['title'] ?? '',
+      location: json['location'] ?? '',
+      category: json['category'] ?? '',
+      images: parsedImages,
       description: json['description'] ?? '',
-      parking: json['parking'] ?? '',
-      googleMapsUrl: json['googleMapUrl'] ?? '',
-      bestfor: json['bestfor'] ?? '',
-      dresscode: json['dresscode'] ?? '',
-      ticketPrice: json['ticketPrice'] ?? '',
-      date: json['bestTimetoVisit'] != null
-          ? DateTime.parse(json['bestTimetoVisit'])
-          : DateTime.now(),
+      googleMapsUrl: json['googleMapsUrl'] ?? '',
+      date: json['date'] ?? '',
       contactno: json['contactno'] ?? '',
+      bestfor: json['bestfor'] ?? '',
+      ticketPrice: json['ticketPrice'] ?? '',
+      dresscode: json['dresscode'] ?? '',
+      parking: json['parking'] ?? '',
       address: json['address'] ?? '',
       bus: json['bus'] ?? false,
       taxi: json['taxi'] ?? false,
@@ -61,3 +71,26 @@ class Item {
     );
   }
 }
+
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'title': title,
+//       'category': category,
+//       'images': images.map((img) => img.toJson()).toList(),
+//       'description': description,
+//       'googleMapsUrl': googleMapsUrl,
+//       'date': date.toIso8601String(),
+//       'contactno': contactno,
+//       'bestfor': bestfor,
+//       'ticketPrice': ticketPrice,
+//       'dresscode': dresscode,
+//       'parking': parking,
+//       'address': address,
+//       'bus': bus,
+//       'taxi': taxi,
+//       'train': train,
+//     };
+//   }
+//
+

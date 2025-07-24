@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:test/thingstodo/placestovisit/placestovisit.dart';
 import 'package:test/thingstodo/specialevents/specialevents.dart';
+import 'package:test/home.dart';
 import 'dart:ui';
 import 'buythings/buythings.dart';
 import 'adventures/adventures.dart';
@@ -93,7 +95,12 @@ class Content1 extends StatelessWidget {
           Row(
             // back button + things to do text
             children: [
-              Icon(Icons.arrow_back),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
+                  },
+                  child: Icon(Icons.arrow_back)),
               Expanded(
                 child: Align(
                   alignment: Alignment.center,
@@ -140,7 +147,7 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Places To Watch",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 15),
                       ),
                       Text("Around 2000 places"),
                     ],
@@ -199,7 +206,7 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Adventure",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 15),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -230,61 +237,6 @@ class Content1 extends StatelessWidget {
             height: 15,
           ),
 
-          //  Ayurweda
-          Container(
-            height: 85,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: const Color.fromARGB(111, 22, 142, 190),
-                    spreadRadius: 0.3,
-                    blurRadius: 12,
-                    offset: Offset(0, 4))
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Image.asset('assets/groups/4.png'),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Ayurwedha",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text("Around 2000 places")
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Ayurwedha()));
-                    },
-                    child: Container(
-                      //More Button 2
-                      height: 40,
-                      width: 80,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFD8EFFF),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(child: Text("More >")),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-
-          SizedBox(
-            height: 15,
-          ),
           //  Learning points
           Container(
             height: 85,
@@ -312,7 +264,7 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Learning Points",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 15),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -370,7 +322,7 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Buy Things",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 15),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -425,7 +377,7 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Special Events",
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 15),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -436,6 +388,60 @@ class Content1 extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => specialevents()));
+                    },
+                    child: Container(
+                      //More Button 2
+                      height: 40,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFD8EFFF),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text("More >")),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            height: 85,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: const Color.fromARGB(111, 22, 142, 190),
+                    spreadRadius: 0.3,
+                    blurRadius: 12,
+                    offset: Offset(0, 4))
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Image.asset('assets/groups/4.png'),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Ayurwedha",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      Text("Around 2000 places")
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Coming Soon!')),
+                      );
                     },
                     child: Container(
                       //More Button 2

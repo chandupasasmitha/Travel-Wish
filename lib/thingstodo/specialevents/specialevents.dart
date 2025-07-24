@@ -15,8 +15,8 @@ class specialevents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: 'Quicksand'),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(fontFamily: 'Quicksand'),
       home: Scaffold(
         body: Container(
             decoration: BoxDecoration(
@@ -131,16 +131,19 @@ class _SpecialeventsState extends State<Specialevents> {
 
   Future<void> fetchItems() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:2000/api/specialevents'));
+      final response = await http.get(
+        Uri.parse('http://localhost:2000/api/specialevents'),
+      );
+
       if (response.statusCode == 200) {
-        List<dynamic> data = jsonDecode(
-            response.body); //recieves the response body and save it to a list
+        final decoded = jsonDecode(response.body);
+        final List<dynamic> data = decoded['data']; // ⬅️ extract "data" array
+
         setState(() {
           items = data
               .where((item) => item['category'] == 'specialevents')
-              .map((item) => Item.fromJson(item))
-              .toList(); //map only the catergory = 'specialevents'
+              .map((item) => Item.fromJson(item as Map<String, dynamic>))
+              .toList();
         });
       } else {
         print('Failed to load items');
@@ -169,24 +172,28 @@ class _SpecialeventsState extends State<Specialevents> {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ItemDetailsSpecialevents(
-                                title: item.title,
-                                imageUrl: item.imageUrl,
-                                description: item.description,
-                                date: item.date,
-                                bestfor: item.bestfor,
-                                ticketPrice: item.ticketPrice,
-                                googleMapsUrl: item.googleMapsUrl,
-                                dresscode: item.dresscode,
-                                parking: item.parking,
-                                train: item.train,
-                                bus: item.bus,
-                                taxi: item.taxi,
-                                contactno: item.contactno,
-                                address: item.address,
-                              )));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemDetailsSpecialevents(
+                        title: item.title,
+                        location: item.location,
+                        category: item.category,
+                        images: item.images,
+                        description: item.description,
+                        date: item.date,
+                        bestfor: item.bestfor,
+                        ticketPrice: item.ticketPrice,
+                        googleMapsUrl: item.googleMapsUrl,
+                        dresscode: item.dresscode,
+                        parking: item.parking,
+                        train: item.train,
+                        bus: item.bus,
+                        taxi: item.taxi,
+                        contactno: item.contactno,
+                        address: item.address,
+                      ),
+                    ),
+                  );
                 },
                 child: Card(
                   elevation: 3,
@@ -198,28 +205,44 @@ class _SpecialeventsState extends State<Specialevents> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child:
-                              Image.network(item.imageUrl, fit: BoxFit.cover),
+                          child: Image.network(
+                            item.images[0].url,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Positioned.fill(
-                          child:
-                              Container(color: Colors.black.withOpacity(0.5)),
+                          child: Container(
+                            color: Colors.black.withOpacity(0.5),
+                          ),
                         ),
                         Positioned(
                           left: 16,
                           bottom: 16,
+                          right: 16, // prevent overflow on right
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 item.title,
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                softWrap: true,
+                                maxLines: 2, // Optional: control line count
+                                overflow: TextOverflow.ellipsis,
                               ),
+                              const SizedBox(height: 4),
                               const Text(
                                 'See Review',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 13),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                softWrap: true,
                               ),
                             ],
                           ),
