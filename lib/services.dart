@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'repair_list_page.dart'; // Import your repair list page
+import 'housekeeping_list_page.dart'; // Import housekeeping list page
 
 class ServicesPage extends StatefulWidget {
   @override
@@ -13,14 +15,16 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Vehicle Repair',
       'description': 'Quick and reliable vehicle repair services',
       'color': Colors.orange,
-      'route': null,
+      'route': '/repair_list',
+      'hasRoute': true,
     },
     {
       'icon': Icons.cleaning_services,
       'label': 'House Keeping',
       'description': 'Professional cleaning and housekeeping services',
-      'color': Colors.green,
-      'route': null,
+      'color': Color.fromARGB(255, 102, 183, 251), // Your blue theme
+      'route': '/housekeeping_list',
+      'hasRoute': true, // Now available
     },
     {
       'icon': Icons.phone,
@@ -28,6 +32,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'description': 'Stay connected with our communication services',
       'color': Colors.blue,
       'route': null,
+      'hasRoute': false,
     },
     {
       'icon': Icons.local_hospital,
@@ -35,6 +40,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'description': 'Emergency and medical care services',
       'color': Colors.red,
       'route': null,
+      'hasRoute': false,
     },
     {
       'icon': Icons.miscellaneous_services,
@@ -42,8 +48,47 @@ class _ServicesPageState extends State<ServicesPage> {
       'description': 'Additional services for your convenience',
       'color': Colors.purple,
       'route': null,
+      'hasRoute': false,
     },
   ];
+
+  void _handleServiceTap(Map<String, dynamic> service) {
+    if (service['hasRoute'] == true) {
+      // Navigate to the specific service page
+      switch (service['label']) {
+        case 'Vehicle Repair':
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RepairListPage(),
+            ),
+          );
+          break;
+        case 'House Keeping':
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HousekeepingListPage(),
+            ),
+          );
+          break;
+        default:
+          _showComingSoonMessage(service);
+      }
+    } else {
+      _showComingSoonMessage(service);
+    }
+  }
+
+  void _showComingSoonMessage(Map<String, dynamic> service) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${service['label']} coming soon!'),
+        duration: Duration(seconds: 2),
+        backgroundColor: service['color'],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +191,8 @@ class _ServicesPageState extends State<ServicesPage> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: serviceOptions.length,
               itemBuilder: (context, index) {
+                final service = serviceOptions[index];
+                
                 return Container(
                   margin: EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
@@ -161,16 +208,7 @@ class _ServicesPageState extends State<ServicesPage> {
                     ],
                   ),
                   child: InkWell(
-                    onTap: () {
-                      // Show message for services that are not implemented yet
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${serviceOptions[index]['label']} coming soon!'),
-                          duration: Duration(seconds: 2),
-                          backgroundColor: serviceOptions[index]['color'],
-                        ),
-                      );
-                    },
+                    onTap: () => _handleServiceTap(service),
                     borderRadius: BorderRadius.circular(15),
                     child: Padding(
                       padding: EdgeInsets.all(20),
@@ -180,13 +218,13 @@ class _ServicesPageState extends State<ServicesPage> {
                           Container(
                             padding: EdgeInsets.all(15),
                             decoration: BoxDecoration(
-                              color: serviceOptions[index]['color'].withOpacity(0.1),
+                              color: service['color'].withOpacity(0.1),
                               borderRadius: BorderRadius.circular(50),
                             ),
                             child: Icon(
-                              serviceOptions[index]['icon'],
+                              service['icon'],
                               size: 30,
-                              color: serviceOptions[index]['color'],
+                              color: service['color'],
                             ),
                           ),
                           
@@ -197,17 +235,43 @@ class _ServicesPageState extends State<ServicesPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  serviceOptions[index]['label'],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      service['label'],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    // Add "Available" badge for services with routes
+                                    if (service['hasRoute'] == true) ...[
+                                      SizedBox(width: 8),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          'Available',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  serviceOptions[index]['description'],
+                                  service['description'],
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black54,
@@ -217,10 +281,14 @@ class _ServicesPageState extends State<ServicesPage> {
                             ),
                           ),
                           
-                          // Arrow icon
+                          // Arrow icon with different styles for available vs coming soon
                           Icon(
-                            Icons.arrow_forward_ios,
-                            color: Colors.black26,
+                            service['hasRoute'] == true 
+                                ? Icons.arrow_forward_ios 
+                                : Icons.schedule,
+                            color: service['hasRoute'] == true 
+                                ? service['color'] 
+                                : Colors.black26,
                             size: 16,
                           ),
                         ],
