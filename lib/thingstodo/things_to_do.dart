@@ -147,7 +147,8 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Places To Watch",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text("Around 2000 places"),
                     ],
@@ -206,9 +207,13 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Adventure",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
-                      Text("Around 2000 places")
+                      Text(
+                        "Around 2000 places",
+                        style: TextStyle(),
+                      )
                     ],
                   ),
                   GestureDetector(
@@ -264,7 +269,8 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Learning Points",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -322,7 +328,8 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Buy Things",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -377,7 +384,8 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Special Events",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text("Around 2000 places")
                     ],
@@ -432,7 +440,8 @@ class Content1 extends StatelessWidget {
                     children: [
                       Text(
                         "Ayurwedha",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
                       ),
                       Text("Around 2000 places")
                     ],

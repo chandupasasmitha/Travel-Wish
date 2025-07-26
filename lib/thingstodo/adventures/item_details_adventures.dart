@@ -44,11 +44,42 @@ class ItemDetailsAdventures extends StatelessWidget {
       required this.price,
       required this.contactInfo});
 
-  void _launchMap() async {
-    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-      await launchUrl(Uri.parse(googleMapsUrl));
-    } else {
-      throw 'Could not open the map.';
+  void _launchMap(BuildContext context) async {
+    if (googleMapsUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No map location available')),
+      );
+      return;
+    }
+
+    try {
+      Uri uri;
+
+      // If it's already a proper Google Maps URL (including shortened URLs)
+      if (googleMapsUrl.startsWith('https://maps.google.com') ||
+          googleMapsUrl.startsWith('https://www.google.com/maps') ||
+          googleMapsUrl
+              .startsWith('https://maps.app.goo.gl') || // Add this line
+          googleMapsUrl.startsWith('https://goo.gl/maps')) {
+        // Add this line too for other short URLs
+        uri = Uri.parse(googleMapsUrl);
+      }
+      // If it's coordinates (latitude,longitude)
+      else if (googleMapsUrl.contains(',')) {
+        uri = Uri.parse('geo:$googleMapsUrl');
+      }
+      // If it's a place name
+      else {
+        uri = Uri.parse(
+            'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(googleMapsUrl)}');
+      }
+
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      print('Error launching map: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open map')),
+      );
     }
   }
 
@@ -564,12 +595,23 @@ class ItemDetailsAdventures extends StatelessWidget {
 
                             // Map Button
                             ElevatedButton.icon(
-                              onPressed: _launchMap,
+                              onPressed: () {
+                                if (googleMapsUrl.isNotEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Please wait... returning to Maps')),
+                                  );
+                                }
+                                _launchMap(context);
+                              },
                               icon: const Icon(Icons.map),
-                              label: const Text(
+                              label: Text(
                                 'View on Map',
                                 style: TextStyle(
-                                    fontFamily: 'Quicksand', fontSize: 14),
+                                  fontFamily: 'Quicksand',
+                                  fontSize: 14,
+                                ),
                               ),
                               style: ElevatedButton.styleFrom(
                                 minimumSize: const Size(double.infinity, 50),

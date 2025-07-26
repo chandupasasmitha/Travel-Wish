@@ -56,7 +56,7 @@ class Item {
       images: parsedImages,
       description: json['description'] ?? '',
       duration: json['duration'] ?? '',
-      googleMapsUrl: json['googleMapUrl'] ?? '',
+      googleMapsUrl: json['googleMapsUrl'] ?? '',
       bestfor: json['bestfor'] ?? '',
       contactInfo: json['contactInfo'] ?? '',
       price: json['price'] ?? '',

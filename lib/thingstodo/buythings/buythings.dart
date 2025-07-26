@@ -221,6 +221,8 @@ class _CategoriesState extends State<Categories> {
                   final item = items[index];
                   return GestureDetector(
                       onTap: () {
+                        print('googleMapsUrl: ${item.googleMapsUrl}');
+                        print('websiteUrl: ${item.websiteUrl}');
                         Navigator.push(
                             context,
                             MaterialPageRoute(

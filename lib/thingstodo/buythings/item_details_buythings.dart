@@ -12,6 +12,7 @@ import '../../config.dart';
 
 class ItemDetailsBuythings extends StatelessWidget {
   final String title;
+
   final List<ImageModel> images;
   final String description;
   final String location;
@@ -30,7 +31,7 @@ class ItemDetailsBuythings extends StatelessWidget {
   final String category;
   final String familyFriendly;
 
-  ItemDetailsBuythings({
+  const ItemDetailsBuythings({
     super.key,
     required this.title,
     required this.category,
@@ -52,17 +53,49 @@ class ItemDetailsBuythings extends StatelessWidget {
     required this.familyFriendly,
   });
 
-  void _launchMap() async {
-    if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-      await launchUrl(Uri.parse(googleMapsUrl));
-    } else {
-      throw 'Could not open the map.';
+  void _launchMap(BuildContext context) async {
+    if (googleMapsUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No map location available')),
+      );
+      return;
+    }
+
+    try {
+      Uri uri;
+
+      // If it's already a proper Google Maps URL (including shortened URLs)
+      if (googleMapsUrl.startsWith('https://maps.google.com') ||
+          googleMapsUrl.startsWith('https://www.google.com/maps') ||
+          googleMapsUrl
+              .startsWith('https://maps.app.goo.gl') || // Add this line
+          googleMapsUrl.startsWith('https://goo.gl/maps')) {
+        // Add this line too for other short URLs
+        uri = Uri.parse(googleMapsUrl);
+      }
+      // If it's coordinates (latitude,longitude)
+      else if (googleMapsUrl.contains(',')) {
+        uri = Uri.parse('geo:$googleMapsUrl');
+      }
+      // If it's a place name
+      else {
+        uri = Uri.parse(
+            'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(googleMapsUrl)}');
+      }
+
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      print('Error launching map: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open map')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'QuickSand', // Default font family for all text
         textTheme: ThemeData.light().textTheme.apply(
@@ -703,18 +736,40 @@ class ItemDetailsBuythings extends StatelessWidget {
                                       SizedBox(width: 4),
                                       Expanded(
                                         child: GestureDetector(
-                                          // Wrap the Text with GestureDetector
                                           onTap: () async {
                                             final Uri url =
                                                 Uri.parse(websiteUrl);
-                                            if (await canLaunchUrl(url)) {
-                                              await launchUrl(url);
-                                            } else {
-                                              // Handle error, e.g., show a SnackBar or a dialog
-                                              print('Could not launch $url');
-                                              // ScaffoldMessenger.of(context).showSnackBar(
-                                              //   SnackBar(content: Text('Could not open website.')),
-                                              // );
+                                            try {
+                                              print(
+                                                  'Attempting to launch: $url'); // Debug print
+
+                                              if (await canLaunchUrl(url)) {
+                                                print(
+                                                    'URL can be launched'); // Debug print
+                                                await launchUrl(
+                                                  url,
+                                                  mode: LaunchMode
+                                                      .externalApplication,
+                                                );
+                                              } else {
+                                                print(
+                                                    'Cannot launch URL: $url');
+                                                // Show user-friendly error
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Cannot open website')),
+                                                );
+                                              }
+                                            } catch (e) {
+                                              print('Error launching URL: $e');
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        'Error opening website: $e')),
+                                              );
                                             }
                                           },
                                           child: Text(
@@ -722,10 +777,9 @@ class ItemDetailsBuythings extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontFamily: 'Quicksand',
-                                              color: Colors
-                                                  .blue, // Make it look like a link
-                                              decoration: TextDecoration
-                                                  .underline, // Underline to indicate it's a link
+                                              color: Colors.blue,
+                                              decoration:
+                                                  TextDecoration.underline,
                                             ),
                                           ),
                                         ),
@@ -775,9 +829,17 @@ class ItemDetailsBuythings extends StatelessWidget {
                             ),
                             // Map Button
                             ElevatedButton.icon(
-                              onPressed: _launchMap,
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Please wait... returning to Maps')),
+                                );
+
+                                _launchMap(context);
+                              },
                               icon: const Icon(Icons.map),
-                              label: const Text(
+                              label: Text(
                                 'View on Map',
                                 style: TextStyle(
                                   fontFamily: 'Quicksand',
