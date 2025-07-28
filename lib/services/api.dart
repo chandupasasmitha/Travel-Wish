@@ -302,8 +302,8 @@ class Api {
       throw Exception("Booking taxi failed: $e");
     }
   }
-// ==================== RESTUARANT METHODS ====================
 
+  // ==================== RESTAURANT METHODS ====================
   static Future<List<Map<String, dynamic>>> getRestaurants() async {
     var url = Uri.parse("${baseUrl}restaurants");
     try {
@@ -324,6 +324,281 @@ class Api {
       return jsonDecode(res.body);
     } catch (e) {
       throw Exception("Failed to fetch restaurant details: $e");
+    }
+  }
+
+  // ==================== VEHICLE REPAIR METHODS ====================
+  static Future<List<Map<String, dynamic>>> getRepairServices() async {
+    var url = Uri.parse("${baseUrl}repairs");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        if (responseData is Map && responseData['data'] is List) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          return [];
+        }
+      } else {
+        throw Exception(
+            "Failed to fetch repair services: ${res.statusCode} ${res.body}");
+      }
+    } catch (e) {
+      throw Exception("Error fetching repair services: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getRepairServiceById(String id) async {
+    var url = Uri.parse("${baseUrl}repairs/$id");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        throw Exception(
+            "Failed to fetch repair service details: ${res.statusCode} ${res.body}");
+      }
+    } catch (e) {
+      throw Exception("Error fetching repair service details: $e");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchRepairServices(
+      {String? query, String? location, String? serviceType}) async {
+    var url = Uri.parse("${baseUrl}repairs/search");
+    Map<String, dynamic> params = {};
+    if (query != null) params['query'] = query;
+    if (location != null) params['location'] = location;
+    if (serviceType != null) params['serviceType'] = serviceType;
+
+    try {
+      final res = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(params));
+      if (res.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
+      } else {
+        throw Exception("Search failed: ${res.statusCode} ${res.body}");
+      }
+    } catch (e) {
+      throw Exception("Search failed: $e");
+    }
+  }
+
+  // ==================== HOUSEKEEPING METHODS ====================
+  static Future<Map<String, dynamic>> getHousekeepingServices() async {
+    var url = Uri.parse("${baseUrl}housekeeping");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        throw Exception(
+            "Failed to fetch housekeeping services: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getHousekeepingServiceById(String id) async {
+    var url = Uri.parse("${baseUrl}housekeeping/$id");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        throw Exception(
+            "Failed to fetch housekeeping service details: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchHousekeepingServices(
+      Map<String, dynamic> filters) async {
+    var url = Uri.parse("${baseUrl}housekeeping/search");
+    try {
+      final res = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(filters));
+      if (res.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
+      } else {
+        throw Exception("Search failed: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Search failed: $e");
+    }
+  }
+
+  // ==================== COMMUNICATION METHODS ====================
+  static Future<List<Map<String, dynamic>>> getCommunicationServices() async {
+    var url = Uri.parse("${baseUrl}communications");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        if (responseData['success'] == true && responseData['data'] is List) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Failed to parse communication services");
+        }
+      } else {
+        throw Exception(
+            "Failed to fetch communication services: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getCommunicationServiceById(String id) async {
+    var url = Uri.parse("${baseUrl}communications/$id");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        throw Exception(
+            "Failed to fetch communication service details: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchCommunicationServices(
+      Map<String, dynamic> filters) async {
+    var url = Uri.parse("${baseUrl}communications/search");
+    try {
+      final res = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(filters));
+      if (res.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
+      } else {
+        throw Exception("Search failed: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Search failed: $e");
+    }
+  }
+
+  // ==================== HEALTH SERVICES METHODS ====================
+  static Future<List<Map<String, dynamic>>> getHealthServices() async {
+    var url = Uri.parse("${baseUrl}health-services");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        if (responseData['success'] == true && responseData['data'] is List) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Failed to parse health services");
+        }
+      } else {
+        throw Exception(
+            "Failed to fetch health services: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getHealthServiceById(String id) async {
+    var url = Uri.parse("${baseUrl}health-services/$id");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        throw Exception(
+            "Failed to fetch health service details: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchHealthServices(
+      Map<String, dynamic> filters) async {
+    var url = Uri.parse("${baseUrl}health-services/search");
+    try {
+      final res = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(filters));
+      if (res.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
+      } else {
+        throw Exception("Search failed: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Search failed: $e");
+    }
+  }
+
+  // ==================== OTHER SERVICES METHODS (NEW) ====================
+  static Future<List<Map<String, dynamic>>> getOtherServices() async {
+    var url = Uri.parse("${baseUrl}other-services");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        if (responseData['success'] == true && responseData['data'] is List) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          throw Exception("Failed to parse other services");
+        }
+      } else {
+        throw Exception(
+            "Failed to fetch other services: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getOtherServiceById(String id) async {
+    var url = Uri.parse("${baseUrl}other-services/$id");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
+      } else {
+        throw Exception(
+            "Failed to fetch other service details: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> searchOtherServices(
+      Map<String, dynamic> filters) async {
+    var url = Uri.parse("${baseUrl}other-services/search");
+    try {
+      final res = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(filters));
+      if (res.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
+      } else {
+        throw Exception("Search failed: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Search failed: $e");
     }
   }
 }

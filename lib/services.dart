@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'repair_list_page.dart'; // Import your repair list page
-import 'housekeeping_list_page.dart'; // Import housekeeping list page
+import 'housekeeping_list_page.dart';
+import 'vehicle_repair.dart';
+import 'communication_list_page.dart';
+import 'health_list_page.dart';
+import 'other_services_list_page.dart'; // Import the new other services page
 
 class ServicesPage extends StatefulWidget {
   @override
@@ -15,66 +18,51 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Vehicle Repair',
       'description': 'Quick and reliable vehicle repair services',
       'color': Colors.orange,
-      'route': '/repair_list',
+      'page': VehicleRepairPage(),
       'hasRoute': true,
     },
     {
       'icon': Icons.cleaning_services,
       'label': 'House Keeping',
       'description': 'Professional cleaning and housekeeping services',
-      'color': Color.fromARGB(255, 102, 183, 251), // Your blue theme
-      'route': '/housekeeping_list',
-      'hasRoute': true, // Now available
+      'color': Color.fromARGB(255, 102, 183, 251),
+      'page': HousekeepingListPage(),
+      'hasRoute': true,
     },
     {
-      'icon': Icons.phone,
+      'icon': Icons.router,
       'label': 'Communication',
       'description': 'Stay connected with our communication services',
       'color': Colors.blue,
-      'route': null,
-      'hasRoute': false,
+      'page': CommunicationListPage(),
+      'hasRoute': true,
     },
     {
       'icon': Icons.local_hospital,
       'label': 'Hospital Service',
       'description': 'Emergency and medical care services',
       'color': Colors.red,
-      'route': null,
-      'hasRoute': false,
+      'page': HealthListPage(),
+      'hasRoute': true,
     },
     {
       'icon': Icons.miscellaneous_services,
       'label': 'Other Services',
       'description': 'Additional services for your convenience',
       'color': Colors.purple,
-      'route': null,
-      'hasRoute': false,
+      'page': OtherServicesListPage(), // ADDED page route
+      'hasRoute': true, // ENABLED route
     },
   ];
 
   void _handleServiceTap(Map<String, dynamic> service) {
-    if (service['hasRoute'] == true) {
-      // Navigate to the specific service page
-      switch (service['label']) {
-        case 'Vehicle Repair':
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RepairListPage(),
-            ),
-          );
-          break;
-        case 'House Keeping':
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HousekeepingListPage(),
-            ),
-          );
-          break;
-        default:
-          _showComingSoonMessage(service);
-      }
+    if (service['hasRoute'] == true && service['page'] != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => service['page'],
+        ),
+      );
     } else {
       _showComingSoonMessage(service);
     }
@@ -192,7 +180,7 @@ class _ServicesPageState extends State<ServicesPage> {
               itemCount: serviceOptions.length,
               itemBuilder: (context, index) {
                 final service = serviceOptions[index];
-                
+
                 return Container(
                   margin: EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
@@ -227,9 +215,9 @@ class _ServicesPageState extends State<ServicesPage> {
                               color: service['color'],
                             ),
                           ),
-                          
+
                           SizedBox(width: 20),
-                          
+
                           // Service details
                           Expanded(
                             child: Column(
@@ -255,7 +243,8 @@ class _ServicesPageState extends State<ServicesPage> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: Colors.green,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Text(
                                           'Available',
@@ -280,14 +269,14 @@ class _ServicesPageState extends State<ServicesPage> {
                               ],
                             ),
                           ),
-                          
+
                           // Arrow icon with different styles for available vs coming soon
                           Icon(
-                            service['hasRoute'] == true 
-                                ? Icons.arrow_forward_ios 
+                            service['hasRoute'] == true
+                                ? Icons.arrow_forward_ios
                                 : Icons.schedule,
-                            color: service['hasRoute'] == true 
-                                ? service['color'] 
+                            color: service['hasRoute'] == true
+                                ? service['color']
                                 : Colors.black26,
                             size: 16,
                           ),
@@ -347,8 +336,10 @@ class _ServicesPageState extends State<ServicesPage> {
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Contact support feature coming soon!'),
-                          backgroundColor: Color.fromARGB(255, 102, 183, 251),
+                          content:
+                              Text('Contact support feature coming soon!'),
+                          backgroundColor:
+                              Color.fromARGB(255, 102, 183, 251),
                         ),
                       );
                     },
@@ -357,7 +348,8 @@ class _ServicesPageState extends State<ServicesPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                     ),
                     child: Text(
                       'Contact Support',

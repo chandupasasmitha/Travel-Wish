@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'services/api.dart';
 
-class CommunicationDetailsPage extends StatefulWidget {
+class OtherServicesDetailsPage extends StatefulWidget {
   final String serviceId;
 
-  const CommunicationDetailsPage({Key? key, required this.serviceId}) : super(key: key);
+  const OtherServicesDetailsPage({Key? key, required this.serviceId}) : super(key: key);
 
   @override
-  _CommunicationDetailsPageState createState() => _CommunicationDetailsPageState();
+  _OtherServicesDetailsPageState createState() => _OtherServicesDetailsPageState();
 }
 
-class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
+class _OtherServicesDetailsPageState extends State<OtherServicesDetailsPage> {
   Map<String, dynamic>? service;
   bool isLoading = true;
 
@@ -22,12 +22,12 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
 
   Future<void> _fetchServiceDetails() async {
     try {
-      final responseData = await Api.getCommunicationServiceById(widget.serviceId);
+      final responseData = await Api.getOtherServiceById(widget.serviceId);
       setState(() {
-        if (responseData.containsKey('data') && responseData['data'] is Map<String, dynamic>) {
+        if (responseData['success'] == true && responseData['data'] is Map<String, dynamic>) {
           service = responseData['data'];
         } else {
-          service = responseData; // Fallback
+          throw Exception('Failed to load details from API');
         }
         isLoading = false;
       });
@@ -59,24 +59,24 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
   SliverAppBar _buildSliverAppBar() {
     return SliverAppBar(
       expandedHeight: 250.0,
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.purple,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text(service?['companyName'] ?? 'Details', style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold)),
+        title: Text(service?['fullNameOrBusinessName'] ?? 'Details', style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold)),
         background: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.blue.withOpacity(0.6), Colors.lightBlue.withOpacity(0.6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+            gradient: LinearGradient(colors: [Colors.purple.withOpacity(0.6), Colors.deepPurple.withOpacity(0.6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
           ),
-          child: Icon(Icons.router, color: Colors.white.withOpacity(0.5), size: 100),
+          child: Icon(Icons.miscellaneous_services, color: Colors.white.withOpacity(0.5), size: 100),
         ),
       ),
     );
   }
 
   SliverList _buildSliverList() {
-    final serviceTypes = service?['serviceTypesOffered'] as List<dynamic>? ?? [];
-    final paymentMethods = service?['paymentMethods'] as List<dynamic>? ?? [];
-    final coverageAreas = service?['serviceCoverageArea'] as List<dynamic>? ?? [];
+    final servicesOffered = service?['listOfServicesOffered'] as List<dynamic>? ?? [];
+    final availability = service?['availability'] as Map<String, dynamic>? ?? {};
+    final availableDays = (availability['availableDays'] as List<dynamic>? ?? []).join(', ');
 
     return SliverList(
       delegate: SliverChildListDelegate([
@@ -90,16 +90,11 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
               _buildInfoCard(),
               SizedBox(height: 24),
               _buildSectionTitle('Services Offered'),
-              _buildChips(serviceTypes),
+              _buildChips(servicesOffered),
               SizedBox(height: 24),
-               _buildSectionTitle('Coverage Area'),
-              _buildChips(coverageAreas),
-              SizedBox(height: 24),
-              _buildSectionTitle('Payment Methods'),
-              _buildChips(paymentMethods),
-              SizedBox(height: 24),
-              _buildSectionTitle('Special Features'),
-              Text(service?['specialFeatures'] ?? 'No special features listed.', style: TextStyle(fontSize: 14, height: 1.5)),
+               _buildSectionTitle('Availability'),
+              _buildInfoRow(Icons.calendar_today, 'Days: $availableDays'),
+              _buildInfoRow(Icons.access_time, 'Times: ${availability['availableTimeSlots'] ?? 'N/A'}'),
               SizedBox(height: 32),
               _buildContactButton(),
             ],
@@ -110,7 +105,7 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
   }
 
   Widget _buildHeader() {
-    return Text(service?['companyName'] ?? 'Unknown Service', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold));
+    return Text(service?['fullNameOrBusinessName'] ?? 'Unknown Service', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold));
   }
 
   Widget _buildInfoCard() {
@@ -123,10 +118,10 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
       ),
       child: Column(
         children: [
-          _buildInfoRow(Icons.person, 'Contact: ${service?['contactPerson'] ?? 'N/A'}'),
-          _buildInfoRow(Icons.phone, service?['phoneNumber'] ?? 'No phone number'),
+          _buildInfoRow(Icons.work, 'Service Type: ${service?['typeOfService'] ?? 'N/A'}'),
+          _buildInfoRow(Icons.phone, service?['primaryPhoneNumber'] ?? 'No phone number'),
           _buildInfoRow(Icons.email, service?['emailAddress'] ?? 'No email provided'),
-          _buildInfoRow(Icons.business, 'Years in Business: ${service?['yearsInBusiness']?.toString() ?? 'N/A'}'),
+          _buildInfoRow(Icons.history, 'Experience: ${service?['yearsOfExperience']?.toString() ?? 'N/A'} years'),
         ],
       ),
     );
@@ -136,8 +131,9 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.blue, size: 20),
+          Icon(icon, color: Colors.purple, size: 20),
           SizedBox(width: 16),
           Expanded(child: Text(text, style: TextStyle(fontSize: 14))),
         ],
@@ -156,26 +152,28 @@ class _CommunicationDetailsPageState extends State<CommunicationDetailsPage> {
     if (items.isEmpty) return Text('Not specified.');
     return Wrap(
       spacing: 8.0,
-      runSpacing: 8.0,
+      runSpacing: 4.0,
       children: items.map((item) => Chip(
         label: Text(item.toString()),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.purple.withOpacity(0.1),
+        labelStyle: TextStyle(color: Colors.purple.shade900),
       )).toList(),
     );
   }
 
   Widget _buildContactButton() {
-    return ElevatedButton(
+    return ElevatedButton.icon(
+      icon: Icon(Icons.call),
+      label: Text('Contact Provider', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
         minimumSize: Size(double.infinity, 50),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       onPressed: () {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Contacting service...')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Contacting provider...')));
       },
-      child: Text('Contact Provider', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 }
