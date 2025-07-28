@@ -35,8 +35,15 @@ class EmergencyScreen extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/background01.png',
+                  'assets/background01.png', // Make sure this asset is in your pubspec.yaml
                   fit: BoxFit.cover,
+                  // Added error builder for image
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.blueGrey,
+                      child: Center(child: Text('Image not found', style: TextStyle(color: Colors.white))),
+                    );
+                  },
                 ),
               ),
               SafeArea(
@@ -70,10 +77,17 @@ class EmergencyScreen extends StatelessWidget {
                         SizedBox(height: screenHeight * 0.05),
                         Row(
                           children: [
-                            Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                              size: screenWidth * 0.06,
+                            // FIXED: Wrapped Icon in an IconButton to make it tappable
+                            IconButton(
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: screenWidth * 0.06,
+                              ),
+                              onPressed: () {
+                                // This will navigate back to the previous screen
+                                Navigator.pop(context);
+                              },
                             ),
                             SizedBox(width: screenWidth * 0.02),
                             Text(
@@ -207,6 +221,14 @@ class EmergencyScreen extends StatelessWidget {
               imagePath,
               width: screenWidth * 0.3,
               height: screenWidth * 0.3,
+               errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: screenWidth * 0.3,
+                      height: screenWidth * 0.3,
+                      color: Colors.grey[200],
+                      child: Center(child: Icon(Icons.error, color: Colors.red)),
+                    );
+                  },
             ),
             SizedBox(height: screenHeight * 0.02),
             Text(

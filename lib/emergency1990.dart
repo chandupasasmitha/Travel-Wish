@@ -1,26 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// Your UI class for the ambulance screen
 class TravelWishAmbulanceUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AmbulanceServiceScreen(),
-    );
+    // Directly return the screen content
+    return AmbulanceServiceScreen();
   }
 }
 
 class AmbulanceServiceScreen extends StatelessWidget {
+  // Function to launch the dialer with proper error handling
+  void _launchDialer(String phoneNumber, BuildContext context) async {
+    final Uri phoneUri = Uri.parse('tel:$phoneNumber');
+    try {
+      if (await canLaunchUrl(phoneUri)) {
+        await launchUrl(phoneUri);
+      } else {
+        // Show an error message if the dialer can't be launched
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch dialer for $phoneNumber')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to launch dialer: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Added a transparent background to ensure the previous screen's visuals show through if needed
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
           Positioned.fill(
             child: Image.asset(
               'assets/background.png',
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: Colors.blueGrey,
+                  child: Center(child: Text('Image not found', style: TextStyle(color: Colors.white))),
+                );
+              },
             ),
           ),
           SafeArea(
@@ -34,7 +60,19 @@ class AmbulanceServiceScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Image.asset('assets/logo.png', height: 24),
+                          // ADDED: A working back button
+                          IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          SizedBox(width: 5),
+                          Image.asset('assets/logo.png', height: 24,
+                           errorBuilder: (context, error, stackTrace) {
+                             return Icon(Icons.travel_explore, color: Colors.white);
+                           },
+                          ),
                           SizedBox(width: 5),
                           Text(
                             "travelwish.",
@@ -46,7 +84,14 @@ class AmbulanceServiceScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Icon(Icons.notifications_none, color: Colors.white),
+                      // MODIFIED: This icon is now a button that calls 119
+                      IconButton(
+                        icon: Icon(Icons.notifications, color: Colors.white),
+                        tooltip: 'Call Police (119)',
+                        onPressed: () {
+                          _launchDialer('119', context);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -60,12 +105,10 @@ class AmbulanceServiceScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
+                // MODIFIED: This now correctly calls 1990 on tap
                 GestureDetector(
-                  onTap: () async {
-                    final Uri phoneUri = Uri.parse('tel:1990');
-                    if (await canLaunchUrl(phoneUri)) {
-                      await launchUrl(phoneUri);
-                    }
+                  onTap: () {
+                    _launchDialer('1990', context);
                   },
                   child: Container(
                     padding: EdgeInsets.all(30),
@@ -84,6 +127,9 @@ class AmbulanceServiceScreen extends StatelessWidget {
                       'assets/1990.png',
                       height: 80,
                       width: 80,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.local_hospital, size: 80, color: Colors.red);
+                      },
                     ),
                   ),
                 ),
