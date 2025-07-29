@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'loginpage.dart';
 import 'signuppage.dart';
+import 'card_details_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'card_details_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'dart:typed_data';
 
 void main() {
   runApp(MaterialApp(
@@ -21,7 +21,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
-  File? _profileImage;
+  Uint8List? _profileImageBytes;
   String name = "John David";
   String email = "abc123@gmail.com";
   String phone = "+72 345 678 654";
@@ -49,11 +49,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      withData: true,
+    );
+    if (result != null && result.files.single.bytes != null) {
       setState(() {
-        _profileImage = File(pickedFile.path);
+        _profileImageBytes = result.files.single.bytes!;
       });
     }
   }
@@ -77,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _saveDetails() async {
-    final url = Uri.parse('http://10.0.2.2:2000/api/profile/save');
+    final url = Uri.parse('http://10.10.12.192:2000/api/profile/save');
 
     var request = http.MultipartRequest('POST', url);
     request.fields['name'] = _nameController.text;
@@ -85,10 +87,12 @@ class _ProfilePageState extends State<ProfilePage> {
     request.fields['phone'] = _phoneController.text;
     request.fields['country'] = _countryController.text;
 
-    if (_profileImage != null) {
-      request.files.add(await http.MultipartFile.fromPath(
+    // Optional: You may want to skip image upload for web or convert _profileImageBytes to a base64 string.
+    if (_profileImageBytes != null) {
+      request.files.add(http.MultipartFile.fromBytes(
         'profileImage',
-        _profileImage!.path,
+        _profileImageBytes!,
+        filename: 'profile.jpg',
       ));
     }
 
@@ -207,12 +211,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: Colors.grey[200],
                 child: Stack(
                   children: [
-                    _profileImage != null
+                    _profileImageBytes != null
                         ? ClipOval(
-                            child: Image.file(_profileImage!,
-                                fit: BoxFit.cover,
-                                width: screenWidth * 0.36,
-                                height: screenWidth * 0.36),
+                            child: Image.memory(
+                              _profileImageBytes!,
+                              fit: BoxFit.cover,
+                              width: screenWidth * 0.36,
+                              height: screenWidth * 0.36,
+                            ),
                           )
                         : Icon(Icons.person,
                             size: screenWidth * 0.25, color: Colors.grey[600]),

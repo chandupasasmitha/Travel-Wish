@@ -42,6 +42,10 @@ ffi
 3.7
 file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/ffi-2.1.4/
 file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/ffi-2.1.4/lib/
+file_picker
+2.19
+file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-6.2.1/
+file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-6.2.1/lib/
 file_selector_linux
 3.3
 file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_linux-0.9.3+2/
@@ -318,6 +322,10 @@ web
 3.4
 file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1/
 file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1/lib/
+win32
+3.7
+file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.13.0/
+file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.13.0/lib/
 xdg_directories
 3.3
 file:///C:/Users/Chamathka/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.1.0/
