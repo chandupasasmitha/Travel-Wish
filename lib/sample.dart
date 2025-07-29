@@ -84,7 +84,7 @@ class _ItemGalleryState extends State<ItemGallery> {
                           borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(15)),
                           child: Image.network(
-                            item.imageUrl,
+                            item.images[0].url,
                             fit: BoxFit.cover,
                           ),
                         ),

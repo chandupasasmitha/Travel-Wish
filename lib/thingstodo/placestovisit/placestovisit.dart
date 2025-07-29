@@ -150,7 +150,6 @@ class _PlacestovisitState extends State<Placestovisit> {
     }
   }
 
-//Creating the card
   @override
   Widget build(BuildContext context) {
     return items.isEmpty
@@ -169,24 +168,30 @@ class _PlacestovisitState extends State<Placestovisit> {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ItemDetailsPlacestovisit(
-                                title: item.title,
-                                imageUrl: item.imageUrl,
-                                description: item.description,
-                                duration: item.tripDuration,
-                                bestfor: item.bestfor,
-                                price: item.ticketPrice,
-                                googleMapsUrl: item.googleMapsUrl,
-                                bestTimetoVisit: item.bestTimetoVisit,
-                                whatToBring: item.whatToBring,
-                                whatToWear: item.whatToWear,
-                                precautions: item.precautions,
-                                activities: item.activities,
-                                contactno: item.contactno,
-                                address: item.address,
-                              )));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemDetailsPlacestovisit(
+                        title: item.title,
+                        images: item.images,
+                        category: item.category,
+                        description: item.description,
+                        tripDuration: item.tripDuration,
+                        bestfor: item.bestfor,
+                        ticketPrice: item.ticketPrice,
+                        googleMapsUrl: item.googleMapsUrl,
+                        bestTimetoVisit: item.bestTimetoVisit,
+                        whatToBring: item.whatToBring,
+                        whatToWear: item.whatToWear,
+                        precautions: item.precautions,
+                        activities: item.activities,
+                        contactInfo: item.contactInfo,
+                        bus: item.bus,
+                        taxi: item.taxi,
+                        train: item.train,
+                        address: item.address,
+                      ),
+                    ),
+                  );
                 },
                 child: Card(
                   elevation: 3,
@@ -197,29 +202,47 @@ class _PlacestovisitState extends State<Placestovisit> {
                     borderRadius: BorderRadius.circular(30),
                     child: Stack(
                       children: [
+                        // Background image
                         Positioned.fill(
-                          child:
-                              Image.network(item.imageUrl, fit: BoxFit.cover),
+                          child: Image.network(
+                            item.images[0].url,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                        // Dark overlay
                         Positioned.fill(
-                          child:
-                              Container(color: Colors.black.withOpacity(0.5)),
+                          child: Container(
+                            color: Colors.black.withOpacity(0.5),
+                          ),
                         ),
+                        // Text content
                         Positioned(
                           left: 16,
+                          right:
+                              16, // Add right padding to constrain text width
                           bottom: 16,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 item.title,
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
+                                  color: Colors.white,
+                                  fontSize: 15, // Set title font size to 15
+                                  fontWeight: FontWeight.normal, // Not bold
+                                ),
+                                maxLines:
+                                    3, // Allow up to 3 lines for long text
+                                overflow: TextOverflow.visible, // Let text wrap
                               ),
+                              const SizedBox(height: 4),
                               const Text(
                                 'See Review',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 13),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),
