@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async'; // For Timer (if implementing proper polling)
 import 'services/api.dart'; // Ensure this path is correct
+import 'utils/user_manager.dart'; // <--- Import UserManager
 
 class BookingPage extends StatefulWidget {
   final Map<String, dynamic> accommodationDetails;
@@ -117,28 +118,44 @@ class _BookingPageState extends State<BookingPage> {
       _bookingStatus = 'pending'; // Reset status when submitting
     });
 
-    final bookingData = {
-      'accommodationId': widget.accommodationDetails['_id'],
-      'accommodationName': widget.accommodationDetails['accommodationName'],
-      'checkInDate':
-          _checkInDate!.toIso8601String().split('T')[0], // YYYY-MM-DD
-      'checkOutDate':
-          _checkOutDate!.toIso8601String().split('T')[0], // YYYY-MM-DD
-      'numberOfGuests': _numberOfGuests,
-      'roomType': _selectedRoom!['type'],
-      'pricePerNight': _selectedRoom!['pricePerNight'],
-      'totalPrice': _selectedRoom!['pricePerNight'] *
-          _checkOutDate!.difference(_checkInDate!).inDays,
-      'customerEmail':
-          'customer@example.com', // Replace with actual logged-in user's email
-      'customerName':
-          'Current Customer', // Replace with actual logged-in user's name
-      'status': 'pending', // Initial status
-    };
+    // Retrieve customerUserId, customerEmail, customerName from UserManager
+    final String? customerUserId = await UserManager.getUserId();
+    final String? customerName = await UserManager.getUserName();
+    final String? customerEmail = await UserManager.getUserEmail();
+
+    if (customerUserId == null ||
+        customerName == null ||
+        customerEmail == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('User information missing. Please log in again.')),
+      );
+      setState(() {
+        _isBookingLoading = false;
+      });
+      return;
+    }
 
     try {
       final response = await Api.createBooking(
-          bookingData); // Call your API to create booking
+        accommodationId: widget.accommodationDetails['_id'],
+        accommodationName: widget.accommodationDetails['accommodationName'],
+        checkInDate:
+            _checkInDate!.toIso8601String().split('T')[0], // YYYY-MM-DD
+        checkOutDate:
+            _checkOutDate!.toIso8601String().split('T')[0], // YYYY-MM-DD
+        numberOfGuests: _numberOfGuests,
+        roomType: _selectedRoom!['type'],
+        pricePerNight:
+            _selectedRoom!['pricePerNight'].toDouble(), // Ensure it's double
+        totalPrice: (_selectedRoom!['pricePerNight'] *
+                _checkOutDate!.difference(_checkInDate!).inDays)
+            .toDouble(), // Ensure it's double
+        customerEmail: customerEmail, // Use retrieved email
+        customerName: customerName, // Use retrieved name
+        customerUserId: customerUserId, // Pass the retrieved user ID here
+      );
+
       debugPrint('Booking API response: $response'); // <-- Add this line
 
       if (response['success'] == true) {

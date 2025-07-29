@@ -3,9 +3,11 @@ import 'loginpage.dart';
 import 'services/api.dart'; // Import the login page
 
 class SignUpScreen extends StatelessWidget {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   SignUpScreen({super.key});
 
   @override
@@ -26,81 +28,121 @@ class SignUpScreen extends StatelessWidget {
           // Sign-up Form
           Center(
             child: Padding(
-              padding: EdgeInsets.only(top: 130, left: 30, right: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Create an Account",
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Sign Up to get started",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 30),
-
-                  _buildInputField(
-                      "Username", Icons.person, false, usernameController),
-                  const SizedBox(height: 20),
-                  _buildInputField(
-                      "Email", Icons.email, false, emailController),
-                  const SizedBox(height: 20),
-                  _buildInputField(
-                      "Password", Icons.lock, true, passwordController),
-                  const SizedBox(height: 30),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      var data1 = {
-                        "username": usernameController.text,
-                        "email": emailController.text,
-                        "password": passwordController.text
-                      };
-
-                      Api.adduser(data1);
-
-                      // Navigate to the Login Page
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 15),
+              padding: const EdgeInsets.only(top: 130, left: 30, right: 30),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "Create an Account",
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue),
                     ),
-                    child: const Text("Sign Up",
-                        style: TextStyle(fontSize: 18, color: Colors.white)),
-                  ),
-                  const SizedBox(height: 50),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Sign Up to get started",
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 30),
 
-                  // Login Navigation
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Already have an account?",
-                          style: TextStyle(color: Colors.black54)),
-                      TextButton(
-                        onPressed: () {
+                    _buildInputField(
+                      "Username",
+                      Icons.person,
+                      false,
+                      usernameController,
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter a username";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    _buildInputField(
+                      "Email",
+                      Icons.email,
+                      false,
+                      emailController,
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter an email";
+                        }
+                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                        if (!emailRegex.hasMatch(value)) {
+                          return "Enter a valid email";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    _buildInputField(
+                      "Password",
+                      Icons.lock,
+                      true,
+                      passwordController,
+                      (value) {
+                        if (value == null || value.length < 6) {
+                          return "Password must be at least 6 characters";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 30),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          var data1 = {
+                            "username": usernameController.text,
+                            "email": emailController.text,
+                            "password": passwordController.text
+                          };
+
+                          Api.adduser(data1);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen()),
                           );
-                        },
-                        child: const Text("Log in",
-                            style: TextStyle(color: Colors.blue)),
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 15),
                       ),
-                    ],
-                  ),
-                ],
+                      child: const Text("Sign Up",
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                    ),
+                    const SizedBox(height: 50),
+
+                    // Login Navigation
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Already have an account?",
+                            style: TextStyle(color: Colors.black54)),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                            );
+                          },
+                          child: const Text("Log in",
+                              style: TextStyle(color: Colors.blue)),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -109,8 +151,13 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInputField(String hint, IconData icon, bool obscure,
-      TextEditingController controller) {
+  Widget _buildInputField(
+    String hint,
+    IconData icon,
+    bool obscure,
+    TextEditingController controller,
+    String? Function(String?)? validator,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -122,9 +169,10 @@ class SignUpScreen extends StatelessWidget {
               color: Colors.black12, blurRadius: 5, offset: const Offset(0, 3)),
         ],
       ),
-      child: TextField(
-        controller: controller, // ✅ Use the parameter
+      child: TextFormField(
+        controller: controller,
         obscureText: obscure,
+        validator: validator,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Colors.blue),
           hintText: hint,

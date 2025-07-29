@@ -38,7 +38,8 @@ class Api {
     }
   }
 
-  static Future<bool> loginUser(Map loginData) async {
+  // Update this method in your api.dart file
+  static Future<Map<String, dynamic>> loginUser(Map loginData) async {
     var url = Uri.parse("${baseUrl}login");
     try {
       final res = await http.post(
@@ -46,11 +47,23 @@ class Api {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(loginData),
       );
+
       var data = jsonDecode(res.body);
-      return res.statusCode == 200 && data['message'] == "Login successful";
+
+      if (res.statusCode == 200 && data['message'] == "Login successful") {
+        // Return the full response data including user details
+        return {
+          'success': true,
+          'userData': data['user'] ??
+              {}, // Assuming your backend returns user data in 'user' field
+          'message': data['message']
+        };
+      } else {
+        return {'success': false, 'message': data['message'] ?? 'Login failed'};
+      }
     } catch (e) {
       debugPrint("Login error: $e");
-      return false;
+      return {'success': false, 'message': 'Network error: $e'};
     }
   }
 
@@ -225,8 +238,33 @@ class Api {
 
   // ==================== BOOKING METHODS ====================
   static Future<Map<String, dynamic>> createBooking(
-      Map<String, dynamic> bookingData) async {
+      {required String accommodationId,
+      required String accommodationName,
+      required String checkInDate,
+      required String checkOutDate,
+      required int numberOfGuests,
+      required String roomType,
+      required double pricePerNight,
+      required double totalPrice,
+      required String customerEmail,
+      required String customerName,
+      required String customerUserId, // Added customerUserId
+      String? status = 'pending'}) async {
     var url = Uri.parse("${baseUrl}bookings");
+    Map<String, dynamic> bookingData = {
+      'accommodationId': accommodationId,
+      'accommodationName': accommodationName,
+      'checkInDate': checkInDate,
+      'checkOutDate': checkOutDate,
+      'numberOfGuests': numberOfGuests,
+      'roomType': roomType,
+      'pricePerNight': pricePerNight,
+      'totalPrice': totalPrice,
+      'customerEmail': customerEmail,
+      'customerName': customerName,
+      'customerUserId': customerUserId,
+      'status': status,
+    };
     try {
       final res = await http.post(url,
           headers: {"Content-Type": "application/json"},
@@ -248,6 +286,30 @@ class Api {
       return {'success': false, 'error': e.toString()};
     }
   }
+
+  static Future<List<Map<String, dynamic>>> getUserBookings(
+      String userId) async {
+    var url = Uri.parse("${baseUrl}bookings/user/$userId");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        if (responseData is Map && responseData['data'] is List) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          return [];
+        }
+      } else {
+        throw Exception("Failed to fetch user bookings: ${res.statusCode}");
+      }
+    } catch (e) {
+      debugPrint("Error fetching user bookings: $e");
+      throw Exception("Error fetching user bookings: $e");
+    }
+  }
+
+  //==========================================================
 
   static Future<Map<String, dynamic>> bookGuide({
     required String guideId,
@@ -302,6 +364,84 @@ class Api {
       throw Exception("Booking taxi failed: $e");
     }
   }
+
+// ==================== NOTIFICATION METHODS ====================
+  static Future<List<Map<String, dynamic>>> getUserNotifications(
+      String userId) async {
+    var url = Uri.parse("${baseUrl}notifications/$userId");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        if (responseData is Map && responseData['data'] is List) {
+          return List<Map<String, dynamic>>.from(responseData['data']);
+        } else {
+          return [];
+        }
+      } else {
+        throw Exception("Failed to fetch notifications: ${res.statusCode}");
+      }
+    } catch (e) {
+      debugPrint("Error fetching notifications: $e");
+      throw Exception("Error fetching notifications: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> markNotificationAsRead(
+      String notificationId) async {
+    var url = Uri.parse("${baseUrl}notifications/$notificationId/read");
+    try {
+      final res =
+          await http.put(url, headers: {"Content-Type": "application/json"});
+      return jsonDecode(res.body);
+    } catch (e) {
+      debugPrint("Error marking notification as read: $e");
+      throw Exception("Error marking notification as read: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> markAllNotificationsAsRead(
+      String userId) async {
+    var url = Uri.parse("${baseUrl}notifications/$userId/read-all");
+    try {
+      final res =
+          await http.put(url, headers: {"Content-Type": "application/json"});
+      return jsonDecode(res.body);
+    } catch (e) {
+      debugPrint("Error marking all notifications as read: $e");
+      throw Exception("Error marking all notifications as read: $e");
+    }
+  }
+
+  static Future<int> getUnreadNotificationCount(String userId) async {
+    var url = Uri.parse("${baseUrl}notifications/$userId/unread-count");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      if (res.statusCode == 200) {
+        var responseData = jsonDecode(res.body);
+        return responseData['unreadCount'] ?? 0;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      debugPrint("Error getting unread count: $e");
+      return 0;
+    }
+  }
+
+  static Future<Map<String, dynamic>> deleteNotification(
+      String notificationId) async {
+    var url = Uri.parse("${baseUrl}notifications/$notificationId");
+    try {
+      final res =
+          await http.delete(url, headers: {"Content-Type": "application/json"});
+      return jsonDecode(res.body);
+    } catch (e) {
+      debugPrint("Error deleting notification: $e");
+      throw Exception("Error deleting notification: $e");
+
 // ==================== RESTUARANT METHODS ====================
 
   static Future<List<Map<String, dynamic>>> getRestaurants() async {

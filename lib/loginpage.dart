@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'signuppage.dart';
 import 'services/api.dart';
-import 'home.dart'; // Import your API service
+import 'home.dart';
+import 'utils/user_manager.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,30 +24,72 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = true;
       });
 
-      final success = await Api.loginUser({
-        "username": usernameController.text,
-        "password": passwordController.text,
-      });
+      try {
+        final result = await Api.loginUser({
+          "username": usernameController.text,
+          "password": passwordController.text,
+        });
 
-      setState(() {
-        _isLoading = false;
-      });
+        setState(() {
+          _isLoading = false;
+        });
 
-      if (success) {
+        if (result['success']) {
+          // Extract user data from the response
+          Map<String, dynamic> userData = result['userData'] ?? {};
+
+          // Adjust these field names based on your backend response
+          String userId = userData['_id'] ??
+              userData['id'] ??
+              DateTime.now().millisecondsSinceEpoch.toString();
+          String userName = userData['username'] ??
+              userData['name'] ??
+              usernameController.text;
+          String userEmail =
+              userData['email'] ?? '${usernameController.text}@example.com';
+
+          if (userId.isNotEmpty) {
+            // Save user data using UserManager
+            bool saveSuccess = await UserManager.saveUserData(
+              userId: userId,
+              userName: userName,
+              userEmail: userEmail,
+            );
+
+            if (saveSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Login Successful")),
+              );
+
+              // Navigate to home screen
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(username: userName),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Error saving user data")),
+              );
+            }
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Invalid user data received")),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(result['message'] ?? "Invalid credentials")),
+          );
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login Successful")),
-        );
-        // Navigate to home or dashboard
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  HomeScreen(username: usernameController.text)),
-        );
-        // Navigator.pushReplacement(...);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Invalid credentials")),
+          SnackBar(content: Text("Login error: $e")),
         );
       }
     }
