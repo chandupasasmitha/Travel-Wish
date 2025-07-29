@@ -8,6 +8,8 @@ import 'services.dart';
 import 'notification_page.dart';
 import 'services/api.dart';
 import 'utils/user_manager.dart';
+import 'emergency_home.dart'; // Import your existing Emergency home page
+import 'package:test/restaurant.dart';
 
 void main() {
   runApp(MyApp());
@@ -78,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> options = [
     {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
     {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
-    {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': null},
-    {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': null},
+    {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': Restaurant()},
+    {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': EmergencyScreen()}, // Updated Emergency route
     {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
     {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': Taxi()},
     {'icon': Icons.people, 'label': 'Guides', 'route': Guide()},
@@ -89,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'label': 'Services',
       'route': ServicesPage()
     },
+
   ];
 
   final List<Map<String, String>> popularPlaces = [
