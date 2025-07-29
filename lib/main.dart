@@ -3,11 +3,11 @@ import 'loginpage.dart';
 import 'signuppage.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Main());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Main extends StatelessWidget {
+  const Main({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +52,8 @@ class HomeScreen extends StatelessWidget {
                       // Logo
                       Image.asset(
                         'assets/logo.png',
-                        width: screenWidth * 0.35, 
-                        height: screenWidth * 0.2, 
+                        width: screenWidth * 0.35,
+                        height: screenWidth * 0.2,
                       ),
 
                       SizedBox(height: screenHeight * 0.02),
@@ -90,16 +90,20 @@ class HomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.02),
                           ),
                           child: Text(
                             'Log In',
-                            style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                color: Colors.black),
                           ),
                         ),
                       ),
@@ -124,16 +128,20 @@ class HomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                            padding: EdgeInsets.symmetric(
+                                vertical: screenHeight * 0.02),
                           ),
                           child: Text(
                             'Sign Up',
-                            style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                color: Colors.black),
                           ),
                         ),
                       ),
