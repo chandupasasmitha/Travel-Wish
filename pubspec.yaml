@@ -110,6 +110,7 @@ flutter:
     - assets/bell.png
     - assets/image04.png
     - assets/logo.png
+    - assets/rectangle.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
