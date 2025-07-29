@@ -3,8 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String baseUrl = "http://localhost:2000/api/";
-
+  static const String baseUrl = "http://10.0.2.2:2000/api/";
   // ==================== USER METHODS ====================
   static adduser(Map udata) async {
     var url = Uri.parse("${baseUrl}add_data");
@@ -441,6 +440,8 @@ class Api {
     } catch (e) {
       debugPrint("Error deleting notification: $e");
       throw Exception("Error deleting notification: $e");
+    }
+  }
 
 // ==================== RESTUARANT METHODS ====================
 
