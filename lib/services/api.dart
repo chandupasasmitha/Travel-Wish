@@ -104,7 +104,7 @@ class Api {
 
   // ==================== GUIDE METHODS ====================
   static Future<List<Map<String, dynamic>>> getGuides() async {
-    var url = Uri.parse("${baseUrl}guides");
+    var url = Uri.parse("${baseUrl}guides/guides");
     try {
       final res =
           await http.get(url, headers: {"Content-Type": "application/json"});
@@ -165,8 +165,9 @@ class Api {
 
   // ==================== TAXI METHODS ====================
   static Future<List<Map<String, dynamic>>> getTaxiDrivers() async {
-    var url = Uri.parse("${baseUrl}taxis");
+    var url = Uri.parse("${baseUrl}taxi/taxis");
     try {
+      
       final res =
           await http.get(url, headers: {"Content-Type": "application/json"});
       return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
@@ -324,6 +325,99 @@ class Api {
       return jsonDecode(res.body);
     } catch (e) {
       throw Exception("Failed to fetch restaurant details: $e");
+    }
+  }
+
+   static Future<List<Map<String, dynamic>>> getVehicleRepairs() async {
+    var url = Uri.parse("${baseUrl}vehiclerepair");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body);
+        if (data['success'] == true && data['data'] is List) {
+          return List<Map<String, dynamic>>.from(data['data']);
+        } else {
+          throw Exception("Invalid response format");
+        }
+      } else {
+        throw Exception("Failed to load vehicle repairs: ${res.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch vehicle repairs: $e");
+    }
+  }
+
+
+  static Future<List<Map<String, dynamic>>> getHousekeepingServices() async {
+    var url = Uri.parse("${baseUrl}houeskeeping/housekeeping");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      final body = jsonDecode(res.body);
+      if (body['success'] == true && body['data'] != null) {
+        return List<Map<String, dynamic>>.from(body['data']);
+      } else {
+        throw Exception("Invalid response structure: ${res.body}");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch housekeeping services: $e");
+    }
+  }
+
+  
+
+  /// Fetch all communication services
+  static Future<List<Map<String, dynamic>>> getCommunicationServices() async {
+    var url = Uri.parse("${baseUrl}communication");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      final body = jsonDecode(res.body);
+
+      if (body['success'] == true && body['data'] != null) {
+        return List<Map<String, dynamic>>.from(body['data']);
+      } else {
+        throw Exception("Invalid response structure: ${res.body}");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch communication services: $e");
+    }
+  }
+
+
+  static Future<List<Map<String, dynamic>>> getDoctors() async {
+    final url = Uri.parse("${baseUrl}health/doctors");
+    try {
+      final res =
+          await http.get(url, headers: {"Content-Type": "application/json"});
+      final body = jsonDecode(res.body);
+
+      if (body['success'] == true && body['data'] != null) {
+        return List<Map<String, dynamic>>.from(body['data']);
+      } else {
+        throw Exception("Invalid doctor data");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch doctors: $e");
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getOtherServices() async {
+    final url = Uri.parse("${baseUrl}other/other-services");
+
+    try {
+      final response = await http.get(url, headers: {"Content-Type": "application/json"});
+      final body = jsonDecode(response.body);
+
+      if (body['success'] == true && body['data'] != null) {
+        return List<Map<String, dynamic>>.from(body['data']);
+      } else {
+        throw Exception("Invalid data format");
+      }
+    } catch (e) {
+      throw Exception("Failed to fetch other services: $e");
     }
   }
 

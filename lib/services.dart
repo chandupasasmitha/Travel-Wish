@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
- // Import the new other services page
+import 'vehiclerepair.dart'; // Import the Vehicle Repair page
+import 'housekeeping.dart';
+import 'communication.dart';
+import 'doctors.dart';
+import 'other.dart';
+// Make sure the file 'vehiclerepair.dart' exists and contains a class named VehicleRepairPage
 
 class ServicesPage extends StatefulWidget {
   @override
@@ -14,7 +19,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Vehicle Repair',
       'description': 'Quick and reliable vehicle repair services',
       'color': Colors.orange,
-      //'page': VehicleRepairPage(),
+      'page': VehicleRepairPage(),
       'hasRoute': true,
     },
     {
@@ -22,7 +27,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'House Keeping',
       'description': 'Professional cleaning and housekeeping services',
       'color': Color.fromARGB(255, 102, 183, 251),
-      //'page': HousekeepingListPage(),
+      'page': HousekeepingPage(),
       'hasRoute': true,
     },
     {
@@ -30,7 +35,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Communication',
       'description': 'Stay connected with our communication services',
       'color': Colors.blue,
-//'page': CommunicationListPage(),
+      'page': CommunicationPage(),
       'hasRoute': true,
     },
     {
@@ -38,7 +43,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Hospital Service',
       'description': 'Emergency and medical care services',
       'color': Colors.red,
-      //'page': HealthListPage(),
+      'page': DoctorsPage(),
       'hasRoute': true,
     },
     {
@@ -46,7 +51,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Other Services',
       'description': 'Additional services for your convenience',
       'color': Colors.purple,
-      //'page': OtherServicesListPage(), // ADDED page route
+      'page': OtherServicesPage(), // ADDED page route
       'hasRoute': true, // ENABLED route
     },
   ];
