@@ -18,6 +18,10 @@ collection
 3.4
 file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.19.1/
 file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.19.1/lib/
+crypto
+3.4
+file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.6/
+file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.6/lib/
 cupertino_icons
 3.1
 file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/cupertino_icons-1.0.8/
@@ -162,6 +166,10 @@ web
 3.4
 file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1/
 file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1/lib/
+web_socket_channel
+2.15
+file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0/
+file:///C:/Users/DELL/AppData/Local/Pub/Cache/hosted/pub.dev/web_socket_channel-2.4.0/lib/
 sky_engine
 3.7
 file:///C:/src/flutter/bin/cache/pkg/sky_engine/

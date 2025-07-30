@@ -1,6 +1,13 @@
+import 'dart:ffi' as ffi; //
+import './restaurantbooking.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'services/api.dart'; // Assuming your api.dart is in a services folder
+import 'services/api.dart';
+import 'dart:convert';
+import '../../models/review.dart';
+import '../../config.dart';
+import 'package:http/http.dart'
+    as http; // Assuming your api.dart is in a services folder
 
 class RestaurantDetailsPage extends StatefulWidget {
   final String restaurantId;
@@ -21,6 +28,107 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   void initState() {
     super.initState();
     _fetchRestaurantDetails();
+  }
+
+  Future<List<Review>> fetchReviews() async {
+    // Your API endpoint for fetching reviews of a place
+    final url = Uri.parse('$baseUrl/api/reviews');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        // Map each JSON object to a Review
+        return jsonData
+            .map((reviewJson) => Review.fromJson(reviewJson))
+            .toList();
+      } else {
+        throw Exception('Failed to load reviews: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching reviews: $e');
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchReviewsWithStats(
+      String restaurantName) async {
+    final url = Uri.parse('$baseUrl/api/reviews');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        // Filter reviews for this specific restaurant
+        final filteredReviews = jsonData.where((reviewJson) {
+          final category = reviewJson['category']?.toString();
+          final title = reviewJson['title']?.toString();
+          return category == 'Restaurants' && title == restaurantName;
+        }).toList();
+
+        final int reviewCount = filteredReviews.length;
+
+        double totalRating = 0;
+        for (var reviewJson in filteredReviews) {
+          final ratingRaw = reviewJson['rating'];
+          final rating = double.tryParse(ratingRaw.toString()) ?? 0.0;
+          totalRating += rating;
+        }
+
+        double averageRating =
+            reviewCount > 0 ? totalRating / reviewCount : 0.0;
+
+        return {
+          'reviews': filteredReviews
+              .map((reviewJson) => Review.fromJson(reviewJson))
+              .toList(),
+          'reviewCount': reviewCount,
+          'averageRating': double.parse(averageRating.toStringAsFixed(1)),
+        };
+      } else {
+        throw Exception('Failed to load reviews: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching reviews: $e');
+      return {
+        'reviews': [],
+        'reviewCount': 0,
+        'averageRating': 0.0,
+      };
+    }
+  }
+
+  Future<void> submitReview({
+    required String title,
+    required String username,
+    required String reviewText,
+    required double rating,
+  }) async {
+    final url = Uri.parse('$baseUrl/api/reviews');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'title': title,
+          'username': username,
+          'reviewText': reviewText,
+          'rating':
+              rating.toString(), // send rating as string if API expects string
+        }),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        print('Review submitted successfully ✅');
+        print(response.body);
+      } else {
+        print('Failed to submit review ❌: ${response.statusCode}');
+        throw Exception('Failed to submit review: ${response.body}');
+      }
+    } catch (e) {
+      print('Error submitting review: $e');
+    }
   }
 
   Future<void> _fetchRestaurantDetails() async {
@@ -76,12 +184,37 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   }
 
   String _getOpeningHours() {
-    Map<String, dynamic>? hours = restaurant?['openingHours'];
-    if (hours == null) return 'Hours not available';
+    Map<String, dynamic>? workingHours = restaurant?['workingHours'];
+    String? openTime = workingHours?['openingTime'];
+    String? closeTime = workingHours?['closingTime'];
+
+    if (openTime == null && closeTime == null) return 'Hours not available';
 
     String today = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
-    String todayHours = hours[today] ?? 'Closed';
-    return 'Today: $todayHours';
+    String todayHours = '$openTime - $closeTime';
+    return todayHours;
+  }
+
+  bool getOpenOrClosed(String todayHours) {
+    // Return false if format is invalid or input is 'closed'
+    if (todayHours.toLowerCase() == 'closed') return false;
+
+    final parts = todayHours.split(' - ');
+    if (parts.length != 2) return false;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    // Parse opening and closing times
+    final openParts = parts[0].split(':').map(int.parse).toList();
+    final closeParts = parts[1].split(':').map(int.parse).toList();
+
+    final openTime = DateTime(
+        today.year, today.month, today.day, openParts[0], openParts[1]);
+    final closeTime = DateTime(
+        today.year, today.month, today.day, closeParts[0], closeParts[1]);
+
+    return now.isAfter(openTime) && now.isBefore(closeTime);
   }
 
   @override
@@ -158,6 +291,10 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   }
 
   SliverList _buildSliverList() {
+    String todayHours = restaurant!['workingHours'] != null
+        ? '${restaurant!['workingHours']['openingTime']} - ${restaurant!['workingHours']['closingTime']}'
+        : 'Closed';
+    String name = restaurant?['restaurantName'];
     return SliverList(
       delegate: SliverChildListDelegate(
         [
@@ -166,13 +303,16 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeader(),
+                _buildHeader(todayHours),
                 SizedBox(height: 16),
                 _buildInfoCard(),
                 SizedBox(height: 24),
                 _buildRatingSection(),
+                _buildRatingDisplayWithAdd(name),
                 SizedBox(height: 24),
                 _buildCuisineSection(),
+                SizedBox(height: 24),
+                _buildAmenitiesSection(),
                 SizedBox(height: 24),
                 _buildMenuHighlights(),
                 SizedBox(height: 24),
@@ -189,10 +329,10 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(String todayHours) {
     double rating = (restaurant?['rating'] ?? 0.0).toDouble();
     String priceRange = restaurant?['priceRange'] ?? '\$';
-    bool isOpen = restaurant?['isOpen'] ?? false;
+    bool isOpen = getOpenOrClosed(todayHours);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,7 +342,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                restaurant?['name'] ?? 'Unknown Restaurant',
+                restaurant?['restaurantName'] ?? 'Unknown Restaurant',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -286,9 +426,9 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
       child: Column(
         children: [
           _buildInfoRow(Icons.location_on,
-              restaurant?['address'] ?? 'Address not provided'),
+              restaurant?['locationAddress'] ?? 'Address not provided'),
           _buildInfoRow(
-              Icons.phone, restaurant?['contact'] ?? 'Phone not available'),
+              Icons.phone, restaurant?['phoneNumber'] ?? 'Phone not available'),
           _buildInfoRow(Icons.access_time, _getOpeningHours()),
           _buildInfoRow(Icons.delivery_dining,
               '${restaurant?['deliveryTime'] ?? 'N/A'} • Delivery available'),
@@ -315,80 +455,220 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     );
   }
 
-  Widget _buildRatingSection() {
-    double rating = (restaurant?['rating'] ?? 0.0).toDouble();
-    int reviewCount = restaurant?['reviewCount'] ?? 0;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildRatingDisplayWithAdd(String title) {
+    return Stack(
       children: [
-        Text(
-          'Rating & Reviews',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 12),
-        Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
+        // 👇 Your whole scrollable content
+        SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(111, 22, 142, 190),
+                        spreadRadius: 0.3,
+                        blurRadius: 12,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  constraints: BoxConstraints(
+                    minHeight: 150,
+                    maxHeight: 300, // Makes reviews box scrollable inside
+                  ),
+                  child: FutureBuilder<List<Review>>(
+                    future: fetchReviews(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text('No reviews found');
+                      } else {
+                        final reviews = snapshot.data!.where(
+                          (review) => review.title == title,
+                        );
+                        if (reviews.isEmpty) {
+                          return Text('No reviews found');
+                        }
+                        return ListView(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          children: reviews.map((review) {
+                            final rating =
+                                double.tryParse(review.rating) ?? 0.0;
+                            return ListTile(
+                              leading: CircleAvatar(
+                                child: Text(
+                                  review.username[0].toUpperCase(),
+                                  style: TextStyle(
+                                    fontFamily: 'Quicksand',
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    review.username,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Quicksand',
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          4), // spacing between name & stars
+                                  Row(
+                                    children: List.generate(
+                                      5,
+                                      (index) => Icon(
+                                        index < rating.floor()
+                                            ? Icons.star
+                                            : (index < rating
+                                                ? Icons.star_half
+                                                : Icons.star_border),
+                                        color: Colors.amber,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              subtitle: Text(
+                                review.reviewText,
+                                style: TextStyle(
+                                  fontFamily: 'Quicksand',
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                // space to avoid FAB overlap
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              Column(
+        ),
+
+        // 👇 FAB pinned to bottom-right of the screen
+        Positioned(
+          bottom: 45,
+          right: 45,
+          child: FloatingActionButton(
+            onPressed: () {
+              ReviewPage().showAddReviewDialog(context, title);
+            },
+            backgroundColor: const Color.fromARGB(255, 210, 208, 211),
+            child: Icon(Icons.add, color: Colors.white),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRatingSection() {
+    return FutureBuilder<Map<String, dynamic>>(
+      future: fetchReviewsWithStats(restaurant?['restaurantName'] ?? ''),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Text('Failed to load reviews');
+        }
+
+        final data = snapshot.data!;
+        final double rating = data['averageRating'] ?? 0.0;
+        final int reviewCount = data['reviewCount'] ?? 0;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Rating & Reviews',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 12),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Row(
                 children: [
-                  Text(
-                    rating.toStringAsFixed(1),
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4A90E2),
-                    ),
+                  Column(
+                    children: [
+                      Text(
+                        rating.toStringAsFixed(1),
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF4A90E2),
+                        ),
+                      ),
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            Icons.star,
+                            color: index < rating.floor()
+                                ? Colors.amber
+                                : Colors.grey[300],
+                            size: 20,
+                          );
+                        }),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        '$reviewCount reviews',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
                   ),
-                  Row(
-                    children: List.generate(5, (index) {
-                      return Icon(
-                        Icons.star,
-                        color: index < rating.floor()
-                            ? Colors.amber
-                            : Colors.grey[300],
-                        size: 20,
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '$reviewCount reviews',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
+                  SizedBox(width: 24),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildRatingBar('Food Quality', 4.5),
+                        _buildRatingBar('Service', 4.2),
+                        _buildRatingBar('Ambiance', 4.0),
+                        _buildRatingBar('Value', 3.8),
+                      ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(width: 24),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildRatingBar('Food Quality', 4.5),
-                    _buildRatingBar('Service', 4.2),
-                    _buildRatingBar('Ambiance', 4.0),
-                    _buildRatingBar('Value', 3.8),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -443,6 +723,50 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                     .toList(),
               ),
       ],
+    );
+  }
+
+  Widget _buildAmenitiesSection() {
+    final amenities = restaurant?['amenities'] as Map<String, dynamic>? ?? {};
+    final List<Widget> amenityWidgets = [];
+
+    amenities.forEach((key, value) {
+      if (value == true) {
+        amenityWidgets.add(_buildAmenityChip(key));
+      }
+    });
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Amenities',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 12),
+        amenityWidgets.isEmpty
+            ? Text('No amenities listed.')
+            : Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: amenityWidgets,
+              ),
+      ],
+    );
+  }
+
+  Widget _buildAmenityChip(String amenityName) {
+    // Simple mapping from key to a more readable name
+    final displayName = toBeginningOfSentenceCase(amenityName.replaceAllMapped(
+        RegExp(r'[A-Z]'), (match) => ' ${match.group(0)}'));
+
+    return Chip(
+      avatar: Icon(Icons.check_circle, color: Colors.green, size: 18),
+      label: Text(
+        displayName ?? amenityName,
+        style: TextStyle(color: Colors.black87),
+      ),
+      backgroundColor: Colors.grey[200],
     );
   }
 
@@ -660,6 +984,33 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     );
   }
 
+  Widget _buildBookNowButton() {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF4A90E2),
+        foregroundColor: Colors.white,
+        minimumSize: const Size(double.infinity, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      onPressed: () {
+        // You can define this function to push to the booking screen
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Icon(Icons.event_available),
+          SizedBox(width: 8),
+          Text(
+            'Book Now',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActionButtons() {
     return Column(
       children: [
@@ -852,6 +1203,24 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
   }
 
   void _showReservationDialog() {
+    void _navigateToBookingPage() {
+      if (restaurant == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Restaurant details not loaded yet')),
+        );
+        return;
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RestaurantBookingPage(
+            restaurantDetails: restaurant!, // ✅ passing loaded data
+          ),
+        ),
+      );
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -869,13 +1238,149 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
             ElevatedButton(
               child: Text('Reserve'),
               onPressed: () {
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Reservation request sent!')),
-                );
+                _navigateToBookingPage();
               },
             ),
           ],
+        );
+      },
+    );
+  }
+}
+
+class ReviewPage {
+  Future<void> submitReview({
+    required String title,
+    required String category,
+    required String username,
+    required String reviewText,
+    required double rating,
+  }) async {
+    final url = Uri.parse('$baseUrl/api/reviews');
+    String dateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'title': title,
+          'username': username,
+          'reviewText': reviewText,
+          'rating': rating.toString(),
+          'dateAdded': dateTime,
+          'category': category, // include category in the request
+        }),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        print('Review submitted successfully ✅');
+      } else {
+        print('Failed to submit review ❌: ${response.statusCode}');
+        throw Exception('Failed to submit review: ${response.body}');
+      }
+    } catch (e) {
+      print('Error submitting review: $e');
+    }
+  }
+
+  void showAddReviewDialog(BuildContext context, String title) {
+    final _nameController = TextEditingController();
+    final _reviewController = TextEditingController();
+    double _rating = 3; // default rating
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              title: Text("Add Review for $title"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Name
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: "Name",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    // Review Description
+                    TextField(
+                      controller: _reviewController,
+                      decoration: InputDecoration(
+                        labelText: "Review",
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 3,
+                    ),
+                    SizedBox(height: 10),
+                    // Rating
+                    Row(
+                      children: [
+                        Text("Rating:"),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Slider(
+                            activeColor: Colors.blue,
+                            inactiveColor: Colors.blue.shade100,
+                            value: _rating,
+                            min: 1,
+                            max: 5,
+                            divisions: 4,
+                            label: _rating.toString(),
+                            onChanged: (value) {
+                              setState(() {
+                                _rating = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Text(_rating.toStringAsFixed(1)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text("Submit"),
+                  onPressed: () async {
+                    String name = _nameController.text;
+                    String review = _reviewController.text;
+                    double ratingValue = _rating;
+                    if (name.isEmpty || review.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Please fill in all fields")),
+                      );
+                      return;
+                    }
+
+                    await submitReview(
+                      category: "Restaurants",
+                      title: title, // use the passed title here
+                      username: name,
+                      reviewText: review,
+                      rating: ratingValue,
+                    );
+
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     );

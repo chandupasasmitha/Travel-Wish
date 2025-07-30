@@ -187,99 +187,117 @@ class _RestaurantState extends State<Restaurant> {
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: Color(0xFF4A90E2),
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'RESTAURANTS',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/appbar-background.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications_outlined, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Icon(Icons.restaurant, color: Color(0xFF4A90E2), size: 20),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Discover amazing restaurants near you',
+        child: Column(
+          children: [
+            AppBar(
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 25,
+                  ),
+                  Text(
+                    "travelWish.",
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey[700],
+                        fontWeight: FontWeight.w600, color: Colors.white),
+                  )
+                ],
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.notifications_outlined),
+                  color: Colors.white,
+                ),
+              ],
+              backgroundColor: Colors.transparent,
+            ),
+            Expanded(
+              child: Transform.scale(
+                scale: 1.02,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40)),
+                  child: Container(
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03),
+                        Text(
+                          'Restaurants',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              Expanded(child: _buildSortButton()),
+                              SizedBox(width: 12),
+                              Expanded(child: _buildFilterButton()),
+                              SizedBox(width: 12),
+                              Expanded(child: _buildLocationButton()),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: isLoading
+                              ? Center(child: CircularProgressIndicator())
+                              : RefreshIndicator(
+                                  onRefresh: fetchRestaurants,
+                                  child: displayedRestaurants.isEmpty
+                                      ? Center(
+                                          child: Text(
+                                            "No restaurants found.",
+                                            style: TextStyle(
+                                                color: Colors.grey[600]),
+                                          ),
+                                        )
+                                      : ListView.builder(
+                                          padding: EdgeInsets.all(16),
+                                          itemCount:
+                                              displayedRestaurants.length,
+                                          itemBuilder: (context, index) {
+                                            final restaurant =
+                                                displayedRestaurants[index];
+                                            return RestaurantCard(
+                                              restaurant: restaurant,
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        RestaurantDetailsPage(
+                                                      restaurantId:
+                                                          restaurant['_id'],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(child: _buildSortButton()),
-                SizedBox(width: 8),
-                Expanded(child: _buildFilterButton()),
-                SizedBox(width: 8),
-                Expanded(child: _buildLocationButton()),
-              ],
-            ),
-          ),
-          Expanded(
-            child: isLoading
-                ? Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
-                    onRefresh: fetchRestaurants,
-                    child: displayedRestaurants.isEmpty
-                        ? Center(
-                            child: Text(
-                              "No restaurants found.",
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                          )
-                        : ListView.builder(
-                            padding: EdgeInsets.all(16),
-                            itemCount: displayedRestaurants.length,
-                            itemBuilder: (context, index) {
-                              final restaurant = displayedRestaurants[index];
-                              return RestaurantCard(
-                                restaurant: restaurant,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          RestaurantDetailsPage(
-                                        restaurantId: restaurant['_id'],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                  ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -528,14 +546,39 @@ class RestaurantCard extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+  bool getOpenOrClosed(String todayHours) {
+    // Return false if format is invalid or input is 'closed'
+    if (todayHours.toLowerCase() == 'closed') return false;
+
+    final parts = todayHours.split(' - ');
+    if (parts.length != 2) return false;
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    // Parse opening and closing times
+    final openParts = parts[0].split(':').map(int.parse).toList();
+    final closeParts = parts[1].split(':').map(int.parse).toList();
+
+    final openTime = DateTime(
+        today.year, today.month, today.day, openParts[0], openParts[1]);
+    final closeTime = DateTime(
+        today.year, today.month, today.day, closeParts[0], closeParts[1]);
+
+    return now.isAfter(openTime) && now.isBefore(closeTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<dynamic> cuisines = restaurant['cuisineTypes'] ?? [];
+    String todayHours = restaurant!['workingHours'] != null
+        ? '${restaurant!['workingHours']['openingTime']} - ${restaurant!['workingHours']['closingTime']}'
+        : 'Closed';
     String location = restaurant['location'] ?? '';
     double rating = (restaurant['rating'] ?? 0.0).toDouble();
     String priceRange = restaurant['priceRange'] ?? '\$';
     double distance = (restaurant['distance'] ?? 0.0).toDouble();
-    bool isOpen = restaurant['isOpen'] ?? false;
+    bool isOpen = getOpenOrClosed(todayHours);
 
     return Container(
       margin: EdgeInsets.only(bottom: 16),
@@ -609,7 +652,8 @@ class RestaurantCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              restaurant['name'] ?? 'Unknown Restaurant',
+                              restaurant['restaurantName'] ??
+                                  'Unknown Restaurant Name',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

@@ -367,6 +367,9 @@ class ItemDetailsBuythings extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.04,
+                            ),
                             GalleryScreen(images: images),
 
                             SizedBox(
@@ -523,8 +526,8 @@ class ItemDetailsBuythings extends StatelessWidget {
 
                                 // 👇 FAB pinned to bottom-right of the screen
                                 Positioned(
-                                  bottom: 20,
-                                  right: 20,
+                                  bottom: 45,
+                                  right: 45,
                                   child: FloatingActionButton(
                                     onPressed: () {
                                       ReviewPage().showAddReviewDialog(
@@ -894,7 +897,7 @@ class ItemDetailsBuythings extends StatelessWidget {
 
   Future<List<Review>> fetchReviews() async {
     // Your API endpoint for fetching reviews of a place
-    final url = Uri.parse('http://localhost:2000/api/reviews');
+    final url = Uri.parse('$baseUrl/api/reviews');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -991,7 +994,6 @@ class GalleryScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
         const Text(
           "--Gallery Section--",
           style: TextStyle(

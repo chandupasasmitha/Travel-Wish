@@ -326,4 +326,62 @@ class Api {
       throw Exception("Failed to fetch restaurant details: $e");
     }
   }
+
+  static Future<Map<String, dynamic>> createRestaurantBooking(
+      Map<String, dynamic> bookingData) async {
+    var url = Uri.parse("${baseUrl}addRestaurantBooking");
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(bookingData),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+            "Failed to create booking. Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error creating restaurant booking: $e");
+    }
+  }
+
+  // Get booking status by ID
+  static Future<Map<String, dynamic>> getRestaurantBookingStatus(
+      String bookingId) async {
+    var url = Uri.parse("${baseUrl}restaurantBooking/$bookingId/status");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception(
+            "Failed to fetch booking status. Status: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("Error fetching restaurant booking status: $e");
+    }
+  }
+
+  static Future<Map<String, dynamic>> getMyRestaurantBookings() async {
+    var url = Uri.parse("${baseUrl}restaurantBooking");
+
+    try {
+      final res = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+      return jsonDecode(res.body);
+    } catch (e) {
+      throw Exception("Failed to fetch bookings: $e");
+    }
+  }
 }
