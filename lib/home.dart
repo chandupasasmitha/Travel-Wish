@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test/loginpage.dart'; // Import the login page
 import 'package:test/thingstodo/things_to_do.dart';
 import 'accommodation.dart';
 import 'guide.dart';
@@ -8,28 +8,13 @@ import 'services.dart';
 import 'notification_page.dart';
 import 'services/api.dart';
 import 'utils/user_manager.dart';
-import 'emergency_home.dart'; // Import your existing Emergency home page
+import 'services/token_manager.dart'; // Import the TokenManager
+import 'emergency_home.dart';
 import 'package:test/restaurant.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(username: 'Guest'),
-    );
-  }
-}
 
 class HomeScreen extends StatefulWidget {
   final String username;
-
   const HomeScreen({Key? key, required this.username}) : super(key: key);
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -77,11 +62,58 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// Handles the user logout process with a confirmation dialog.
+  Future<void> _handleLogout() async {
+    // Show a confirmation dialog
+    final bool? confirmLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Logout'),
+          content: const Text('Are you sure you want to log out?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // User cancels
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true), // User confirms
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // If the user confirmed the logout, proceed.
+    // The '?? false' handles cases where the dialog is dismissed without a choice.
+    if (confirmLogout ?? false) {
+      // 1. Clear the stored JWT token.
+      await TokenManager.deleteToken();
+
+      // 2. Clear user data from SharedPreferences.
+      await UserManager.clearUserData();
+
+      // 3. Navigate to the LoginScreen and remove all previous routes from the stack.
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (Route<dynamic> route) => false,
+        );
+      }
+    }
+  }
+
+  // The 'options' and 'popularPlaces' lists remain the same
   final List<Map<String, dynamic>> options = [
     {'icon': Icons.directions_bus, 'label': 'Public Transport', 'route': null},
     {'icon': Icons.hotel, 'label': 'Accommodation', 'route': Accommodation()},
     {'icon': Icons.restaurant, 'label': 'Restaurant', 'route': Restaurant()},
-    {'icon': Icons.local_hospital, 'label': 'Emergency', 'route': EmergencyScreen()}, // Updated Emergency route
+    {
+      'icon': Icons.local_hospital,
+      'label': 'Emergency',
+      'route': EmergencyScreen()
+    },
     {'icon': Icons.explore, 'label': 'Things to do', 'route': ThingsToDo()},
     {'icon': Icons.local_taxi, 'label': 'Taxi', 'route': Taxi()},
     {'icon': Icons.people, 'label': 'Guides', 'route': Guide()},
@@ -91,7 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
       'label': 'Services',
       'route': ServicesPage()
     },
-
   ];
 
   final List<Map<String, String>> popularPlaces = [
@@ -104,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
@@ -118,19 +149,17 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             height: imageHeight,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/rectangle.png'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-
-          // Main content over image
           SingleChildScrollView(
             child: Column(
               children: [
-                // Custom top bar over image
+                // Custom top bar
                 Padding(
                   padding: const EdgeInsets.only(top: 40, left: 16, right: 16),
                   child: Row(
@@ -139,8 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Image.asset('assets/logo.png', height: 40),
-                          SizedBox(width: 8),
-                          Text(
+                          const SizedBox(width: 8),
+                          const Text(
                             'travelWish',
                             style: TextStyle(
                               fontSize: 20,
@@ -150,89 +179,99 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      Stack(
+                      Row(
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.notifications,
-                                color: Colors.white),
-                            onPressed: () {
-                              if (currentUserId != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NotificationsScreen(
-                                        userId: currentUserId!),
-                                  ),
-                                ).then((_) => _loadUnreadCount());
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Please log in to view notifications'),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          if (unreadCount > 0)
-                            Positioned(
-                              right: 8,
-                              top: 8,
-                              child: Container(
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                constraints: BoxConstraints(
-                                  minWidth: 16,
-                                  minHeight: 16,
-                                ),
-                                child: Text(
-                                  unreadCount > 99 ? '99+' : '$unreadCount',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
+                          // Notification Icon with Badge
+                          Stack(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.notifications,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  if (currentUserId != null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            NotificationsScreen(
+                                                userId: currentUserId!),
+                                      ),
+                                    ).then((_) => _loadUnreadCount());
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Please log in to view notifications'),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
+                              if (unreadCount > 0)
+                                Positioned(
+                                  right: 8,
+                                  top: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 16,
+                                      minHeight: 16,
+                                    ),
+                                    child: Text(
+                                      unreadCount > 99 ? '99+' : '$unreadCount',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          // Add the Logout Button here
+                          if (currentUserId != null)
+                            IconButton(
+                              icon:
+                                  const Icon(Icons.logout, color: Colors.white),
+                              tooltip: 'Logout',
+                              onPressed: _handleLogout,
                             ),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),
 
-                // Main body content (below image)
+                // Remainder of the UI is unchanged
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 10),
-
-                      // Greeting
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Hello,',
+                              const Text('Hello,',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255))),
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255))),
                               Text(widget.username,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 24,
-                                      color: const Color.fromARGB(
-                                          255, 255, 255, 255))),
+                                      color:
+                                          Color.fromARGB(255, 255, 255, 255))),
                               if (currentUserId == null)
-                                Text(
+                                const Text(
                                   'Please log in for full features',
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.red),
@@ -242,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           CircleAvatar(
                             radius: 25,
                             backgroundColor: Colors.grey[200],
-                            child: Icon(
+                            child: const Icon(
                               Icons.person,
                               size: 30,
                               color: Colors.black54,
@@ -250,13 +289,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
-
-                      // GridView
+                      const SizedBox(height: 20),
                       GridView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
@@ -279,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SnackBar(
                                     content: Text(
                                         '${options[index]['label']} coming soon!'),
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                   ),
                                 );
                               }
@@ -295,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.black,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Text(options[index]['label'],
                                     textAlign: TextAlign.center),
                               ],
@@ -303,16 +341,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                      SizedBox(height: 20),
-
-                      Text(
+                      const SizedBox(height: 20),
+                      const Text(
                         'Popular ',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 10),
-
-                      Container(
+                      const SizedBox(height: 10),
+                      SizedBox(
                         height: 200,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -320,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             return Container(
                               width: 151,
-                              margin: EdgeInsets.only(right: 10),
+                              margin: const EdgeInsets.only(right: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
@@ -333,11 +369,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
                                   color: Colors.black.withOpacity(0.5),
                                   child: Text(
                                     popularPlaces[index]['name']!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -349,9 +385,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                       ),
-
-                      SizedBox(height: 20),
-                      Text(
+                      const SizedBox(height: 20),
+                      const Text(
                         'Explore ',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
@@ -366,8 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.search),
-        backgroundColor: Color.fromARGB(255, 102, 183, 251),
+        backgroundColor: const Color.fromARGB(255, 102, 183, 251),
+        child: const Icon(Icons.search),
       ),
     );
   }

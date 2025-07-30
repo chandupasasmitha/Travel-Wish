@@ -1,7 +1,11 @@
 // lib/notification_page.dart
 import 'package:flutter/material.dart';
+// import 'package:url_launcher/url_launcher.dart'; // Remove this import
 import 'services/api.dart';
 import 'utils/user_manager.dart';
+// Assuming your checkout page is in a file like 'checkout_screen.dart'
+// You will need to replace this with the actual path to your checkout page
+import 'checkout_screen.dart'; // <--- Add this import
 
 class NotificationsScreen extends StatefulWidget {
   final String userId;
@@ -149,6 +153,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }
   }
 
+  // Remove the _launchPaymentLink function as we are navigating internally
+  // Future<void> _launchPaymentLink(String urlString) async {
+  //   final Uri url = Uri.parse(urlString);
+  //   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Could not launch payment link: $urlString')),
+  //     );
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -243,6 +257,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         final notification = notifications[index];
         final isRead = notification['isRead'] ?? false;
         final type = notification['type'] ?? 'other';
+        final bookingId = notification['bookingId']; // Get the booking ID
 
         return Card(
           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -316,6 +331,32 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       color: Colors.grey[400],
                     ),
                   ),
+                  // Conditionally show the button for 'booking_confirmed' and if bookingId is available
+                  if (type == 'booking_confirmed' && bookingId != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // Navigate to the CheckoutScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CheckoutScreen(bookingId: bookingId),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.payment, size: 20),
+                        label: Text('Proceed To Payment'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
               trailing: !isRead

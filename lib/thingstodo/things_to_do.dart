@@ -97,8 +97,13 @@ class Content1 extends StatelessWidget {
             children: [
               GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyApp()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomeScreen(
+                                username:
+                                    "Guest")) // Example: Navigating to HomeScreen
+                        );
                   },
                   child: Icon(Icons.arrow_back)),
               Expanded(
