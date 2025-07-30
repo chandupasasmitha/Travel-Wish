@@ -476,4 +476,26 @@ class Api {
       throw Exception("Failed to fetch restaurant details: $e");
     }
   }
+
+  //===================================================
+  static Future<Map<String, dynamic>> addRating(
+      String accommodationId, double rating) async {
+    final response = await http.post(
+      Uri.parse(
+          '${baseUrl}accommodations/$accommodationId/ratings'), // Example endpoint
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, double>{
+        'rating': rating,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      // Throw an exception with the error message from the backend, if available
+      throw Exception('Failed to submit rating: ${response.body}');
+    }
+  }
 }
