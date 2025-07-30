@@ -126,10 +126,10 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<Map<String, String>> popularPlaces = [
-    {'image': 'assets/image01.jpeg', 'name': 'Beach'},
-    {'image': 'assets/image02.jpg', 'name': 'Mountain'},
-    {'image': 'assets/image01.jpeg', 'name': 'City'},
-    {'image': 'assets/image02.jpg', 'name': 'Resort'},
+    {'image': 'assets/beach.jpg', 'name': 'Beach'},
+    {'image': 'assets/mountain.avif', 'name': 'Mountain'},
+    {'image': 'assets/city.jpg', 'name': 'City'},
+    {'image': 'assets/resort.jpeg', 'name': 'Resort'},
   ];
 
   @override
@@ -399,11 +399,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromARGB(255, 102, 183, 251),
-        child: const Icon(Icons.search),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   backgroundColor: const Color.fromARGB(255, 102, 183, 251),
+      //   child: const Icon(Icons.search),
+      // ),
     );
   }
 }
