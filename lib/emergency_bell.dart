@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
-class EmergencyAlertScreen extends StatelessWidget {
-  const EmergencyAlertScreen({super.key});
+class TravelWishEmergencyUI extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: EmergencyBellScreen(),
+    );
+  }
+}
 
+class EmergencyBellScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Full-screen background image
           Positioned.fill(
             child: Image.asset(
               'assets/background.png',
@@ -19,122 +25,117 @@ class EmergencyAlertScreen extends StatelessWidget {
           SafeArea(
             child: Column(
               children: [
-                // AppBar substitute (logo and bell icon)
+                SizedBox(height: 20),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        'assets/logo.png', // Replace with your logo asset
-                        height: 40,
+                      Row(
+                        children: [
+                          Image.asset('assets/logo.png', height: 24),
+                          SizedBox(width: 5),
+                          Text(
+                            "travelwish.",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      const Icon(
-                        Icons.notifications_none,
-                        color: Colors.white,
-                        size: 28,
-                      ),
+                      Icon(Icons.notifications_none, color: Colors.white),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Emergency Title
-                const Text(
-                  'EMERGENCY',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: 60),
+                Text(
                   'EMERGENCY ALERT SENT',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     color: Colors.red,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 32),
-                // Bell Icon in Card
-                Center(
+                SizedBox(height: 30),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.purple, width: 2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Container(
+                    padding: EdgeInsets.all(30),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
+                          color: Colors.grey.shade300,
+                          blurRadius: 6,
+                          offset: Offset(4, 4),
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.all(32),
                     child: Image.asset(
                       'assets/bell.png',
-                      height: 104,
-                      width: 104,
+                      height: 60,
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Help is on the way card
+                SizedBox(height: 40),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
                     width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
+                          color: Colors.blue.shade100,
+                          blurRadius: 10,
+                          offset: Offset(0, 6),
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                    child: const Column(
+                    child: Column(
                       children: [
                         Text(
-                          'Help is on the way.',
+                          "Help is on the way.",
                           style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+                            color: Colors.red.shade900,
                             fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 4),
                         Text(
-                          'Stay calm and stay safe.',
+                          "Stay calm and stay safe.",
                           style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 15,
+                            color: Colors.red.shade900,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: FloatingActionButton(
+                      onPressed: () {},
+                      backgroundColor: Colors.blue,
+                      child: Icon(Icons.search, color: Colors.white),
+                    ),
+                  ),
+                ),
               ],
-            ),
-          ),
-          // FloatingActionButton at bottom right
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed: () {},
-                child: const Icon(Icons.search, color: Colors.blue, size: 32),
-              ),
             ),
           ),
         ],

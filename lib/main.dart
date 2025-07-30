@@ -4,21 +4,12 @@ import 'loginpage.dart';
 import 'signuppage.dart';
 import 'card_details_page.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // ✅ Stripe public key for test mode
-  Stripe.publishableKey =
-      'pk_test_51RlqMsQ0MZyvxx0lsc3WgV7Z0AHuKqjWcercr4o8aglWtiit7lMLAup84wtAv3kCXJkbnSWtzXq43RUY8LOTODMn008XXp22dd'; // Replace with your Stripe test key
-
-  // Optional: Apply default settings
-  await Stripe.instance.applySettings();
-
+void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Main extends StatelessWidget {
+  const Main({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +130,7 @@ class HomeScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen()),
+                              MaterialPageRoute(builder: (context) => const SignUpScreen()),
                             );
                           },
                           style: ElevatedButton.styleFrom(
