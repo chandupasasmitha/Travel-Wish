@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:geolocator/geolocator.dart';
 
 void main() {
@@ -19,28 +22,37 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
+
   LatLng? _currentLocation;
+
   StreamSubscription<Position>? _positionStream;
+
   final Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
+
     _initializeLocation();
   }
 
   Future<void> _initializeLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     if (!serviceEnabled) return;
 
     LocationPermission permission = await Geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
+
       if (permission == LocationPermission.denied) return;
     }
+
     if (permission == LocationPermission.deniedForever) return;
 
     Position position = await Geolocator.getCurrentPosition();
+
     _updateLocation(position);
 
     _positionStream =
@@ -52,6 +64,7 @@ class _MapScreenState extends State<MapScreen> {
   void _updateLocation(Position position) {
     setState(() {
       _currentLocation = LatLng(position.latitude, position.longitude);
+
       _markers
         ..clear()
         ..add(
@@ -73,6 +86,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _goToCurrentLocation() async {
     if (_currentLocation != null) {
       final GoogleMapController controller = await _controller.future;
+
       controller.animateCamera(
         CameraUpdate.newLatLng(_currentLocation!),
       );
@@ -145,6 +159,7 @@ class _MapScreenState extends State<MapScreen> {
                       'Use my current location',
                       onTap: () {
                         Navigator.pop(context);
+
                         _goToCurrentLocation();
                       },
                     ),
@@ -205,6 +220,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void dispose() {
     _positionStream?.cancel();
+
     super.dispose();
   }
 
@@ -215,6 +231,7 @@ class _MapScreenState extends State<MapScreen> {
       body: Column(
         children: [
           // Header
+
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -270,6 +287,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
 
           // Centered Map title
+
           Container(
             width: double.infinity,
             color: Colors.white,
@@ -287,6 +305,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
 
           // Map section
+
           Expanded(
             child: _currentLocation == null
                 ? const Center(
