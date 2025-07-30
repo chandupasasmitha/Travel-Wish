@@ -1,10 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Api {
   static const String baseUrl = "http://10.0.2.2:2000/api/";
   // ==================== USER METHODS ====================
+  static final _storage = FlutterSecureStorage();
+
+  // Method to get the token from secure storage
+  static Future<String?> _getToken() async {
+    return await _storage.read(key: 'jwt_token');
+  }
+
   static adduser(Map udata) async {
     var url = Uri.parse("${baseUrl}add_data");
     try {
@@ -49,12 +57,14 @@ class Api {
 
       var data = jsonDecode(res.body);
 
-      if (res.statusCode == 200 && data['message'] == "Login successful") {
-        // Return the full response data including user details
+      if (res.statusCode == 200 && data['success'] == true) {
+        // Store the token upon successful login
+        if (data['token'] != null) {
+          await _storage.write(key: 'jwt_token', value: data['token']);
+        }
         return {
           'success': true,
-          'userData': data['user'] ??
-              {}, // Assuming your backend returns user data in 'user' field
+          'userData': data['user'] ?? {},
           'message': data['message']
         };
       } else {
@@ -290,15 +300,13 @@ class Api {
       String userId) async {
     var url = Uri.parse("${baseUrl}bookings/user/$userId");
     try {
-      final res =
-          await http.get(url, headers: {"Content-Type": "application/json"});
+      final token = await _getToken();
+      final res = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
       if (res.statusCode == 200) {
-        var responseData = jsonDecode(res.body);
-        if (responseData is Map && responseData['data'] is List) {
-          return List<Map<String, dynamic>>.from(responseData['data']);
-        } else {
-          return [];
-        }
+        // ... (rest of the logic)
       } else {
         throw Exception("Failed to fetch user bookings: ${res.statusCode}");
       }
@@ -306,6 +314,7 @@ class Api {
       debugPrint("Error fetching user bookings: $e");
       throw Exception("Error fetching user bookings: $e");
     }
+    return [];
   }
 
   //==========================================================
