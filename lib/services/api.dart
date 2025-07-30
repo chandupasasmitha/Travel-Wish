@@ -109,19 +109,28 @@ class Api {
   }
 
   static Future<List<Map<String, dynamic>>> searchAccommodations(
-      {String? query}) async {
-    var url = Uri.parse("${baseUrl}accommodations/search");
-    Map<String, dynamic> params = {};
-    if (query != null) params['query'] = query;
-
-    try {
-      final res = await http.post(url,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(params));
-      return List<Map<String, dynamic>>.from(jsonDecode(res.body)['data']);
-    } catch (e) {
-      throw Exception("Search failed: $e");
+      String query) async {
+    // If the query is empty, return all accommodations
+    if (query.isEmpty) {
+      return getAccommodations();
     }
+
+    final response = await http.post(
+      Uri.parse('${baseUrl}accommodations/search'), // Your backend search route
+      headers: {'Content-Type': 'application/json'},
+      // We are searching by the 'location' field
+      body: json.encode({'location': query}),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      // Assuming the backend returns data in a 'data' key
+      if (responseData['success'] == true && responseData['data'] is List) {
+        return List<Map<String, dynamic>>.from(responseData['data']);
+      }
+    }
+    // If search fails, return an empty list
+    throw Exception('Failed to search accommodations');
   }
 
   // ==================== GUIDE METHODS ====================
