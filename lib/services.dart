@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'housekeeping_list_page.dart';
-import 'vehicle_repair.dart';
-import 'communication_list_page.dart';
-import 'health_list_page.dart';
-import 'other_services_list_page.dart'; // Import the new other services page
+ // Import the new other services page
 
 class ServicesPage extends StatefulWidget {
   @override
@@ -18,7 +14,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Vehicle Repair',
       'description': 'Quick and reliable vehicle repair services',
       'color': Colors.orange,
-      'page': VehicleRepairPage(),
+      //'page': VehicleRepairPage(),
       'hasRoute': true,
     },
     {
@@ -26,7 +22,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'House Keeping',
       'description': 'Professional cleaning and housekeeping services',
       'color': Color.fromARGB(255, 102, 183, 251),
-      'page': HousekeepingListPage(),
+      //'page': HousekeepingListPage(),
       'hasRoute': true,
     },
     {
@@ -34,7 +30,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Communication',
       'description': 'Stay connected with our communication services',
       'color': Colors.blue,
-      'page': CommunicationListPage(),
+//'page': CommunicationListPage(),
       'hasRoute': true,
     },
     {
@@ -42,7 +38,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Hospital Service',
       'description': 'Emergency and medical care services',
       'color': Colors.red,
-      'page': HealthListPage(),
+      //'page': HealthListPage(),
       'hasRoute': true,
     },
     {
@@ -50,7 +46,7 @@ class _ServicesPageState extends State<ServicesPage> {
       'label': 'Other Services',
       'description': 'Additional services for your convenience',
       'color': Colors.purple,
-      'page': OtherServicesListPage(), // ADDED page route
+      //'page': OtherServicesListPage(), // ADDED page route
       'hasRoute': true, // ENABLED route
     },
   ];
