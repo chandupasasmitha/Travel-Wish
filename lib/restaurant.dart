@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'services/api.dart'; // Assuming your api.dart is in a services folder
-import 'restaurant_details_page.dart'; // Uncomment when you create the details page
+import 'restaurant_details_page.dart';
+import 'dart:convert';
+import '../../models/review.dart';
+import '../../config.dart';
+import 'package:http/http.dart'
+    as http; // Uncomment when you create the details page
 
 class Restaurant extends StatefulWidget {
-  @override
   _RestaurantState createState() => _RestaurantState();
 }
 
@@ -15,7 +19,7 @@ class _RestaurantState extends State<Restaurant> {
   String filterBy = 'all';
   String selectedLocation = 'all';
   String selectedCuisine = 'all';
-
+  double averageRating = 0.0;
   @override
   void initState() {
     super.initState();
@@ -52,7 +56,7 @@ class _RestaurantState extends State<Restaurant> {
     // Apply location filter
     if (selectedLocation != 'all') {
       filtered = filtered.where((restaurant) {
-        String location = restaurant['location'] ?? '';
+        String location = restaurant['locationAddress'] ?? '';
         return location.toLowerCase().contains(selectedLocation.toLowerCase());
       }).toList();
     }
@@ -273,7 +277,7 @@ class _RestaurantState extends State<Restaurant> {
                                                 displayedRestaurants[index];
                                             return RestaurantCard(
                                               restaurant: restaurant,
-                                              onTap: () {
+                                              onTap: () async {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -539,11 +543,13 @@ class _RestaurantState extends State<Restaurant> {
 class RestaurantCard extends StatelessWidget {
   final Map<String, dynamic> restaurant;
   final VoidCallback onTap;
+  // final double averageRating;
 
   const RestaurantCard({
     Key? key,
     required this.restaurant,
     required this.onTap,
+    // required this.averageRating,
   }) : super(key: key);
 
   bool getOpenOrClosed(String todayHours) {
@@ -574,8 +580,8 @@ class RestaurantCard extends StatelessWidget {
     String todayHours = restaurant!['workingHours'] != null
         ? '${restaurant!['workingHours']['openingTime']} - ${restaurant!['workingHours']['closingTime']}'
         : 'Closed';
-    String location = restaurant['location'] ?? '';
-    double rating = (restaurant['rating'] ?? 0.0).toDouble();
+    String location = restaurant['locationAddress'] ?? '';
+
     String priceRange = restaurant['priceRange'] ?? '\$';
     double distance = (restaurant['distance'] ?? 0.0).toDouble();
     bool isOpen = getOpenOrClosed(todayHours);
@@ -688,14 +694,14 @@ class RestaurantCard extends StatelessWidget {
                         children: [
                           Icon(Icons.star, size: 14, color: Colors.amber),
                           SizedBox(width: 4),
-                          Text(
-                            rating.toStringAsFixed(1),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[700],
-                            ),
-                          ),
+                          // Text(
+                          //   rating.toStringAsFixed(1),
+                          //   style: TextStyle(
+                          //     fontSize: 12,
+                          //     fontWeight: FontWeight.w500,
+                          //     color: Colors.grey[700],
+                          //   ),
+                          // ),
                           SizedBox(width: 12),
                           Icon(Icons.location_on,
                               size: 14, color: Colors.grey[600]),

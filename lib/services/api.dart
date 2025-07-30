@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import '../../models/review.dart';
 
 class Api {
   static const String baseUrl = "http://10.0.2.2:2000/api/";
@@ -382,6 +383,56 @@ class Api {
       return jsonDecode(res.body);
     } catch (e) {
       throw Exception("Failed to fetch bookings: $e");
+    }
+  }
+
+  // ==================== REVIEWS METHODS ====================
+
+  static Future<Map<String, dynamic>> fetchReviewsWithStats(
+      String restaurantName) async {
+    final url = Uri.parse('$baseUrl/api/reviews');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        final filtered = jsonData
+            .where((review) =>
+                review['category'] == 'Restaurants' &&
+                review['title'] == restaurantName)
+            .toList();
+
+        final int reviewCount = filtered.length;
+        double totalRating = 0;
+
+        for (var reviewJson in filtered) {
+          final ratingRaw = reviewJson['rating'];
+          final rating = double.tryParse(ratingRaw.toString()) ?? 0.0;
+          totalRating += rating;
+        }
+
+        double averageRating =
+            reviewCount > 0 ? totalRating / reviewCount : 0.0;
+
+        return {
+          'reviews': filtered
+              .map((reviewJson) => Review.fromJson(reviewJson))
+              .toList(),
+          'reviewCount': reviewCount,
+          'averageRating': double.parse(averageRating.toStringAsFixed(1)),
+        };
+      } else {
+        throw Exception('Failed to load reviews: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching reviews: $e');
+      return {
+        'reviews': [],
+        'reviewCount': 0,
+        'averageRating': 0.0,
+      };
     }
   }
 }

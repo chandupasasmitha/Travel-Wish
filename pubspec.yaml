@@ -94,7 +94,11 @@ flutter:
     - assets\cargills-food-city.jpg
     - assets\coolplanet.jpeg
     - assets\ext.jpg
+    - assets\beach.jpg
+    - assets\city.jpg
+    - assets\mountain.avif
     - assets\spar.jpeg
+    - assets\resort.jpeg
     - assets\perera&sons.jpeg
     - assets\ipharma.jpeg 
     - assets\learningpoints\geographynlocation.jpg

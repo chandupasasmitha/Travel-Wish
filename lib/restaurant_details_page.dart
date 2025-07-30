@@ -30,6 +30,54 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     _fetchRestaurantDetails();
   }
 
+  static Future<Map<String, dynamic>> fetchReviewsWithStats(
+      String restaurantName) async {
+    final url = Uri.parse('$baseUrl/api/reviews');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+
+        final filtered = jsonData
+            .where((review) =>
+                review['category'] == 'Restaurants' &&
+                review['title'] == restaurantName)
+            .toList();
+
+        final int reviewCount = filtered.length;
+        double totalRating = 0;
+
+        for (var reviewJson in filtered) {
+          final ratingRaw = reviewJson['rating'];
+          final rating = double.tryParse(ratingRaw.toString()) ?? 0.0;
+          totalRating += rating;
+        }
+
+        double averageRating =
+            reviewCount > 0 ? totalRating / reviewCount : 0.0;
+
+        return {
+          'reviews': filtered
+              .map((reviewJson) => Review.fromJson(reviewJson))
+              .toList(),
+          'reviewCount': reviewCount,
+          'averageRating': double.parse(averageRating.toStringAsFixed(1)),
+        };
+      } else {
+        throw Exception('Failed to load reviews: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching reviews: $e');
+      return {
+        'reviews': [],
+        'reviewCount': 0,
+        'averageRating': 0.0,
+      };
+    }
+  }
+
   Future<List<Review>> fetchReviews() async {
     // Your API endpoint for fetching reviews of a place
     final url = Uri.parse('$baseUrl/api/reviews');
@@ -47,55 +95,6 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     } catch (e) {
       print('Error fetching reviews: $e');
       return [];
-    }
-  }
-
-  Future<Map<String, dynamic>> fetchReviewsWithStats(
-      String restaurantName) async {
-    final url = Uri.parse('$baseUrl/api/reviews');
-
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = json.decode(response.body);
-
-        // Filter reviews for this specific restaurant
-        final filteredReviews = jsonData.where((reviewJson) {
-          final category = reviewJson['category']?.toString();
-          final title = reviewJson['title']?.toString();
-          return category == 'Restaurants' && title == restaurantName;
-        }).toList();
-
-        final int reviewCount = filteredReviews.length;
-
-        double totalRating = 0;
-        for (var reviewJson in filteredReviews) {
-          final ratingRaw = reviewJson['rating'];
-          final rating = double.tryParse(ratingRaw.toString()) ?? 0.0;
-          totalRating += rating;
-        }
-
-        double averageRating =
-            reviewCount > 0 ? totalRating / reviewCount : 0.0;
-
-        return {
-          'reviews': filteredReviews
-              .map((reviewJson) => Review.fromJson(reviewJson))
-              .toList(),
-          'reviewCount': reviewCount,
-          'averageRating': double.parse(averageRating.toStringAsFixed(1)),
-        };
-      } else {
-        throw Exception('Failed to load reviews: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching reviews: $e');
-      return {
-        'reviews': [],
-        'reviewCount': 0,
-        'averageRating': 0.0,
-      };
     }
   }
 
@@ -306,6 +305,7 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
                 _buildHeader(todayHours),
                 SizedBox(height: 16),
                 _buildInfoCard(),
+                _buildAdditionalInfoCard(),
                 SizedBox(height: 24),
                 _buildRatingSection(),
                 _buildRatingDisplayWithAdd(name),
@@ -329,10 +329,12 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
     );
   }
 
-  Widget _buildHeader(String todayHours) {
-    double rating = (restaurant?['rating'] ?? 0.0).toDouble();
+  Widget _buildHeader(
+    String todayHours,
+  ) {
     String priceRange = restaurant?['priceRange'] ?? '\$';
     bool isOpen = getOpenOrClosed(todayHours);
+    double rating = 4.4;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -424,30 +426,132 @@ class _RestaurantDetailsPageState extends State<RestaurantDetailsPage> {
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildInfoRow(Icons.location_on,
-              restaurant?['locationAddress'] ?? 'Address not provided'),
           _buildInfoRow(
-              Icons.phone, restaurant?['phoneNumber'] ?? 'Phone not available'),
-          _buildInfoRow(Icons.access_time, _getOpeningHours()),
-          _buildInfoRow(Icons.delivery_dining,
-              '${restaurant?['deliveryTime'] ?? 'N/A'} • Delivery available'),
+            Icons.location_on,
+            'Address',
+            restaurant?['locationAddress'] ?? 'Address not provided',
+          ),
+          _buildInfoRow(
+            Icons.phone,
+            'Phone number',
+            restaurant?['phoneNumber'] ?? 'Phone not available',
+          ),
+          _buildInfoRow(
+            Icons.access_time,
+            'Opening hours',
+            _getOpeningHours(),
+          ),
+          _buildInfoRow(
+            Icons.delivery_dining,
+            'Delivery time',
+            '${restaurant?['deliveryTime'] ?? 'N/A'} • Delivery available',
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text) {
+  Widget _buildAdditionalInfoCard() {
+    // Ensure 'restaurant' is accessible in this scope.
+    // It should be a Map<String, dynamic>? type, typically accessed as a state variable
+    // or via widget.restaurantData if passed as a constructor parameter.
+    // Assuming 'restaurant' is a Map<String, dynamic> state variable within _RestaurantDetailsPageState
+    // If it's passed via constructor, you'd use widget.restaurant
+    // For demonstration, let's assume 'restaurant' is directly available in this scope.
+
+    // --- Helper function to safely get a string value or 'Not Added' ---
+    String safeGetString(String key) {
+      // Check if the restaurant map itself is null or if the key is missing/value is null
+      if (restaurant == null ||
+          !restaurant!.containsKey(key) ||
+          restaurant![key] == null) {
+        return 'Not Added';
+      }
+      // Return the string representation of the value
+      return restaurant![key].toString();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          'Additional Info',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        Container(
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.only(
+              top: 16), // Add some space above this new card
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Food Safety License URL
+              _buildInfoRow(
+                Icons.health_and_safety, // Appropriate icon for food safety
+                'Food Safety License',
+                safeGetString('foodSafetyLicenseUrl'),
+              ),
+              // Business Registration Number
+              _buildInfoRow(
+                Icons.business, // Appropriate icon for business
+                'Business Registration No.',
+                safeGetString('businessRegistrationNumber'),
+              ),
+              // Years in Operation
+              _buildInfoRow(
+                Icons.calendar_today, // Appropriate icon for years
+                'Years In Operation',
+                safeGetString('yearsInOperation'),
+              ),
+              // Number of Branches
+              _buildInfoRow(
+                Icons.store, // Appropriate icon for branches
+                'Number of Branches',
+                safeGetString('numberOfBranches'),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, color: Color(0xFF4A90E2), size: 20),
-          SizedBox(width: 16),
+          SizedBox(width: 5),
           Expanded(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 14),
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 14, color: Colors.black),
+                children: [
+                  TextSpan(
+                    text: '$label: ',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  TextSpan(text: value),
+                ],
+              ),
             ),
           ),
         ],
