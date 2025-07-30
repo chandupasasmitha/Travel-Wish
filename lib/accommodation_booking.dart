@@ -253,126 +253,197 @@ class _BookingPageState extends State<BookingPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Book ${accommodationName}'),
-        backgroundColor: const Color(0xFF4A90E2),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+      backgroundColor: Colors.grey[100],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/appbar-background.jpg'),
+              fit: BoxFit.cover),
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '1. Stay Details',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF333333)),
-            ),
-            const SizedBox(height: 16),
-            _buildDetailCard(
-              title: 'Hotel Name:',
-              value: accommodationName,
-              icon: Icons.hotel,
-            ),
-            _buildDetailCard(
-              title: 'Location:',
-              value: locationAddress,
-              icon: Icons.location_on,
-            ),
-            _buildDetailCardWithAction(
-              title: 'Check-in Date:',
-              value: _checkInDate != null
-                  ? DateFormat('dd MMM yyyy').format(_checkInDate!)
-                  : 'Select Date',
-              icon: Icons.calendar_today,
-              onTap: () => _selectDate(context, true),
-            ),
-            _buildDetailCardWithAction(
-              title: 'Check-out Date:',
-              value: _checkOutDate != null
-                  ? DateFormat('dd MMM yyyy').format(_checkOutDate!)
-                  : 'Select Date',
-              icon: Icons.calendar_today,
-              onTap: () => _selectDate(context, false),
-            ),
-            _buildGuestsPicker(),
-            const SizedBox(height: 32),
-
-            Text(
-              '2. Select Room Type',
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF333333)),
-            ),
-            const SizedBox(height: 16),
-            ..._availableRooms.map((room) => _buildRoomCard(room)).toList(),
-            const SizedBox(height: 20),
-
-            // Booking Submission Button
-            _isBookingLoading
-                ? const Center(child: CircularProgressIndicator())
-                : ElevatedButton(
-                    onPressed:
-                        _selectedRoom != null && _bookingStatus == 'pending'
-                            ? _submitBooking
-                            : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A90E2),
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 55),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: const Text('Submit Booking Request',
-                        style: TextStyle(fontSize: 18)),
+            AppBar(
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 25,
                   ),
-            const SizedBox(height: 20),
-
-            // Booking Status Display
-            if (_bookingStatus == 'pending')
-              _buildStatusCard(
-                'Waiting for confirmation...',
-                Icons.hourglass_empty,
-                Colors.orange,
+                  Text(
+                    "travelWish.",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600, color: Colors.white),
+                  )
+                ],
               ),
-            if (_bookingStatus == 'confirmed')
-              _buildStatusCard(
-                'Booking Confirmed!',
-                Icons.check_circle_outline,
-                Colors.green,
-              ),
-            if (_bookingStatus == 'rejected')
-              _buildStatusCard(
-                'Booking Rejected. Please try again or contact support.',
-                Icons.cancel_outlined,
-                Colors.red,
-              ),
-
-            const SizedBox(height: 20),
-
-            // Conditional "Proceed to Payment" button
-            if (_bookingStatus == 'confirmed')
-              ElevatedButton(
-                onPressed: () {
-                  // TODO: Implement navigation to actual payment page
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Proceeding to payment...')),
-                  );
-                  // Here you would navigate to your payment gateway or payment processing page
-                  // You might pass booking ID and total amount
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4CAF50), // Green for payment
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(double.infinity, 55),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    // You might want to remove this or change its functionality
+                    // as it's typically for the main accommodation list.
+                  },
+                  icon: Icon(Icons.notifications_outlined),
+                  color: Colors.white,
                 ),
-                child: const Text('Proceed to Payment',
-                    style: TextStyle(fontSize: 18)),
+              ],
+              backgroundColor: Colors.transparent,
+              elevation: 0, // Remove shadow
+            ),
+            Expanded(
+              child: Transform.scale(
+                scale: 1.02,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40)),
+                  child: Container(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                              height: MediaQuery.of(context).size.height *
+                                  0.03), // Add space after the top bar
+                          Center(
+                            // Wrap the Text widget with Center
+                            child: Text(
+                              'Book ${accommodationName}',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight
+                                      .w500), // Adjusted to be more like a section title
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            '1. Stay Details',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF333333)),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildDetailCard(
+                            title: 'Hotel Name:',
+                            value: accommodationName,
+                            icon: Icons.hotel,
+                          ),
+                          _buildDetailCard(
+                            title: 'Location:',
+                            value: locationAddress,
+                            icon: Icons.location_on,
+                          ),
+                          _buildDetailCardWithAction(
+                            title: 'Check-in Date:',
+                            value: _checkInDate != null
+                                ? DateFormat('dd MMM yyyy')
+                                    .format(_checkInDate!)
+                                : 'Select Date',
+                            icon: Icons.calendar_today,
+                            onTap: () => _selectDate(context, true),
+                          ),
+                          _buildDetailCardWithAction(
+                            title: 'Check-out Date:',
+                            value: _checkOutDate != null
+                                ? DateFormat('dd MMM yyyy')
+                                    .format(_checkOutDate!)
+                                : 'Select Date',
+                            icon: Icons.calendar_today,
+                            onTap: () => _selectDate(context, false),
+                          ),
+                          _buildGuestsPicker(),
+                          const SizedBox(height: 32),
+
+                          Text(
+                            '2. Select Room Type',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF333333)),
+                          ),
+                          const SizedBox(height: 16),
+                          ..._availableRooms
+                              .map((room) => _buildRoomCard(room))
+                              .toList(),
+                          const SizedBox(height: 20),
+
+                          // Booking Submission Button
+                          _isBookingLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : ElevatedButton(
+                                  onPressed: _selectedRoom != null &&
+                                          _bookingStatus == 'pending'
+                                      ? _submitBooking
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF4A90E2),
+                                    foregroundColor: Colors.white,
+                                    minimumSize:
+                                        const Size(double.infinity, 55),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                  ),
+                                  child: const Text('Submit Booking Request',
+                                      style: TextStyle(fontSize: 18)),
+                                ),
+                          const SizedBox(height: 20),
+
+                          // Booking Status Display
+                          if (_bookingStatus == 'pending')
+                            _buildStatusCard(
+                              'Waiting for confirmation...',
+                              Icons.hourglass_empty,
+                              Colors.orange,
+                            ),
+                          if (_bookingStatus == 'confirmed')
+                            _buildStatusCard(
+                              'Booking Confirmed!',
+                              Icons.check_circle_outline,
+                              Colors.green,
+                            ),
+                          if (_bookingStatus == 'rejected')
+                            _buildStatusCard(
+                              'Booking Rejected. Please try again or contact support.',
+                              Icons.cancel_outlined,
+                              Colors.red,
+                            ),
+
+                          const SizedBox(height: 20),
+
+                          // Conditional "Proceed to Payment" button
+                          if (_bookingStatus == 'confirmed')
+                            ElevatedButton(
+                              onPressed: () {
+                                // TODO: Implement navigation to actual payment page
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('Proceeding to payment...')),
+                                );
+                                // Here you would navigate to your payment gateway or payment processing page
+                                // You might pass booking ID and total amount
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(
+                                    0xFF4CAF50), // Green for payment
+                                foregroundColor: Colors.white,
+                                minimumSize: const Size(double.infinity, 55),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              child: const Text('Proceed to Payment',
+                                  style: TextStyle(fontSize: 18)),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
+            ),
           ],
         ),
       ),
