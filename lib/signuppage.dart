@@ -95,21 +95,44 @@ class SignUpScreen extends StatelessWidget {
                     const SizedBox(height: 30),
 
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        // Make the onPressed callback async
                         if (_formKey.currentState!.validate()) {
-                          var data1 = {
-                            "username": usernameController.text,
-                            "email": emailController.text,
+                          var data = {
+                            "username": usernameController.text.trim(),
+                            "email": emailController.text.trim(),
                             "password": passwordController.text
                           };
 
-                          Api.adduser(data1);
+                          // Await the result from the API call
+                          final result = await Api.adduser(data);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                          );
+                          // Check if the widget is still in the tree before showing UI
+                          if (!context.mounted) return;
+
+                          // Show feedback based on the result
+                          if (result['success'] == true) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(result['message']),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            // Navigate to the login screen on success
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                            );
+                          } else {
+                            // Show the error message (e.g., "Username already exists")
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(result['message']),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(

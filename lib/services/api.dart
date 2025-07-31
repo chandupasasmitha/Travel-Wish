@@ -13,7 +13,7 @@ class Api {
     return await _storage.read(key: 'jwt_token');
   }
 
-  static adduser(Map udata) async {
+  static Future<Map<String, dynamic>> adduser(Map udata) async {
     var url = Uri.parse("${baseUrl}add_data");
     try {
       final res = await http.post(
@@ -21,13 +21,22 @@ class Api {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(udata),
       );
-      if (res.statusCode == 200) {
-        print(jsonDecode(res.body));
+
+      final responseData = jsonDecode(res.body);
+
+      // Check if user was created (201) or if there was a conflict (409)
+      if (res.statusCode == 201) {
+        return {'success': true, 'message': responseData['message']};
       } else {
-        throw Exception("Failed to add user");
+        // For any other status code, assume failure and return the server's message
+        return {
+          'success': false,
+          'message': responseData['message'] ?? 'An unknown error occurred'
+        };
       }
     } catch (e) {
       debugPrint(e.toString());
+      return {'success': false, 'message': 'Network error: ${e.toString()}'};
     }
   }
 
