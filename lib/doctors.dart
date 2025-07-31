@@ -48,7 +48,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Doctors Directory"),
-        backgroundColor: const Color.fromARGB(255, 0, 8, 121),
+        backgroundColor: const Color.fromARGB(255, 22, 35, 214),
       ),
       body: Column(
         children: [
@@ -148,7 +148,7 @@ class DoctorCard extends StatelessWidget {
           children: [
             Text(name,
                 style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w600, color: const Color.fromARGB(255, 6, 0, 69))),
+                    fontSize: 16, fontWeight: FontWeight.w600, color: const Color.fromARGB(255, 17, 5, 151))),
             SizedBox(height: 4),
             Text(specialty,
                 style: TextStyle(fontSize: 13, color: Colors.black54)),
