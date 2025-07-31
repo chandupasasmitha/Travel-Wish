@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'loginpage.dart';
 import 'signuppage.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = 'your_publishable_key_here';
+  await Stripe.instance.applySettings();
   runApp(const Main());
 }
 
