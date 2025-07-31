@@ -48,7 +48,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Doctors Directory"),
-        backgroundColor: Colors.teal[700],
+        backgroundColor: const Color.fromARGB(255, 0, 8, 121),
       ),
       body: Column(
         children: [
@@ -99,7 +99,7 @@ class _DoctorsPageState extends State<DoctorsPage> {
               margin: EdgeInsets.symmetric(horizontal: 6),
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? Colors.teal[700] : Colors.grey[300],
+                color: isSelected ? const Color.fromARGB(255, 0, 5, 59) : Colors.grey[300],
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
@@ -148,7 +148,7 @@ class DoctorCard extends StatelessWidget {
           children: [
             Text(name,
                 style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w600, color: Colors.teal[800])),
+                    fontSize: 16, fontWeight: FontWeight.w600, color: const Color.fromARGB(255, 6, 0, 69))),
             SizedBox(height: 4),
             Text(specialty,
                 style: TextStyle(fontSize: 13, color: Colors.black54)),
